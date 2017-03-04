@@ -1,0 +1,5 @@
+﻿﻿insert into token 
+(id, access_token, account_id, account_username, expires_in, refresh_token, token_type)
+values 
+(1, '1b8f36cdbbc33ae4579a23686508443e348a4919', 1490547415, 'antoniocesar', 
+1489889209, '797953e8767cb5616f06638bf9585376044c5c0a', 'bearer')

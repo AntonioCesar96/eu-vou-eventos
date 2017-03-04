@@ -1,0 +1,6 @@
+﻿select * from faculdade
+
+insert into faculdade (id, cidade, estado, nome) values
+(1, 'Campo Grande', 'MS', 'Uniderp Matriz'),
+(2, 'Campo Grande', 'MS', 'Uniderp Unidade 2'),
+(3, 'Campo Grande', 'MS', 'UCDB');

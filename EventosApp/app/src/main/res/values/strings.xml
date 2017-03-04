@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Eventos</string>
+
+    <!-- A -->
+    <string name="txt_alterar_ws">Alterar endereço do webservice</string>
+    <string name="l_config">Alterar dados</string>
+    <string name="activity_cadastro_usuario">Cadastro</string>
+    <string name="activity_login">Login</string>
+    <string name="activity_alterar_dados">Alterar Dados</string>
+    <string name="activity_novo_evento">Novo Evento</string>
+
+    <!-- C -->
+    <string name="c_evento">Cadastrar Evento</string>
+    <string name="configuracoes">Configurações</string>
+
+    <!-- L -->
+    <string name="l_eventos">Meus Eventos</string>
+
+    <!-- M -->
+    <string name="msg_error_conexao_indisponivel">Conexão indisponível</string>
+
+    <!-- N -->
+    <string name="nav_drawer_username">Antonio Cesar</string>
+    <string name="nav_drawer_email">antoniocss19@gmail.com</string>
+    <string name="nome">Nome</string>
+
+    <!-- O -->
+    <string name="ok">OK</string>
+    <string name="opcao1">Próximos</string>
+    <string name="opcao2">Favoritos</string>
+
+    <string name="msg_erro_intenet">Você precisa estar conectado na internet para usar essa função do aplicativo!</string>
+    <string name="alerta">Alerta</string>
+
+
+    <!-- S -->
+    <string name="sair">Sair</string>
+
+</resources>

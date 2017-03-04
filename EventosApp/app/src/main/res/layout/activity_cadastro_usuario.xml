@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/loginActivity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    tools:context="eventos.com.br.eventos.activity.LoginActivity">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="4dp">
+
+        <include layout="@layout/include_toolbar" />
+    </android.support.v7.widget.CardView>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColorHint="@color/cinzaBBB">
+
+                        <EditText
+                            android:id="@+id/txtNome"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:backgroundTint="#fff"
+                            android:ems="14"
+                            android:hint="Nome"
+                            android:inputType="textPersonName"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:paddingTop="5dp"
+                            android:textColorHint="#ccc" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <View
+                        android:id="@+id/viewTxtNome"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/cinzaBBB" />
+
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColorHint="@color/cinzaBBB">
+
+                        <EditText
+                            android:id="@+id/txtEmail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            app:backgroundTint="@color/white"
+                            android:hint="E-mail"
+                            android:inputType="textEmailAddress"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:paddingTop="5dp"
+                            android:textColorHint="@color/cinzaBBB"
+                            android:textSize="18sp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <View
+                        android:id="@+id/viewTxtEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/cinzaBBB" />
+
+                    <Spinner
+                        android:id="@+id/spFaculdades"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"></Spinner>
+
+                    <View
+                        android:id="@+id/viewspFaculdades"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/cinzaBBB" />
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textColorHint="@color/cinzaBBB">
+
+                        <EditText
+                            android:id="@+id/txtSenha"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="10dp"
+                            app:backgroundTint="@color/white"
+                            android:hint="Senha"
+                            android:inputType="textPassword"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:paddingTop="5dp"
+                            android:textColorHint="@color/cinzaBBB"
+                            android:textSize="18sp" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <View
+                        android:id="@+id/viewTxtSenha"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/cinzaBBB" />
+
+                    <CheckBox
+                        android:id="@+id/cbOrganizador"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:checked="false"
+                        android:padding="10dp"
+                        android:text="Organizador de eventos de atlética." />
+
+                    <Button
+                        android:id="@+id/btnCadastrar"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="5dp"
+                        android:layout_marginTop="30dp"
+                        android:background="@color/primary"
+                        android:text="Cadastrar"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <include layout="@layout/include_progress" />
+            </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

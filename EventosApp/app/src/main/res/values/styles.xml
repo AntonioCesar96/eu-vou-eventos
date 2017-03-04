@@ -1,0 +1,52 @@
+<resources>
+
+    <!-- Tema base. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Cor primária do aplicativo -->
+        <item name="colorPrimary">@color/primary</item>
+        <!-- Variação escura da cor primária para a status bar e contextual app bars -->
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <!-- Cor de acentuação para as views (checkbox, textfield etc.) -->
+        <item name="colorAccent">@color/accent</item>
+        <!-- Cor para o efeito ripple -->
+        <item name="colorControlHighlight">@color/control_highlight</item>
+
+        <item name="colorControlActivated">@color/primary</item>
+
+        <!-- Action Mode Overlay -->
+        <item name="windowActionModeOverlay">true</item>
+        <!-- Cor da action bar de contexto (CAB) -->
+        <item name="actionModeBackground">@color/primary</item>
+    </style>
+
+
+    <!-- Tema PhotoView. -->
+    <style name="AppThemePhotoView" parent="AppTheme.NoActionBar">
+        <!-- Cor primária do aplicativo -->
+        <item name="colorPrimary">@color/black</item>
+        <!-- Variação escura da cor primária para a status bar e contextual app bars -->
+        <item name="colorPrimaryDark">@color/black</item>
+    </style>
+
+    <!-- Tema base + NoActionBar -->
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
+
+    <!-- Tema base + NoActionBar -->
+    <style name="AppTheme.NoActionBar.NavDrawer">
+
+    </style>
+
+    <!-- Temas para a Toolbar, ver include_toolbar.xml -->
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="SpinnerTheme" parent="android:Widget.Spinner">
+        <item name="android:background">#fff</item>
+    </style>
+
+</resources>
