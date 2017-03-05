@@ -12,6 +12,7 @@
     <!-- C -->
     <string name="c_evento">Cadastrar Evento</string>
     <string name="configuracoes">Configurações</string>
+    <string name="share">Compartilhar</string>
 
     <!-- L -->
     <string name="l_eventos">Meus Eventos</string>

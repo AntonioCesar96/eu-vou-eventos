@@ -2,12 +2,15 @@ package eventos.com.br.eventos.fragments;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -15,9 +18,6 @@ import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.services.EventoService;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class EventoFragment extends BaseFragment {
 
     private Evento evento;
@@ -51,6 +51,25 @@ public class EventoFragment extends BaseFragment {
 
     private void buscaEvento() {
         new EventoTask().execute(evento.getId());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_evento, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.ic_share) {
+            Toast.makeText(getContext(), "Compartilhar", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (item.getItemId() == R.id.ic_share) {
+            Toast.makeText(getContext(), "Compartilhar", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private class EventoTask extends AsyncTask<Long, Void, Evento> {

@@ -34,18 +34,17 @@ public class EventoActivity extends BaseActivity {
 
         e = (Evento) getIntent().getSerializableExtra("evento");
 
-        //getSupportActionBar().setTitle(e.getNome());
-        setTitle(e.getNome());
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+        configToolbar();
 
         // Imagem de header na action bar
         ImageUtils.setImageEventoIndividual(getActivity(), e.getEnderecoImagem(), appBarImg, progressBar, collapsingToolbar);
-        appBarImg.setOnClickListener(clickImg());
 
-        fabFavorito.setOnClickListener(clickFabFavorito());
+        configClicks();
 
+        addFragment(savedInstanceState);
+    }
+
+    private void addFragment(Bundle savedInstanceState) {
         // Adiciona o fragment no layout
         if (savedInstanceState == null) {
             // Cria o fragment com o mesmo Bundle (args) da intent
@@ -53,6 +52,18 @@ public class EventoActivity extends BaseActivity {
             frag.setArguments(getIntent().getExtras());
             // Adiciona o fragment no layout
             getSupportFragmentManager().beginTransaction().add(R.id.eventoFragment, frag).commit();
+        }
+    }
+
+    private void configClicks() {
+        appBarImg.setOnClickListener(clickImg());
+        fabFavorito.setOnClickListener(clickFabFavorito());
+    }
+
+    private void configToolbar() {
+        setTitle(e.getNome());
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 
