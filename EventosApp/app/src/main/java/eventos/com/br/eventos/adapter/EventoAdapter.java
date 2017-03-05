@@ -52,16 +52,12 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
     public void onBindViewHolder(final EventoViewHolder holder, final int position) {
         Evento evento = this.eventos.get(position);
 
-        SimpleDateFormat formatData = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String data = formatData.format(evento.getDataHora().getTime());
-
-        SimpleDateFormat formatHora = new SimpleDateFormat("HH:mm", Locale.getDefault());
-        String hora = formatHora.format(evento.getDataHora().getTime());
+        SimpleDateFormat formatData = new SimpleDateFormat("EEE',' dd 'de' MMMM 'às' HH:mm", Locale.getDefault());
+        String data = formatData.format(evento.getDataHora().getTime()).toUpperCase();
 
         holder.txtData.setText(data);
         holder.txtNome.setText(evento.getNome());
         holder.txtLocal.setText("Local: " + evento.getLocal().getNome());
-        holder.txtHora.setText(hora);
 
         ImageUtils.setImageFeed(context, evento.getEnderecoImagem(), holder.imgEvento, holder.imgEventoWrapper, holder.progress);
 
@@ -90,7 +86,6 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
         TextView txtData;
         TextView txtNome;
         TextView txtLocal;
-        TextView txtHora;
         ImageButton imgFavorite;
         ImageView imgEvento;
         LinearLayout imgEventoWrapper;
@@ -102,8 +97,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
             txtNome = (TextView) view.findViewById(R.id.txtNome);
             txtData = (TextView) view.findViewById(R.id.txtData);
             txtLocal = (TextView) view.findViewById(R.id.txtLocal);
-            txtHora = (TextView) view.findViewById(R.id.txtHora);
-            imgFavorite = (ImageButton) view.findViewById(R.id.imgFavorite);
+            imgFavorite = (ImageButton) view.findViewById(R.id.icFavorito);
             imgEvento = (ImageView) view.findViewById(R.id.imgEvento);
             imgEventoWrapper = (LinearLayout) view.findViewById(R.id.imgEventoWrapper);
             progress = (ProgressBar) view.findViewById(R.id.progressImg);

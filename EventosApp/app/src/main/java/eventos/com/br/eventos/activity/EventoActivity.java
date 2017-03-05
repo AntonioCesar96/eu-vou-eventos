@@ -3,6 +3,7 @@ package eventos.com.br.eventos.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,7 +19,10 @@ public class EventoActivity extends BaseActivity {
 
     private CollapsingToolbarLayout collapsingToolbar;
     private ProgressBar progressBar;
+    private FloatingActionButton fabFavorito;
+    private ImageView appBarImg;
     private Evento e;
+    private boolean flagClickFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,8 +30,7 @@ public class EventoActivity extends BaseActivity {
         setContentView(R.layout.activity_evento);
         setUpToolbar();
 
-        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        progressBar = (ProgressBar) findViewById(R.id.progressImg);
+        initFields();
 
         e = (Evento) getIntent().getSerializableExtra("evento");
 
@@ -38,18 +41,10 @@ public class EventoActivity extends BaseActivity {
         }
 
         // Imagem de header na action bar
-        ImageView appBarImg = (ImageView) findViewById(R.id.appBarImg);
         ImageUtils.setImageEventoIndividual(getActivity(), e.getEnderecoImagem(), appBarImg, progressBar, collapsingToolbar);
+        appBarImg.setOnClickListener(clickImg());
 
-        appBarImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), PhotoViewActivity.class);
-                intent.putExtra("url", e.getEnderecoImagem());
-                startActivity(intent);
-            }
-        });
-
+        fabFavorito.setOnClickListener(clickFabFavorito());
 
         // Adiciona o fragment no layout
         if (savedInstanceState == null) {
@@ -59,6 +54,39 @@ public class EventoActivity extends BaseActivity {
             // Adiciona o fragment no layout
             getSupportFragmentManager().beginTransaction().add(R.id.eventoFragment, frag).commit();
         }
+    }
+
+    private View.OnClickListener clickFabFavorito() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (flagClickFab) {
+                    fabFavorito.setImageResource(R.drawable.ic_turned_in_not_not_padding);
+                    flagClickFab = false;
+                    return;
+                }
+                fabFavorito.setImageResource(R.drawable.ic_turned_in_not_padding);
+                flagClickFab = true;
+            }
+        };
+    }
+
+    private View.OnClickListener clickImg() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getContext(), PhotoViewActivity.class);
+                intent.putExtra("url", e.getEnderecoImagem());
+                startActivity(intent);
+            }
+        };
+    }
+
+    private void initFields() {
+        collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        progressBar = (ProgressBar) findViewById(R.id.progressImg);
+        fabFavorito = (FloatingActionButton) findViewById(R.id.fabFavorito);
+        appBarImg = (ImageView) findViewById(R.id.appBarImg);
     }
 
     public void setTitle(String s) {

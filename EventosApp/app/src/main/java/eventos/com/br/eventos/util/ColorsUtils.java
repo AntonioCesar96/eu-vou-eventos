@@ -50,7 +50,6 @@ public class ColorsUtils {
         }
     }
 
-
     public static int getPrimaryColor(int color) {
         int red = Color.red(color);
         int green = Color.green(color);
