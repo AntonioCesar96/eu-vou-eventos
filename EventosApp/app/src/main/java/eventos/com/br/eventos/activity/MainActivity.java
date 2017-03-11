@@ -8,9 +8,11 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.TabsAdapter;
+import eventos.com.br.eventos.fragments.FilterEventosDialog;
 import livroandroid.lib.utils.Prefs;
 
 public class MainActivity extends BaseActivity {
@@ -88,6 +90,22 @@ public class MainActivity extends BaseActivity {
 
             return true;
         }
+
+        if (id == R.id.filter_eventos) {
+            openDialogFilter();
+
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void openDialogFilter() {
+        FilterEventosDialog.show(getSupportFragmentManager(),getContext(), new FilterEventosDialog.Callback() {
+            @Override
+            public void onFilter() {
+                Toast.makeText(getContext(), "Volta", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

@@ -14,6 +14,9 @@
     <string name="configuracoes">Configurações</string>
     <string name="share">Compartilhar</string>
 
+    <!-- C -->
+    <string name="txt_filtrar">Filtrar eventos</string>
+
     <!-- L -->
     <string name="l_eventos">Meus Eventos</string>
 
@@ -37,4 +40,20 @@
     <!-- S -->
     <string name="sair">Sair</string>
 
+    <string-array name="array_estados">
+        <item>Amazonas</item>
+        <item>Mato Grosso do Sul</item>
+        <item>São Paulo</item>
+    </string-array>
+
+    <string-array name="array_cidades">
+        <item>Campo Grande</item>
+        <item>São Paulo</item>
+    </string-array>
+
+    <string-array name="array_faculdades">
+        <item>UNIDERP</item>
+        <item>FACSUL</item>
+        <item>UCDB</item>
+    </string-array>
 </resources>

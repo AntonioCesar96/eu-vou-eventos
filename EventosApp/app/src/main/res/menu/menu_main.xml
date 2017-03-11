@@ -2,6 +2,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/filter_eventos"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_filter_white"
+        android:title="@string/txt_filtrar"/>
+
+    <item
         android:id="@+id/editar_config_ws"
         app:showAsAction="never"
         android:title="@string/txt_alterar_ws"/>

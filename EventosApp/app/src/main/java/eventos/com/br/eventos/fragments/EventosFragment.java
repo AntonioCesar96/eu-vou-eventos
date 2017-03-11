@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -86,11 +87,6 @@ public class EventosFragment extends BaseFragment {
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
@@ -124,7 +120,7 @@ public class EventosFragment extends BaseFragment {
                 // Salva a lista de eventos no atributo da classe
                 EventosFragment.this.eventos = eventos;
                 // Atualiza a view na UI Thread
-                recyclerView.setAdapter(new EventoAdapter(getContext(), eventos, onClickEvento()));
+                recyclerView.setAdapter(new EventoAdapter(getContext(), eventos, onClickEvento(), onClickCompartilhar(), onClickFavoritar()));
             }
         }
 
@@ -138,6 +134,31 @@ public class EventosFragment extends BaseFragment {
         public void onCancelled(String s) {
         }
     }
+
+
+    private EventoAdapter.CompartilharOnClickListener onClickCompartilhar() {
+        return new EventoAdapter.CompartilharOnClickListener() {
+            @Override
+            public void onClickCompartilhar(EventoAdapter.EventoViewHolder holder, int idx) {
+                Evento e = eventos.get(idx);
+
+                Toast.makeText(getContext(), "Compartilhar evento " + e.getNome(), Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
+
+    private EventoAdapter.FavoritarOnClickListener onClickFavoritar() {
+        return new EventoAdapter.FavoritarOnClickListener() {
+            @Override
+            public void onClickFavoritar(EventoAdapter.EventoViewHolder holder, int idx) {
+                Evento e = eventos.get(idx);
+
+                Toast.makeText(getContext(), "Favoritar evento " + e.getNome(), Toast.LENGTH_SHORT).show();
+            }
+        };
+    }
+
 
     private EventoAdapter.EventoOnClickListener onClickEvento() {
         return new EventoAdapter.EventoOnClickListener() {

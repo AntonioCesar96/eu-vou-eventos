@@ -5,9 +5,7 @@ package eventos.com.br.eventos.adapter;
  */
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,12 +31,16 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
     private final List<Evento> eventos;
     private final Context context;
     private EventoOnClickListener eventoOnClickListener;
+    private final CompartilharOnClickListener compartilharOnClickListener;
+    private final FavoritarOnClickListener favoritarOnClickListener;
 
     public EventoAdapter(Context context, List<Evento> eventos, EventoOnClickListener
-            eventoOnClickListener) {
+            eventoOnClickListener, CompartilharOnClickListener compartilharOnClickListener, FavoritarOnClickListener favoritarOnClickListener) {
         this.context = context;
         this.eventos = eventos;
         this.eventoOnClickListener = eventoOnClickListener;
+        this.compartilharOnClickListener = compartilharOnClickListener;
+        this.favoritarOnClickListener = favoritarOnClickListener;
     }
 
     @Override
@@ -69,6 +71,24 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
                 }
             });
         }
+
+        if (compartilharOnClickListener != null) {
+            holder.icCompartilhar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    compartilharOnClickListener.onClickCompartilhar(holder, position);
+                }
+            });
+        }
+
+        if (favoritarOnClickListener != null) {
+            holder.icFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    favoritarOnClickListener.onClickFavoritar(holder, position);
+                }
+            });
+        }
     }
 
     @Override
@@ -81,12 +101,21 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
         void onClickEvento(EventoViewHolder holder, int idx);
     }
 
+    public interface CompartilharOnClickListener {
+        void onClickCompartilhar(EventoViewHolder holder, int idx);
+    }
+
+    public interface FavoritarOnClickListener {
+        void onClickFavoritar(EventoViewHolder holder, int idx);
+    }
+
     // ViewHolder com as views
     public static class EventoViewHolder extends RecyclerView.ViewHolder {
         TextView txtData;
         TextView txtNome;
         TextView txtLocal;
-        ImageButton imgFavorite;
+        ImageButton icFavorite;
+        ImageButton icCompartilhar;
         ImageView imgEvento;
         LinearLayout imgEventoWrapper;
         ProgressBar progress;
@@ -97,18 +126,12 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
             txtNome = (TextView) view.findViewById(R.id.txtNome);
             txtData = (TextView) view.findViewById(R.id.txtData);
             txtLocal = (TextView) view.findViewById(R.id.txtLocal);
-            imgFavorite = (ImageButton) view.findViewById(R.id.icFavorito);
+            icFavorite = (ImageButton) view.findViewById(R.id.icFavorito);
+            icCompartilhar = (ImageButton) view.findViewById(R.id.icCompartilhar);
             imgEvento = (ImageView) view.findViewById(R.id.imgEvento);
             imgEventoWrapper = (LinearLayout) view.findViewById(R.id.imgEventoWrapper);
             progress = (ProgressBar) view.findViewById(R.id.progressImg);
         }
     }
-    public static float convertPixelsToDp(float px, Context context){
-        Resources resources = context.getResources();
-        DisplayMetrics metrics = resources.getDisplayMetrics();
-        float dp = px / ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
-        return dp;
-    }
-
 }
 
