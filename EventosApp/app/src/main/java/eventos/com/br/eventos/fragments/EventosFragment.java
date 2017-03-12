@@ -19,7 +19,7 @@ import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.activity.EventoActivity;
 import eventos.com.br.eventos.adapter.EventoAdapter;
 import eventos.com.br.eventos.model.Evento;
-import eventos.com.br.eventos.services.EventoService;
+import eventos.com.br.eventos.rest.EventoRest;
 import eventos.com.br.eventos.util.TipoBusca;
 import livroandroid.lib.utils.AndroidUtils;
 
@@ -110,7 +110,7 @@ public class EventosFragment extends BaseFragment {
 
         @Override
         public List<Evento> execute() throws Exception {
-            EventoService service = new EventoService(this.context);
+            EventoRest service = new EventoRest(this.context);
             return service.getEventos(tipoDeBusca);
         }
 

@@ -1,7 +1,6 @@
 package eventos.com.br.eventos.activity;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -14,17 +13,19 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.FaculdadesAdapter;
-import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Faculdade;
 import eventos.com.br.eventos.model.Usuario;
-import eventos.com.br.eventos.services.FaculdadeService;
-import eventos.com.br.eventos.services.UsuarioService;
+import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.rest.FaculdadeRest;
+import eventos.com.br.eventos.rest.UsuarioRest;
 import eventos.com.br.eventos.util.ValidationUtil;
 import livroandroid.lib.utils.AndroidUtils;
 
@@ -160,7 +161,7 @@ public class CadastroUsuarioActivity extends BaseActivity {
 
         @Override
         protected Usuario doInBackground(Usuario... usuarios) {
-            UsuarioService service = new UsuarioService(CadastroUsuarioActivity.this);
+            UsuarioRest service = new UsuarioRest(CadastroUsuarioActivity.this);
             try {
                 Usuario usuario = usuarios[0];
 
@@ -177,11 +178,16 @@ public class CadastroUsuarioActivity extends BaseActivity {
 
             if (usuario != null && usuario.getId() != null) {
                 // Salva o usuário
-                UsuarioDAO dao = new UsuarioDAO(getContext());
-                dao.save(usuario);
+                try {
+                    DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+                    UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
+                    dao.save(usuario);
+                    finish();
+                    //startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                } catch (SQLException e) {
+                    Log.i("Error", e.getMessage());
+                }
 
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
             } else {
                 alert("Alerta", "Aconteceu um erro ao tentar cadastrar o usuário!");
             }
@@ -197,7 +203,7 @@ public class CadastroUsuarioActivity extends BaseActivity {
 
         @Override
         protected List<Faculdade> doInBackground(Void... voids) {
-            FaculdadeService service = new FaculdadeService(getContext());
+            FaculdadeRest service = new FaculdadeRest(getContext());
 
             try {
                 return service.getFaculdades();

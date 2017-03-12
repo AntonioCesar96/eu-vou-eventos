@@ -1,91 +1,117 @@
 package eventos.com.br.eventos.model;
 
+import com.j256.ormlite.field.DataType;
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.io.Serializable;
 import java.util.Calendar;
 
+@DatabaseTable(tableName = "evento")
 public class Evento implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Long id;
-	private String nome;
-	private String descricao;
-	private String enderecoImagem;
-	private Calendar dataHora;
-	private Usuario usuario;
-	private Faculdade faculdade;
-	private String nomeAtletica;
-	private Local local;
+    @DatabaseField(id = true, generatedId = false)
+    private Long id;
 
-	public Usuario getUsuario() {
-		return usuario;
-	}
+    @DatabaseField
+    private String nome;
 
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
+    @DatabaseField(dataType = DataType.STRING)
+    private String descricao;
 
-	public String getNomeAtletica() {
-		return nomeAtletica;
-	}
+    @DatabaseField
+    private String enderecoImagem;
 
-	public void setNomeAtletica(String nomeAtletica) {
-		this.nomeAtletica = nomeAtletica;
-	}
+    @DatabaseField(dataType = DataType.SERIALIZABLE)
+    private Calendar dataHora;
 
-	public Long getId() {
-		return id;
-	}
+    @DatabaseField
+    private String nomeAtletica;
 
-	public Faculdade getFaculdade() {
-		return faculdade;
-	}
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private Usuario usuario;
 
-	public void setFaculdade(Faculdade faculdade) {
-		this.faculdade = faculdade;
-	}
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private Faculdade faculdade;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private Local local;
 
-	public String getEnderecoImagem() {
-		return enderecoImagem;
-	}
+    public Evento() {
 
-	public void setEnderecoImagem(String enderecoImagem) {
-		this.enderecoImagem = enderecoImagem;
-	}
+    }
 
-	public String getNome() {
-		return nome;
-	}
+    public Usuario getUsuario() {
+        return usuario;
+    }
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
 
-	public String getDescricao() {
-		return descricao;
-	}
+    public String getNomeAtletica() {
+        return nomeAtletica;
+    }
 
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
-	}
+    public void setNomeAtletica(String nomeAtletica) {
+        this.nomeAtletica = nomeAtletica;
+    }
 
-	public Calendar getDataHora() {
-		return dataHora;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setDataHora(Calendar dataHora) {
-		this.dataHora = dataHora;
-	}
+    public Faculdade getFaculdade() {
+        return faculdade;
+    }
 
-	public Local getLocal() {
-		return local;
-	}
+    public void setFaculdade(Faculdade faculdade) {
+        this.faculdade = faculdade;
+    }
 
-	public void setLocal(Local local) {
-		this.local = local;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEnderecoImagem() {
+        return enderecoImagem;
+    }
+
+    public void setEnderecoImagem(String enderecoImagem) {
+        this.enderecoImagem = enderecoImagem;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public Calendar getDataHora() {
+        return dataHora;
+    }
+
+    public void setDataHora(Calendar dataHora) {
+        this.dataHora = dataHora;
+    }
+
+    public Local getLocal() {
+        return local;
+    }
+
+    public void setLocal(Local local) {
+        this.local = local;
+    }
 
 }

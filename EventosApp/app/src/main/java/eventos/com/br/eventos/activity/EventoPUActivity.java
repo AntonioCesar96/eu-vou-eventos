@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,7 +33,7 @@ import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.CidadesAdapter;
 import eventos.com.br.eventos.adapter.EstadosAdapter;
 import eventos.com.br.eventos.adapter.FaculdadesAdapter;
-import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Cidade;
 import eventos.com.br.eventos.model.Estado;
 import eventos.com.br.eventos.model.Evento;
@@ -41,9 +42,10 @@ import eventos.com.br.eventos.model.Local;
 import eventos.com.br.eventos.model.Response;
 import eventos.com.br.eventos.model.ResponseWithURL;
 import eventos.com.br.eventos.model.Usuario;
-import eventos.com.br.eventos.services.EnderecoService;
-import eventos.com.br.eventos.services.EventoService;
-import eventos.com.br.eventos.services.FaculdadeService;
+import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.rest.EnderecoRest;
+import eventos.com.br.eventos.rest.EventoRest;
+import eventos.com.br.eventos.rest.FaculdadeRest;
 import eventos.com.br.eventos.util.CameraUtil;
 import eventos.com.br.eventos.util.ValidationUtil;
 import livroandroid.lib.utils.AlertUtils;
@@ -187,11 +189,18 @@ public class EventoPUActivity extends BaseActivity {
 
                     evento.setLocal(local);
                     evento.setFaculdade(faculdadeSelecionada);
-                    UsuarioDAO dao = new UsuarioDAO(getContext());
-                    List<Usuario> usuarios = dao.findAll();
 
-                    if (usuarios != null && usuarios.size() != 0) {
-                        evento.setUsuario(usuarios.get(0));
+                    Usuario usuario = null;
+                    try {
+                        DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+                        UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
+                        usuario = dao.getUsuario();
+                    } catch (SQLException e) {
+                        Log.i("Error", e.getMessage());
+                    }
+
+                    if (usuario != null) {
+                        evento.setUsuario(usuario);
                     }
 
                     salvarTask(evento);
@@ -242,7 +251,7 @@ public class EventoPUActivity extends BaseActivity {
         @Override
         protected Response doInBackground(Evento... eventos) {
             Evento evento = eventos[0];
-            EventoService service = new EventoService(getApplicationContext());
+            EventoRest service = new EventoRest(getApplicationContext());
 
             Response response;
 
@@ -345,7 +354,7 @@ public class EventoPUActivity extends BaseActivity {
 
         @Override
         protected List<Faculdade> doInBackground(Void... voids) {
-            FaculdadeService service = new FaculdadeService(getContext());
+            FaculdadeRest service = new FaculdadeRest(getContext());
 
             try {
                 return service.getFaculdades();
@@ -406,7 +415,7 @@ public class EventoPUActivity extends BaseActivity {
 
         @Override
         protected List<Estado> doInBackground(Void... voids) {
-            EnderecoService service = new EnderecoService(getContext());
+            EnderecoRest service = new EnderecoRest(getContext());
 
             try {
                 return service.getEstados();
@@ -485,7 +494,7 @@ public class EventoPUActivity extends BaseActivity {
         protected List<Cidade> doInBackground(Long... ids) {
             Long idEstado = ids[0];
 
-            EnderecoService service = new EnderecoService(getContext());
+            EnderecoRest service = new EnderecoRest(getContext());
 
             try {
                 return service.getCidades(idEstado);

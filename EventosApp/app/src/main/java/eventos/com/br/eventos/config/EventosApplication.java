@@ -1,6 +1,5 @@
 package eventos.com.br.eventos.config;
 
-import android.app.Application;
 import android.content.Context;
 
 import livroandroid.lib.utils.Prefs;
@@ -8,21 +7,9 @@ import livroandroid.lib.utils.Prefs;
 /**
  * Created by Antonio Cesar on 18/07/2016.
  */
-public class EventosApplication extends Application{
+public class EventosApplication {
 
-    private static String URL = "http://192.168.1.25:8080/eventos/rest/";
-    private static EventosApplication instance = null;
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        instance = this;
-    }
-
-    public static EventosApplication getInstance() {
-        return instance;
-    }
+    private static String URL = "http://192.168.1.26:8080/eventos/rest/";
 
     public static void setURL(String endereco, Context context) {
 

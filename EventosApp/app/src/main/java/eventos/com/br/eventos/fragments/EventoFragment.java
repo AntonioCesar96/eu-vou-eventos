@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.model.Evento;
-import eventos.com.br.eventos.services.EventoService;
+import eventos.com.br.eventos.rest.EventoRest;
 
 public class EventoFragment extends BaseFragment {
 
@@ -65,10 +65,6 @@ public class EventoFragment extends BaseFragment {
             Toast.makeText(getContext(), "Compartilhar", Toast.LENGTH_SHORT).show();
             return true;
         }
-        if (item.getItemId() == R.id.ic_share) {
-            Toast.makeText(getContext(), "Compartilhar", Toast.LENGTH_SHORT).show();
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -84,7 +80,7 @@ public class EventoFragment extends BaseFragment {
         protected Evento doInBackground(Long... longs) {
             Long idEvento = longs[0];
 
-            EventoService service = new EventoService(getContext());
+            EventoRest service = new EventoRest(getContext());
 
             try {
                 return service.getEvento(idEvento);

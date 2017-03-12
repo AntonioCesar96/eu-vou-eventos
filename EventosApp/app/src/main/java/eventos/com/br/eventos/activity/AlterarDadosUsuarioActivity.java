@@ -17,19 +17,21 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.FaculdadesAdapter;
-import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Faculdade;
 import eventos.com.br.eventos.model.ResponseWithURL;
 import eventos.com.br.eventos.model.Usuario;
-import eventos.com.br.eventos.services.EventoService;
-import eventos.com.br.eventos.services.FaculdadeService;
-import eventos.com.br.eventos.services.UsuarioService;
+import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.rest.EventoRest;
+import eventos.com.br.eventos.rest.FaculdadeRest;
+import eventos.com.br.eventos.rest.UsuarioRest;
 import eventos.com.br.eventos.util.CameraUtil;
 import eventos.com.br.eventos.util.ImageUtils;
 import eventos.com.br.eventos.util.ValidationUtil;
@@ -56,7 +58,14 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
         setUpNavigation();
 
         cameraUtil = new CameraUtil(getActivity());
-        usuario = new UsuarioDAO(getContext()).getUsuario();
+
+        try {
+            DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+            UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
+            usuario = dao.getUsuario();
+        } catch (SQLException e) {
+            Log.i("Error", e.getMessage());
+        }
 
         initFields();
 
@@ -213,19 +222,19 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
             try {
                 Usuario usuario = usuarios[0];
 
-                UsuarioService usuarioService = new UsuarioService(AlterarDadosUsuarioActivity.this);
-                EventoService eventoService = new EventoService(getApplicationContext());
+                UsuarioRest usuarioRest = new UsuarioRest(AlterarDadosUsuarioActivity.this);
+                EventoRest eventoRest = new EventoRest(getApplicationContext());
 
                 // Faz upload da foto
                 if (fileImage != null && fileImage.exists()) {
-                    ResponseWithURL responseWithURL = eventoService.postFotoBase64(fileImage);
+                    ResponseWithURL responseWithURL = eventoRest.postFotoBase64(fileImage);
                     if (responseWithURL != null && responseWithURL.isOk()) {
                         // Atualiza a foto do usuario
                         usuario.setFotoPerfil(responseWithURL.getUrl());
                     }
                 }
 
-                return usuarioService.update(usuario);
+                return usuarioRest.update(usuario);
             } catch (Exception e) {
                 Log.e("ERRO", e.getMessage(), e);
                 return null;
@@ -238,11 +247,16 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
 
             if (usuario != null && usuario.getId() != null) {
                 // Salva o usuário
-                UsuarioDAO dao = new UsuarioDAO(getContext());
-                dao.deletar();
-                dao.save(usuario);
 
-                finish();
+                try {
+                    DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+                    UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
+                    dao.deletar();
+                    dao.save(usuario);
+                    finish();
+                } catch (SQLException e) {
+                    Log.i("Error", e.getMessage());
+                }
             } else {
                 alert("Alerta", "Aconteceu um erro ao tentar atualizar os dados usuário!");
             }
@@ -258,7 +272,7 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
 
         @Override
         protected List<Faculdade> doInBackground(Void... voids) {
-            FaculdadeService service = new FaculdadeService(getContext());
+            FaculdadeRest service = new FaculdadeRest(getContext());
 
             try {
                 return service.getFaculdades();

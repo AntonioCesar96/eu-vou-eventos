@@ -1,4 +1,4 @@
-package eventos.com.br.eventos.services;
+package eventos.com.br.eventos.rest;
 
 import android.content.Context;
 
@@ -13,10 +13,10 @@ import eventos.com.br.eventos.util.HttpHelper;
 /**
  * Created by antonio on 25/06/16.
  */
-public class UsuarioService {
+public class UsuarioRest {
     private String url;
 
-    public UsuarioService(Context context) {
+    public UsuarioRest(Context context) {
         url = EventosApplication.getURL(context) + "usuario";
     }
 

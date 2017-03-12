@@ -7,12 +7,13 @@ import android.os.Handler;
 import android.util.Log;
 
 import java.io.IOException;
-import java.util.List;
+import java.sql.SQLException;
 
 import eventos.com.br.eventos.R;
-import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Usuario;
-import eventos.com.br.eventos.services.UsuarioService;
+import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.rest.UsuarioRest;
 import livroandroid.lib.utils.AndroidUtils;
 
 public class SplashScreenActivity extends BaseActivity {
@@ -22,15 +23,19 @@ public class SplashScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        UsuarioDAO dao = new UsuarioDAO(this);
-        List<Usuario> usuarios = dao.findAll();
+        Usuario usuario = null;
+        try {
+            DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+            UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
+            usuario = dao.getUsuario();
+        } catch (SQLException e) {
+            Log.i("Error", e.getMessage());
+        }
 
-        if (usuarios != null && usuarios.size() > 0) {
-
-            Usuario u = usuarios.get(0);
+        if (usuario != null) {
 
             if (AndroidUtils.isNetworkAvailable(getContext())) {
-                new UsuarioTask().execute(u.getEmail(), u.getSenha());
+                new UsuarioTask().execute(usuario.getEmail(), usuario.getSenha());
             } else {
                 goMainActivity();
             }
@@ -58,7 +63,7 @@ public class SplashScreenActivity extends BaseActivity {
 
         @Override
         protected Usuario doInBackground(String... strings) {
-            UsuarioService service = new UsuarioService(SplashScreenActivity.this);
+            UsuarioRest service = new UsuarioRest(SplashScreenActivity.this);
             try {
                 String email = strings[0];
                 String senha = strings[1];
@@ -75,10 +80,14 @@ public class SplashScreenActivity extends BaseActivity {
 
             if (usuario != null && usuario.getId() != null) {
                 // Salva o usuário
-                UsuarioDAO dao = new UsuarioDAO(getContext());
-                dao.deletar();
-                dao.save(usuario);
-
+                try {
+                    DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+                    UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
+                    dao.deletar();
+                    dao.save(usuario);
+                } catch (SQLException e) {
+                    Log.i("Error", e.getMessage());
+                }
             }
             Intent intent = new Intent(getContext(), MainActivity.class);
             startActivity(intent);

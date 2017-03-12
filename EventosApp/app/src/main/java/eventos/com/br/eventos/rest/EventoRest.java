@@ -1,4 +1,4 @@
-package eventos.com.br.eventos.services;
+package eventos.com.br.eventos.rest;
 
 import android.content.Context;
 import android.util.Base64;
@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -21,11 +22,13 @@ import java.util.Map;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.config.EventosApplication;
-import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.dao.DataBaseHelper;
+import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.model.Response;
 import eventos.com.br.eventos.model.ResponseWithURL;
 import eventos.com.br.eventos.model.Usuario;
+import eventos.com.br.eventos.dao.UsuarioDAO;
 import eventos.com.br.eventos.util.CalendarDeserializer;
 import eventos.com.br.eventos.util.CalendarSerializer;
 import eventos.com.br.eventos.util.TipoBusca;
@@ -36,11 +39,11 @@ import livroandroid.lib.utils.IOUtils;
 /**
  * Created by antonio on 16/07/16.
  */
-public class EventoService {
+public class EventoRest {
     private String url;
     private Context context;
 
-    public EventoService(Context context) {
+    public EventoRest(Context context) {
         url = EventosApplication.getURL(context) + "evento";
         this.context = context;
     }
@@ -48,12 +51,16 @@ public class EventoService {
     public List<Evento> getEventos(TipoBusca tipoDeBusca) throws Exception {
 
         if (tipoDeBusca.equals(TipoBusca.FAVORITOS)) {
-            return new ArrayList<>();
+            DataBaseHelper baseHelper = new DataBaseHelper(context);
+            EventoDAO eventoDAO = new EventoDAO(baseHelper.getConnectionSource());
+
+            return eventoDAO.all();
         }
         if (tipoDeBusca.equals(TipoBusca.USUARIO)) {
             return getEventosPorUsuario();
         }
-        return getEventosProximos();
+        //return getEventosProximos();
+        return getEventosFromRaw();
     }
 
     private List<Evento> getEventosProximos() throws IOException {
@@ -78,14 +85,20 @@ public class EventoService {
 
     private List<Evento> getEventosPorUsuario() throws IOException {
 
-        UsuarioDAO dao = new UsuarioDAO(context);
-        List<Usuario> usuarios = dao.findAll();
+        Usuario usuario = null;
+        try {
+            DataBaseHelper dataBaseHelper = new DataBaseHelper(context);
+            UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
+            usuario = dao.getUsuario();
+        } catch (SQLException e) {
+            Log.i("Error", e.getMessage());
+        }
 
-        if (usuarios != null && usuarios.size() != 0) {
+        if (usuario != null) {
             HttpHelper helper = new HttpHelper();
             helper.LOG_ON = true;
 
-            String json = helper.doGet(url + "/usuario/"+usuarios.get(0).getId());
+            String json = helper.doGet(url + "/usuario/"+usuario.getId());
 
             Type listType = new TypeToken<ArrayList<Evento>>() {
             }.getType();
@@ -120,14 +133,21 @@ public class EventoService {
         return evento;
     }
 
-    public List<Evento> getCarrosFromRaw() throws IOException {
+    public List<Evento> getEventosFromRaw() throws IOException {
 
         String json = FileUtils.readRawFileString(this.context, R.raw.eventos, "UTF-8");
 
         Type listType = new TypeToken<ArrayList<Evento>>() {
         }.getType();
 
-        Gson gson = new Gson();
+        GsonBuilder builder = new GsonBuilder();
+
+        // Serializador para classe Calendar
+        builder.registerTypeAdapter(Calendar.class, new CalendarDeserializer());
+        builder.registerTypeAdapter(GregorianCalendar.class, new CalendarDeserializer());
+
+        Gson gson = builder.create();
+
         return gson.fromJson(json, listType);
     }
 

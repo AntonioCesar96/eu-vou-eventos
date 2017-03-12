@@ -10,7 +10,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
+import java.sql.SQLException;
+
 import eventos.com.br.eventos.R;
+import eventos.com.br.eventos.dao.DataBaseHelper;
+import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.fragments.EventoFragment;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.util.ImageUtils;
@@ -71,16 +75,45 @@ public class EventoActivity extends BaseActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (flagClickFab) {
                     fabFavorito.setImageResource(R.drawable.ic_turned_in_not_not_padding);
                     flagClickFab = false;
+
+                    desFavoritar();
+
                     return;
                 }
                 fabFavorito.setImageResource(R.drawable.ic_turned_in_not_padding);
                 flagClickFab = true;
+
+                favoritar();
             }
         };
     }
+
+    private void favoritar() {
+        try {
+            DataBaseHelper baseHelper = new DataBaseHelper(getContext());
+            EventoDAO eventoDAO = new EventoDAO(baseHelper.getConnectionSource());
+
+            eventoDAO.save(e);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    private void desFavoritar() {
+        try {
+            DataBaseHelper baseHelper = new DataBaseHelper(getContext());
+            EventoDAO eventoDAO = new EventoDAO(baseHelper.getConnectionSource());
+
+            eventoDAO.remove(e);
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+    }
+
 
     private View.OnClickListener clickImg() {
         return new View.OnClickListener() {

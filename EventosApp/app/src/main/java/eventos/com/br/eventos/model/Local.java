@@ -1,89 +1,114 @@
 package eventos.com.br.eventos.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.io.Serializable;
 
+@DatabaseTable(tableName = "local")
 public class Local implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Long id;
-	private String nome;
-	private String cep;
-	private String rua;
-	private Cidade cidade;
-	private String bairro;
-	private String numero;
-	private String longitude;
-	private String latitude;
+    @DatabaseField(id = true, generatedId = false)
+    private Long id;
 
-	public String getLatitude() {
-		return latitude;
-	}
+    @DatabaseField
+    private String nome;
 
-	public void setLatitude(String latitude) {
-		this.latitude = latitude;
-	}
+    @DatabaseField
+    private String cep;
 
-	public Long getId() {
-		return id;
-	}
+    @DatabaseField
+    private String rua;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @DatabaseField
+    private String bairro;
 
-	public String getNome() {
-		return nome;
-	}
+    @DatabaseField
+    private String numero;
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    @DatabaseField
+    private String longitude;
 
-	public String getCep() {
-		return cep;
-	}
+    @DatabaseField
+    private String latitude;
 
-	public void setCep(String cep) {
-		this.cep = cep;
-	}
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private Cidade cidade;
 
-	public String getRua() {
-		return rua;
-	}
+    public Local() {
 
-	public void setRua(String rua) {
-		this.rua = rua;
-	}
+    }
 
-	public Cidade getCidade() {
-		return cidade;
-	}
+    public String getLatitude() {
+        return latitude;
+    }
 
-	public void setCidade(Cidade cidade) {
-		this.cidade = cidade;
-	}
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
 
-	public String getBairro() {
-		return bairro;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setBairro(String bairro) {
-		this.bairro = bairro;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public String getNumero() {
-		return numero;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public String getLongitude() {
-		return longitude;
-	}
+    public String getCep() {
+        return cep;
+    }
 
-	public void setLongitude(String longitude) {
-		this.longitude = longitude;
-	}
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+
+    public String getRua() {
+        return rua;
+    }
+
+    public void setRua(String rua) {
+        this.rua = rua;
+    }
+
+    public Cidade getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(Cidade cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getBairro() {
+        return bairro;
+    }
+
+    public void setBairro(String bairro) {
+        this.bairro = bairro;
+    }
+
+    public String getNumero() {
+        return numero;
+    }
+
+    public void setNumero(String numero) {
+        this.numero = numero;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
 }

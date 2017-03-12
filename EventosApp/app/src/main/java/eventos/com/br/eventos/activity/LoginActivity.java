@@ -12,12 +12,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Arrays;
 
 import eventos.com.br.eventos.R;
-import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Usuario;
-import eventos.com.br.eventos.services.UsuarioService;
+import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.rest.UsuarioRest;
 import eventos.com.br.eventos.util.ValidationUtil;
 import livroandroid.lib.utils.AndroidUtils;
 
@@ -52,6 +54,7 @@ public class LoginActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(), CadastroUsuarioActivity.class));
+                finish();
             }
         };
     }
@@ -125,7 +128,7 @@ public class LoginActivity extends BaseActivity {
 
         @Override
         protected Usuario doInBackground(String... strings) {
-            UsuarioService service = new UsuarioService(LoginActivity.this);
+            UsuarioRest service = new UsuarioRest(LoginActivity.this);
             try {
                 String email = strings[0];
                 String senha = strings[1];
@@ -143,10 +146,14 @@ public class LoginActivity extends BaseActivity {
 
             if (usuario != null && usuario.getId() != null) {
                 // Salva o usuário
-                UsuarioDAO dao = new UsuarioDAO(getContext());
-                dao.save(usuario);
-
-                finish();
+                try {
+                    DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+                    UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
+                    dao.save(usuario);
+                    finish();
+                } catch (SQLException e) {
+                    Log.i("Error", e.getMessage());
+                }
             } else {
                 alert("Alerta", "Usuário não esta cadastrado!");
             }

@@ -1,80 +1,118 @@
 package eventos.com.br.eventos.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.io.Serializable;
 
+@DatabaseTable(tableName = "usuario")
 public class Usuario implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private Long id;
-	private String nome;
-	private String email;
-	private String senha;
-	private boolean queroSerAdmin;
-	private boolean administrador;
-	private Faculdade faculdade;
-	private String fotoPerfil;
+    @DatabaseField(id = true, generatedId = false)
+    private Long id;
 
-	public Long getId() {
-		return id;
-	}
+    @DatabaseField
+    private String nome;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @DatabaseField
+    private String email;
 
-	public String getNome() {
-		return nome;
-	}
+    @DatabaseField
+    private String senha;
 
-	public boolean isAdministrador() {
-		return administrador;
-	}
+    @DatabaseField
+    private boolean queroSerAdmin;
 
-	public void setAdministrador(boolean administrador) {
-		this.administrador = administrador;
-	}
+    @DatabaseField
+    private boolean administrador;
 
-	public boolean isQueroSerAdmin() {
-		return queroSerAdmin;
-	}
+    @DatabaseField
+    private String fotoPerfil;
 
-	public void setQueroSerAdmin(boolean queroSerAdmin) {
-		this.queroSerAdmin = queroSerAdmin;
-	}
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private Faculdade faculdade;
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+    public Usuario() {
 
-	public Faculdade getFaculdade() {
-		return faculdade;
-	}
+    }
 
-	public void setFaculdade(Faculdade faculdade) {
-		this.faculdade = faculdade;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public String getEmail() {
-		return email;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public void setEmail(String email) {
-		this.email = email;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public String getSenha() {
-		return senha;
-	}
+    public boolean isAdministrador() {
+        return administrador;
+    }
 
-	public void setSenha(String senha) {
-		this.senha = senha;
-	}
+    public void setAdministrador(boolean administrador) {
+        this.administrador = administrador;
+    }
 
-	public String getFotoPerfil() {
-		return fotoPerfil;
-	}
+    public boolean isQueroSerAdmin() {
+        return queroSerAdmin;
+    }
 
-	public void setFotoPerfil(String fotoPerfil) {
-		this.fotoPerfil = fotoPerfil;
-	}
+    public void setQueroSerAdmin(boolean queroSerAdmin) {
+        this.queroSerAdmin = queroSerAdmin;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Faculdade getFaculdade() {
+        return faculdade;
+    }
+
+    public void setFaculdade(Faculdade faculdade) {
+        this.faculdade = faculdade;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getFotoPerfil() {
+        return fotoPerfil;
+    }
+
+    public void setFotoPerfil(String fotoPerfil) {
+        this.fotoPerfil = fotoPerfil;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", email='" + email + '\'' +
+                ", senha='" + senha + '\'' +
+                ", queroSerAdmin=" + queroSerAdmin +
+                ", administrador=" + administrador +
+                ", fotoPerfil='" + fotoPerfil + '\'' +
+                ", faculdade=" + faculdade +
+                '}';
+    }
 }

@@ -20,9 +20,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.SQLException;
+
 import eventos.com.br.eventos.R;
-import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Usuario;
+import eventos.com.br.eventos.dao.UsuarioDAO;
 import eventos.com.br.eventos.util.AlertUtils;
 import eventos.com.br.eventos.util.ImageUtils;
 
@@ -64,9 +67,14 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void configNav(NavigationView navigationView) {
-
-        UsuarioDAO dao = new UsuarioDAO(getContext());
-        Usuario usuario = dao.getUsuario();
+        Usuario usuario = null;
+        try {
+            DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+            UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
+            usuario = dao.getUsuario();
+        } catch (SQLException e) {
+            Log.i("Error", e.getMessage());
+        }
 
         if (usuario != null) {
             usuarioLogado(navigationView, usuario);
@@ -178,10 +186,15 @@ public class BaseActivity extends AppCompatActivity {
         builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                UsuarioDAO dao = new UsuarioDAO(getContext());
-                dao.deletar();
 
-                usuarioSemLogin(navigationView);
+                try {
+                    DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+                    UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
+                    dao.deletar();
+                    usuarioSemLogin(navigationView);
+                } catch (SQLException e) {
+                    Log.i("Error", e.getMessage());
+                }
 
                 dialogInterface.dismiss();
             }
