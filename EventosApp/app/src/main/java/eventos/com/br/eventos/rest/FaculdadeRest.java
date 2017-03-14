@@ -35,4 +35,16 @@ public class FaculdadeRest {
         Gson gson = new Gson();
         return gson.fromJson(retorno, listType);
     }
+
+    public List<Faculdade> getFaculdades(Long idCidade) throws Exception {
+        HttpHelper helper = new HttpHelper();
+        //helper.setTIMEOUT_MILLIS(500);
+        String retorno = helper.doGet(url + "/" + idCidade);
+
+        Type listType = new TypeToken<ArrayList<Faculdade>>() {
+        }.getType();
+
+        Gson gson = new Gson();
+        return gson.fromJson(retorno, listType);
+    }
 }

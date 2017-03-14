@@ -9,7 +9,8 @@ import livroandroid.lib.utils.Prefs;
  */
 public class EventosApplication {
 
-    private static String URL = "http://192.168.1.26:8080/eventos/rest/";
+    private static String URL = "http://10.100.3.49:8080/eventos/rest/";
+    //private static String URL = "http://192.168.1.26:8080/eventos/rest/";
 
     public static void setURL(String endereco, Context context) {
 

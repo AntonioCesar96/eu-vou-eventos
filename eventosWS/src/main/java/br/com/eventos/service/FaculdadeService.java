@@ -16,8 +16,14 @@ public class FaculdadeService {
 	private FaculdadeDAO dao;
 
 	public List<FaculdadeDTO> getFaculdades() {
-		
+
 		List<Faculdade> faculdades = dao.getFaculdades();
+		return FaculdadeDTO.createListFaculdadeDTO(faculdades);
+	}
+
+	public List<FaculdadeDTO> getFaculdades(Long idCidade) {
+
+		List<Faculdade> faculdades = dao.getFaculdades(idCidade);
 		return FaculdadeDTO.createListFaculdadeDTO(faculdades);
 	}
 }

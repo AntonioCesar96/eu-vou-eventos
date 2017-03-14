@@ -29,7 +29,6 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
         super(context, dataBaseName, null, dataBaseVersion);
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase sd, ConnectionSource cs) {
         try {

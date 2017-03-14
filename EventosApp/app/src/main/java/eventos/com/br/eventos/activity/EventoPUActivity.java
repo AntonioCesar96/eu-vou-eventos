@@ -107,14 +107,11 @@ public class EventoPUActivity extends BaseActivity {
     }
 
     private void buscar() {
-
         if (AndroidUtils.isNetworkAvailable(getContext())) {
-            new FaculdadesTask().execute();
             new EstadosTask().execute();
         } else {
             alert("Alerta", "Você não esta conectado na internet");
         }
-
     }
 
     public void focusEditText() {
@@ -149,11 +146,8 @@ public class EventoPUActivity extends BaseActivity {
         spEstados = (Spinner) findViewById(R.id.spLocalEstado);
         spCidades = (Spinner) findViewById(R.id.spLocalCidade);
         btnSalvar = (Button) findViewById(R.id.btSalvar);
-
-
         editTexts = Arrays.asList(txtNome, txtDesc, txtDataInicio, txtHoraInicio, txtLocalNome, txtLocalCep, txtLocalRua, txtLocalBairro, txtLocalNumero, tNomeAtletica);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -176,9 +170,6 @@ public class EventoPUActivity extends BaseActivity {
 
                 if (validaOk) {
                     // Validação de campos preenchidos
-                    evento.setNome(txtNome.getText().toString());
-                    evento.setDescricao(txtDesc.getText().toString());
-                    evento.setNomeAtletica(tNomeAtletica.getText().toString());
                     Local local = new Local();
                     local.setNome(txtLocalNome.getText().toString());
                     local.setCep(txtLocalCep.getText().toString());
@@ -187,6 +178,9 @@ public class EventoPUActivity extends BaseActivity {
                     local.setBairro(txtLocalBairro.getText().toString());
                     local.setNumero(txtLocalNumero.getText().toString());
 
+                    evento.setNome(txtNome.getText().toString());
+                    evento.setDescricao(txtDesc.getText().toString());
+                    evento.setNomeAtletica(tNomeAtletica.getText().toString());
                     evento.setLocal(local);
                     evento.setFaculdade(faculdadeSelecionada);
 
@@ -344,7 +338,7 @@ public class EventoPUActivity extends BaseActivity {
         };
     }
 
-    private class FaculdadesTask extends AsyncTask<Void, Void, List<Faculdade>> {
+    private class FaculdadesTask extends AsyncTask<Long, Void, List<Faculdade>> {
         ProgressDialog progressDialog;
 
         @Override
@@ -353,11 +347,13 @@ public class EventoPUActivity extends BaseActivity {
         }
 
         @Override
-        protected List<Faculdade> doInBackground(Void... voids) {
+        protected List<Faculdade> doInBackground(Long... longs) {
+            Long idCidade = longs[0];
+
             FaculdadeRest service = new FaculdadeRest(getContext());
 
             try {
-                return service.getFaculdades();
+                return service.getFaculdades(idCidade);
             } catch (Exception e) {
                 Log.e("ERRO", e.getMessage(), e);
                 return null;
@@ -368,7 +364,6 @@ public class EventoPUActivity extends BaseActivity {
         protected void onPostExecute(List<Faculdade> faculdades) {
 
             progressDialog.dismiss();
-
             configSpinnerFaculdades(faculdades);
         }
     }
@@ -479,6 +474,17 @@ public class EventoPUActivity extends BaseActivity {
         BaseAdapter adapterCidades = new CidadesAdapter(getContext(), cidades);
         EventoPUActivity.this.spCidades.setAdapter(adapterCidades);
         EventoPUActivity.this.spCidades.setSelection(0);
+
+        // Spinner Faculdades
+        List<Faculdade> faculdades = new ArrayList<>();
+        Faculdade f = new Faculdade();
+        f.setNome("Selecione uma faculdade");
+        f.setId(Long.MAX_VALUE);
+        faculdades.add(0, f);
+
+        BaseAdapter adapterFaculdades = new FaculdadesAdapter(getContext(), faculdades);
+        EventoPUActivity.this.spFaculdades.setAdapter(adapterFaculdades);
+        EventoPUActivity.this.spFaculdades.setSelection(0);
     }
 
 
@@ -508,7 +514,6 @@ public class EventoPUActivity extends BaseActivity {
         protected void onPostExecute(List<Cidade> cidades) {
 
             progressDialog.dismiss();
-
             configSpinnerCidades(cidades);
         }
     }
@@ -535,6 +540,12 @@ public class EventoPUActivity extends BaseActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 cidadeSelecionada = cidadesAux.get(i);
+
+                if (cidadeSelecionada.getId().equals(Long.MAX_VALUE)) {
+                    return;
+                }
+
+                new FaculdadesTask().execute(cidadeSelecionada.getId());
             }
 
             @Override

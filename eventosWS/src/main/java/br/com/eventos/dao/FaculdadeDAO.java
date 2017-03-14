@@ -21,4 +21,12 @@ public class FaculdadeDAO {
 		TypedQuery<Faculdade> query = manager.createQuery("from Faculdade", Faculdade.class);
 		return query.getResultList();
 	}
+
+	public List<Faculdade> getFaculdades(Long idCidade) {
+
+		TypedQuery<Faculdade> query = manager.createQuery("from Faculdade where cidade.id = :idCidade",
+				Faculdade.class);
+		query.setParameter("idCidade", idCidade);
+		return query.getResultList();
+	}
 }
