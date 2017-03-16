@@ -16,6 +16,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 import eventos.com.br.eventos.R;
+import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Usuario;
 import eventos.com.br.eventos.dao.UsuarioDAO;
@@ -146,21 +147,20 @@ public class LoginActivity extends BaseActivity {
 
             if (usuario != null && usuario.getId() != null) {
                 // Salva o usuário
-                DataBaseHelper dataBaseHelper = null;
                 try {
-                    dataBaseHelper = new DataBaseHelper(getContext());
+                    DataBaseHelper dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
                     UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
-                    dao.save(usuario);
+                    dao.saveUsuarioDonoDoCelular(usuario);
+
+                    // Salva usuário na memória enquanto o aplicativo estiver aberto
+                    EventosApplication.getInstance().setUsuario(usuario);
+
                     finish();
                 } catch (SQLException e) {
                     Log.i("Error", e.getMessage());
-                } finally {
-                    if (dataBaseHelper != null) {
-                        dataBaseHelper.close();
-                    }
                 }
             } else {
-                alert("Alerta", "Usuário não esta cadastrado!");
+                alert("Alerta", "Login ou senha estão incorretos!");
             }
         }
     }

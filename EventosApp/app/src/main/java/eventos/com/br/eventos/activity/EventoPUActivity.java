@@ -33,6 +33,7 @@ import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.CidadesAdapter;
 import eventos.com.br.eventos.adapter.EstadosAdapter;
 import eventos.com.br.eventos.adapter.FaculdadesAdapter;
+import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Cidade;
 import eventos.com.br.eventos.model.Estado;
@@ -168,6 +169,11 @@ public class EventoPUActivity extends BaseActivity {
 
                 boolean validaOk = validaCampos();
 
+                Usuario usuario = EventosApplication.getInstance().getUsuario();
+                if (usuario == null){
+                    validaOk = false;
+                }
+
                 if (validaOk) {
                     // Validação de campos preenchidos
                     Local local = new Local();
@@ -183,24 +189,7 @@ public class EventoPUActivity extends BaseActivity {
                     evento.setNomeAtletica(tNomeAtletica.getText().toString());
                     evento.setLocal(local);
                     evento.setFaculdade(faculdadeSelecionada);
-
-                    Usuario usuario = null;
-                    DataBaseHelper dataBaseHelper = null;
-                    try {
-                        dataBaseHelper = new DataBaseHelper(getContext());
-                        UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
-                        usuario = dao.getUsuario();
-                    } catch (SQLException e) {
-                        Log.i("Error", e.getMessage());
-                    } finally {
-                        if (dataBaseHelper != null) {
-                            dataBaseHelper.close();
-                        }
-                    }
-
-                    if (usuario != null) {
-                        evento.setUsuario(usuario);
-                    }
+                    evento.setUsuario(usuario);
 
                     salvarTask(evento);
                 }
@@ -280,7 +269,7 @@ public class EventoPUActivity extends BaseActivity {
                 // Fecha a tela
                 getActivity().finish();
             } else {
-                AlertUtils.alert(getAppCompatActivity(), "Alerta", "Erro ao tentar salvar evento \"" + evento.getNome() + "\"");
+                AlertUtils.alert(getAppCompatActivity(), "Alerta", "Erro ao tentar salvar evento " + evento.getNome());
             }
         }
     }
@@ -367,7 +356,6 @@ public class EventoPUActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(List<Faculdade> faculdades) {
-
             progressDialog.dismiss();
             configSpinnerFaculdades(faculdades);
         }

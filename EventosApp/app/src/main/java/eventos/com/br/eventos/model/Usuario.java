@@ -30,6 +30,9 @@ public class Usuario implements Serializable {
     @DatabaseField
     private String fotoPerfil;
 
+    @DatabaseField
+    private boolean donoDoCelular;
+
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private Faculdade faculdade;
 
@@ -101,6 +104,13 @@ public class Usuario implements Serializable {
         this.fotoPerfil = fotoPerfil;
     }
 
+    public boolean isDonoDoCelular() {
+        return donoDoCelular;
+    }
+
+    public void setDonoDoCelular(boolean donoDoCelular) {
+        this.donoDoCelular = donoDoCelular;
+    }
 
     @Override
     public String toString() {

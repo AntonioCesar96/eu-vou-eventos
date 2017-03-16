@@ -5,6 +5,7 @@ import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
 
+import eventos.com.br.eventos.model.Estado;
 import eventos.com.br.eventos.model.Pais;
 
 /**
@@ -16,5 +17,13 @@ public class PaisDAO extends BaseDaoImpl<Pais, Long> {
         super(Pais.class);
         setConnectionSource(cs);
         initialize();
+    }
+
+    public void save(Pais p) throws SQLException {
+        if (p != null) {
+            if (!idExists(p.getId())){
+                create(p);
+            }
+        }
     }
 }

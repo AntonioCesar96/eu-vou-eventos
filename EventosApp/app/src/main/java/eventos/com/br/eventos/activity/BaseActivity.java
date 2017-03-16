@@ -23,6 +23,7 @@ import android.widget.Toast;
 import java.sql.SQLException;
 
 import eventos.com.br.eventos.R;
+import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Usuario;
 import eventos.com.br.eventos.dao.UsuarioDAO;
@@ -67,19 +68,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void configNav(NavigationView navigationView) {
-        Usuario usuario = null;
-        DataBaseHelper dataBaseHelper = null;
-        try {
-            dataBaseHelper = new DataBaseHelper(getContext());
-            UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
-            usuario = dao.getUsuario();
-        } catch (SQLException e) {
-            Log.i("Error", e.getMessage());
-        } finally {
-            if (dataBaseHelper != null) {
-                dataBaseHelper.close();
-            }
-        }
+
+        Usuario usuario = EventosApplication.getInstance().getUsuario();
 
         if (usuario != null) {
             usuarioLogado(navigationView, usuario);
@@ -192,18 +182,17 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
-                DataBaseHelper dataBaseHelper = null;
                 try {
-                    dataBaseHelper = new DataBaseHelper(getContext());
+                    DataBaseHelper dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
                     UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
-                    dao.deletar();
+                    dao.deletarUsuarioDonoDoCelular();
+
+                    // Tira usuário da memória
+                    EventosApplication.getInstance().setUsuario(null);
+
                     usuarioSemLogin(navigationView);
                 } catch (SQLException e) {
-                    Log.i("Error", e.getMessage());
-                } finally {
-                    if (dataBaseHelper != null) {
-                        dataBaseHelper.close();
-                    }
+                    Log.i("", e.getMessage());
                 }
 
                 dialogInterface.dismiss();
@@ -253,31 +242,31 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected AppCompatActivity getAppCompatActivity() {
+    public AppCompatActivity getAppCompatActivity() {
         return this;
     }
 
-    protected Context getContext() {
+    public Context getContext() {
         return this;
     }
 
-    protected AppCompatActivity getActivity() {
+    public AppCompatActivity getActivity() {
         return this;
     }
 
-    protected void toast(String msg) {
+    public void toast(String msg) {
         Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
-    protected void alert(String title, String msg) {
+    public void alert(String title, String msg) {
         AlertUtils.alert(this, title, msg);
     }
 
-    protected void snack(View view, String msg) {
+    public void snack(View view, String msg) {
         this.snack(view, msg, (Runnable) null);
     }
 
-    protected void snack(View view, String msg, final Runnable runnable) {
+    public void snack(View view, String msg, final Runnable runnable) {
         Snackbar.make(view, msg, Snackbar.LENGTH_LONG).setAction("Ok", new View.OnClickListener() {
             public void onClick(View v) {
                 if (runnable != null) {

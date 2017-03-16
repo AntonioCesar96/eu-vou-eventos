@@ -106,6 +106,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp"
                         android:textColorHint="#ccc"
+                        android:background="@color/white"
                         app:backgroundTint="#fff" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -147,6 +148,7 @@
                                 android:paddingRight="10dp"
                                 android:paddingTop="5dp"
                                 android:textColorHint="#ccc"
+                                android:background="@color/white"
                                 app:backgroundTint="#fff" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -183,6 +185,7 @@
                                 android:paddingRight="10dp"
                                 android:paddingTop="5dp"
                                 android:textColorHint="#ccc"
+                                android:background="@color/white"
                                 app:backgroundTint="#fff" />
                         </android.support.design.widget.TextInputLayout>
 
@@ -212,6 +215,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp"
                         android:textColorHint="#ccc"
+                        android:background="@color/white"
                         app:backgroundTint="#fff" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -240,6 +244,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp"
                         android:textColorHint="#ccc"
+                        android:background="@color/white"
                         app:backgroundTint="#fff" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -267,6 +272,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp"
                         android:textColorHint="#ccc"
+                        android:background="@color/white"
                         app:backgroundTint="#fff" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -295,6 +301,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp"
                         android:textColorHint="#ccc"
+                        android:background="@color/white"
                         app:backgroundTint="#fff" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -322,6 +329,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp"
                         android:textColorHint="#ccc"
+                        android:background="@color/white"
                         app:backgroundTint="#fff" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -387,6 +395,7 @@
                         android:paddingRight="10dp"
                         android:paddingTop="5dp"
                         android:textColorHint="#ccc"
+                        android:background="@color/white"
                         app:backgroundTint="#fff" />
                 </android.support.design.widget.TextInputLayout>
 
@@ -418,6 +427,7 @@
                         android:paddingTop="5dp"
                         android:scrollbars="vertical"
                         android:textColorHint="#ccc"
+                        android:background="@color/white"
                         app:backgroundTint="#fff" />
 
                 </android.support.design.widget.TextInputLayout>
@@ -428,7 +438,6 @@
                     android:layout_height="1dp"
                     android:background="@color/cinzaBBB" />
 
-
                 <Button
                     android:id="@+id/btSalvar"
                     android:layout_width="match_parent"
@@ -438,7 +447,6 @@
                     android:background="@color/primary"
                     android:text="Salvar"
                     android:textColor="#fff" />
-
             </LinearLayout>
         </ScrollView>
 

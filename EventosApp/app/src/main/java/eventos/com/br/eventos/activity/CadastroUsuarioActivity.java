@@ -20,6 +20,7 @@ import java.util.List;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.FaculdadesAdapter;
+import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Faculdade;
 import eventos.com.br.eventos.model.Usuario;
@@ -178,19 +179,18 @@ public class CadastroUsuarioActivity extends BaseActivity {
 
             if (usuario != null && usuario.getId() != null) {
                 // Salva o usuário
-                DataBaseHelper dataBaseHelper = null;
                 try {
-                    dataBaseHelper = new DataBaseHelper(getContext());
+                    DataBaseHelper dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
                     UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
-                    dao.save(usuario);
+                    dao.saveUsuarioDonoDoCelular(usuario);
+
+                    // Salva usuário na memória enquanto o aplicativo estiver aberto
+                    EventosApplication.getInstance().setUsuario(usuario);
+
                     finish();
                     //startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 } catch (SQLException e) {
                     Log.i("Error", e.getMessage());
-                }  finally {
-                    if (dataBaseHelper != null) {
-                        dataBaseHelper.close();
-                    }
                 }
 
             } else {

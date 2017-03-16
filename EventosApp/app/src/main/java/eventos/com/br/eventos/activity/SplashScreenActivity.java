@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 import eventos.com.br.eventos.R;
+import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Usuario;
 import eventos.com.br.eventos.dao.UsuarioDAO;
@@ -17,7 +18,6 @@ import eventos.com.br.eventos.rest.UsuarioRest;
 import livroandroid.lib.utils.AndroidUtils;
 
 public class SplashScreenActivity extends BaseActivity {
-
     protected DataBaseHelper dataBaseHelper;
 
     @Override
@@ -25,17 +25,20 @@ public class SplashScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
-        dataBaseHelper = new DataBaseHelper(getContext());
+        dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
 
         Usuario usuario = null;
         try {
             UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
-            usuario = dao.getUsuario();
+            usuario = dao.getUsuarioDonoDoCelular();
         } catch (SQLException e) {
-            Log.i("Error", e.getMessage());
+            Log.i("", e.getMessage());
         }
 
         if (usuario != null) {
+
+            // Salva usuário na memória enquanto o aplicativo estiver aberto
+            EventosApplication.getInstance().setUsuario(usuario);
 
             if (AndroidUtils.isNetworkAvailable(getContext())) {
                 new UsuarioTask().execute(usuario.getEmail(), usuario.getSenha());
@@ -44,14 +47,6 @@ public class SplashScreenActivity extends BaseActivity {
             }
         } else {
             goMainActivity();
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (dataBaseHelper != null) {
-            dataBaseHelper.close();
         }
     }
 
@@ -93,10 +88,14 @@ public class SplashScreenActivity extends BaseActivity {
                 // Salva o usuário
                 try {
                     UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
-                    dao.deletar();
-                    dao.save(usuario);
+                    dao.deletarUsuarioDonoDoCelular();
+                    dao.saveUsuarioDonoDoCelular(usuario);
+
+                    // Salva usuário na memória enquanto o aplicativo estiver aberto
+                    EventosApplication.getInstance().setUsuario(usuario);
+
                 } catch (SQLException e) {
-                    Log.i("Error", e.getMessage());
+                    Log.i("", e.getMessage());
                 }
             }
             Intent intent = new Intent(getContext(), MainActivity.class);

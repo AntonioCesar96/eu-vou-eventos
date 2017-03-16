@@ -5,6 +5,7 @@ import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
 
+import eventos.com.br.eventos.model.Faculdade;
 import eventos.com.br.eventos.model.Local;
 
 /**
@@ -16,5 +17,15 @@ public class LocalDAO extends BaseDaoImpl<Local, Long> {
         super(Local.class);
         setConnectionSource(cs);
         initialize();
+    }
+
+    public void save(Local l) throws SQLException {
+        if (l != null) {
+            if (!idExists(l.getId())){
+                create(l);
+            }
+
+            new CidadeDAO(connectionSource).save(l.getCidade());
+        }
     }
 }

@@ -101,7 +101,7 @@ public class MainActivity extends BaseActivity {
     }
 
     private void openDialogFilter() {
-        FilterEventosDialog.show(getSupportFragmentManager(),getContext(), new FilterEventosDialog.Callback() {
+        FilterEventosDialog.show(getSupportFragmentManager(),getActivity(), new FilterEventosDialog.Callback() {
             @Override
             public void onFilter() {
                 Toast.makeText(getContext(), "Volta", Toast.LENGTH_SHORT).show();

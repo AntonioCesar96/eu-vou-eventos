@@ -70,6 +70,7 @@ public class EventosFragment extends BaseFragment {
 
         return view;
     }
+
     private SwipeRefreshLayout.OnRefreshListener OnRefreshListener() {
         return new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -89,7 +90,6 @@ public class EventosFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         taskEventos(false);
     }
 
@@ -135,30 +135,25 @@ public class EventosFragment extends BaseFragment {
         }
     }
 
-
     private EventoAdapter.CompartilharOnClickListener onClickCompartilhar() {
         return new EventoAdapter.CompartilharOnClickListener() {
             @Override
             public void onClickCompartilhar(EventoAdapter.EventoViewHolder holder, int idx) {
                 Evento e = eventos.get(idx);
-
                 Toast.makeText(getContext(), "Compartilhar evento " + e.getNome(), Toast.LENGTH_SHORT).show();
             }
         };
     }
-
 
     private EventoAdapter.FavoritarOnClickListener onClickFavoritar() {
         return new EventoAdapter.FavoritarOnClickListener() {
             @Override
             public void onClickFavoritar(EventoAdapter.EventoViewHolder holder, int idx) {
                 Evento e = eventos.get(idx);
-
                 Toast.makeText(getContext(), "Favoritar evento " + e.getNome(), Toast.LENGTH_SHORT).show();
             }
         };
     }
-
 
     private EventoAdapter.EventoOnClickListener onClickEvento() {
         return new EventoAdapter.EventoOnClickListener() {

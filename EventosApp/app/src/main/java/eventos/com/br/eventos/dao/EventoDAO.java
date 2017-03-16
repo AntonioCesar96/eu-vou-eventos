@@ -39,27 +39,26 @@ public class EventoDAO extends BaseDaoImpl<Evento, Long> {
             FaculdadeDAO faculdadeDAO = new FaculdadeDAO(cs);
             LocalDAO localDAO = new LocalDAO(cs);
 
-            int result = this.create(evento);
+            int result = create(evento);
 
             if (result == 1) {
-                usuarioDAO.create(evento.getUsuario());
-                faculdadeDAO.create(evento.getFaculdade());
-                localDAO.create(evento.getLocal());
+                usuarioDAO.save(evento.getUsuario());
+                faculdadeDAO.save(evento.getFaculdade());
+                localDAO.save(evento.getLocal());
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-        public List<Evento> all() {
+    public List<Evento> all() {
 
         try {
             List<Evento> eventosFiltrados = new ArrayList<>();
             List<Evento> eventos = this.queryForAll();
 
-            for (Evento e: eventos) {
-                if (e.getLocal() == null){
+            for (Evento e : eventos) {
+                if (e.getLocal() == null) {
                     Local l = new Local();
                     l.setNome("");
                     e.setLocal(l);
@@ -70,7 +69,7 @@ public class EventoDAO extends BaseDaoImpl<Evento, Long> {
                 }
             }
 
-           Collections.sort(eventosFiltrados, new Comparator<Evento>() {
+            Collections.sort(eventosFiltrados, new Comparator<Evento>() {
                 public int compare(Evento o1, Evento o2) {
                     return o1.getDataHora().compareTo(o2.getDataHora());
                 }
@@ -86,10 +85,8 @@ public class EventoDAO extends BaseDaoImpl<Evento, Long> {
     public void remove(Evento e) {
         try {
             DeleteBuilder<Evento, Long> deleteBuilder = deleteBuilder();
-
             deleteBuilder.where().eq("id", e.getId());
             deleteBuilder.delete();
-
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -99,13 +96,12 @@ public class EventoDAO extends BaseDaoImpl<Evento, Long> {
 
         try {
             List<Evento> eventos = queryForEq("id", id);
-
             if (eventos != null && eventos.size() > 0) {
                 return eventos.get(0);
             }
             return null;
         } catch (SQLException e) {
-            Log.e("ERROR", e.getMessage());
+            Log.e("", e.getMessage());
             return null;
         }
     }

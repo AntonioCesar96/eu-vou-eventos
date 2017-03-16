@@ -51,8 +51,8 @@ public class EventoRest {
     public List<Evento> getEventos(TipoBusca tipoDeBusca) throws Exception {
 
         if (tipoDeBusca.equals(TipoBusca.FAVORITOS)) {
-            DataBaseHelper baseHelper = new DataBaseHelper(context);
-            EventoDAO eventoDAO = new EventoDAO(baseHelper.getConnectionSource());
+            DataBaseHelper dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
+            EventoDAO eventoDAO = new EventoDAO(dataBaseHelper.getConnectionSource());
 
             return eventoDAO.all();
         }
@@ -85,14 +85,7 @@ public class EventoRest {
 
     private List<Evento> getEventosPorUsuario() throws IOException {
 
-        Usuario usuario = null;
-        try {
-            DataBaseHelper dataBaseHelper = new DataBaseHelper(context);
-            UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
-            usuario = dao.getUsuario();
-        } catch (SQLException e) {
-            Log.i("Error", e.getMessage());
-        }
+        Usuario usuario = EventosApplication.getInstance().getUsuario();
 
         if (usuario != null) {
             HttpHelper helper = new HttpHelper();

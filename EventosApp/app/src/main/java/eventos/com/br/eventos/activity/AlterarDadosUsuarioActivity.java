@@ -24,6 +24,7 @@ import java.util.List;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.FaculdadesAdapter;
+import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Faculdade;
 import eventos.com.br.eventos.model.ResponseWithURL;
@@ -59,17 +60,12 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
 
         cameraUtil = new CameraUtil(getActivity());
 
-        DataBaseHelper dataBaseHelper = null;
         try {
-            dataBaseHelper = new DataBaseHelper(getContext());
+            DataBaseHelper dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
             UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
-            usuario = dao.getUsuario();
+            usuario = dao.getUsuarioDonoDoCelular();
         } catch (SQLException e) {
-            Log.i("Error", e.getMessage());
-        } finally {
-            if (dataBaseHelper != null) {
-                dataBaseHelper.close();
-            }
+            Log.i("", e.getMessage());
         }
 
         initFields();
@@ -251,21 +247,16 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
             progressDialog.dismiss();
 
             if (usuario != null && usuario.getId() != null) {
-                // Salva o usuário
 
-                DataBaseHelper dataBaseHelper = null;
+                // Salva o usuário
                 try {
-                    dataBaseHelper = new DataBaseHelper(getContext());
+                    DataBaseHelper dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
                     UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
-                    dao.deletar();
-                    dao.save(usuario);
+                    dao.deletarUsuarioDonoDoCelular();
+                    dao.saveUsuarioDonoDoCelular(usuario);
                     finish();
                 } catch (SQLException e) {
-                    Log.i("Error", e.getMessage());
-                }  finally {
-                    if (dataBaseHelper != null) {
-                        dataBaseHelper.close();
-                    }
+                    Log.i("", e.getMessage());
                 }
             } else {
                 alert("Alerta", "Aconteceu um erro ao tentar atualizar os dados usuário!");
