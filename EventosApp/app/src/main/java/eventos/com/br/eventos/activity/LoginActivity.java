@@ -146,13 +146,18 @@ public class LoginActivity extends BaseActivity {
 
             if (usuario != null && usuario.getId() != null) {
                 // Salva o usuário
+                DataBaseHelper dataBaseHelper = null;
                 try {
-                    DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+                    dataBaseHelper = new DataBaseHelper(getContext());
                     UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
                     dao.save(usuario);
                     finish();
                 } catch (SQLException e) {
                     Log.i("Error", e.getMessage());
+                } finally {
+                    if (dataBaseHelper != null) {
+                        dataBaseHelper.close();
+                    }
                 }
             } else {
                 alert("Alerta", "Usuário não esta cadastrado!");

@@ -59,12 +59,17 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
 
         cameraUtil = new CameraUtil(getActivity());
 
+        DataBaseHelper dataBaseHelper = null;
         try {
-            DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+            dataBaseHelper = new DataBaseHelper(getContext());
             UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
             usuario = dao.getUsuario();
         } catch (SQLException e) {
             Log.i("Error", e.getMessage());
+        } finally {
+            if (dataBaseHelper != null) {
+                dataBaseHelper.close();
+            }
         }
 
         initFields();
@@ -248,14 +253,19 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
             if (usuario != null && usuario.getId() != null) {
                 // Salva o usuário
 
+                DataBaseHelper dataBaseHelper = null;
                 try {
-                    DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+                    dataBaseHelper = new DataBaseHelper(getContext());
                     UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
                     dao.deletar();
                     dao.save(usuario);
                     finish();
                 } catch (SQLException e) {
                     Log.i("Error", e.getMessage());
+                }  finally {
+                    if (dataBaseHelper != null) {
+                        dataBaseHelper.close();
+                    }
                 }
             } else {
                 alert("Alerta", "Aconteceu um erro ao tentar atualizar os dados usuário!");

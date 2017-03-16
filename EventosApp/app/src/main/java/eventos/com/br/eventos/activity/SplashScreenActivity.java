@@ -18,14 +18,17 @@ import livroandroid.lib.utils.AndroidUtils;
 
 public class SplashScreenActivity extends BaseActivity {
 
+    protected DataBaseHelper dataBaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+        dataBaseHelper = new DataBaseHelper(getContext());
+
         Usuario usuario = null;
         try {
-            DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
             UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
             usuario = dao.getUsuario();
         } catch (SQLException e) {
@@ -41,6 +44,14 @@ public class SplashScreenActivity extends BaseActivity {
             }
         } else {
             goMainActivity();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (dataBaseHelper != null) {
+            dataBaseHelper.close();
         }
     }
 
@@ -81,7 +92,6 @@ public class SplashScreenActivity extends BaseActivity {
             if (usuario != null && usuario.getId() != null) {
                 // Salva o usuário
                 try {
-                    DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
                     UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
                     dao.deletar();
                     dao.save(usuario);

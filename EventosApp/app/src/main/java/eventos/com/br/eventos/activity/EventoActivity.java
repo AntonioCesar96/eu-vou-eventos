@@ -26,7 +26,6 @@ public class EventoActivity extends BaseActivity {
     private FloatingActionButton fabFavorito;
     private ImageView appBarImg;
     private Evento e;
-    private boolean flagClickFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +52,7 @@ public class EventoActivity extends BaseActivity {
         if (savedInstanceState == null) {
             // Cria o fragment com o mesmo Bundle (args) da intent
             EventoFragment frag = new EventoFragment();
+            frag.setFabButton(fabFavorito);
             frag.setArguments(getIntent().getExtras());
             // Adiciona o fragment no layout
             getSupportFragmentManager().beginTransaction().add(R.id.eventoFragment, frag).commit();
@@ -61,7 +61,6 @@ public class EventoActivity extends BaseActivity {
 
     private void configClicks() {
         appBarImg.setOnClickListener(clickImg());
-        fabFavorito.setOnClickListener(clickFabFavorito());
     }
 
     private void configToolbar() {
@@ -70,50 +69,6 @@ public class EventoActivity extends BaseActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
-
-    private View.OnClickListener clickFabFavorito() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                if (flagClickFab) {
-                    fabFavorito.setImageResource(R.drawable.ic_turned_in_not_not_padding);
-                    flagClickFab = false;
-
-                    desFavoritar();
-
-                    return;
-                }
-                fabFavorito.setImageResource(R.drawable.ic_turned_in_not_padding);
-                flagClickFab = true;
-
-                favoritar();
-            }
-        };
-    }
-
-    private void favoritar() {
-        try {
-            DataBaseHelper baseHelper = new DataBaseHelper(getContext());
-            EventoDAO eventoDAO = new EventoDAO(baseHelper.getConnectionSource());
-
-            eventoDAO.save(e);
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-    }
-
-    private void desFavoritar() {
-        try {
-            DataBaseHelper baseHelper = new DataBaseHelper(getContext());
-            EventoDAO eventoDAO = new EventoDAO(baseHelper.getConnectionSource());
-
-            eventoDAO.remove(e);
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-        }
-    }
-
 
     private View.OnClickListener clickImg() {
         return new View.OnClickListener() {

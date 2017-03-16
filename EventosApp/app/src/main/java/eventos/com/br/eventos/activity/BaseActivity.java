@@ -68,12 +68,17 @@ public class BaseActivity extends AppCompatActivity {
 
     private void configNav(NavigationView navigationView) {
         Usuario usuario = null;
+        DataBaseHelper dataBaseHelper = null;
         try {
-            DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+            dataBaseHelper = new DataBaseHelper(getContext());
             UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
             usuario = dao.getUsuario();
         } catch (SQLException e) {
             Log.i("Error", e.getMessage());
+        } finally {
+            if (dataBaseHelper != null) {
+                dataBaseHelper.close();
+            }
         }
 
         if (usuario != null) {
@@ -187,13 +192,18 @@ public class BaseActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
+                DataBaseHelper dataBaseHelper = null;
                 try {
-                    DataBaseHelper dataBaseHelper = new DataBaseHelper(getContext());
+                    dataBaseHelper = new DataBaseHelper(getContext());
                     UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
                     dao.deletar();
                     usuarioSemLogin(navigationView);
                 } catch (SQLException e) {
                     Log.i("Error", e.getMessage());
+                } finally {
+                    if (dataBaseHelper != null) {
+                        dataBaseHelper.close();
+                    }
                 }
 
                 dialogInterface.dismiss();
