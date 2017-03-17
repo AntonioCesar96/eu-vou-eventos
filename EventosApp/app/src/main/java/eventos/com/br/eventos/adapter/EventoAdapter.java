@@ -80,15 +80,6 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
                 }
             });
         }
-
-        if (favoritarOnClickListener != null) {
-            holder.icFavorite.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    favoritarOnClickListener.onClickFavoritar(holder, position);
-                }
-            });
-        }
     }
 
     @Override
@@ -114,7 +105,6 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
         TextView txtData;
         TextView txtNome;
         TextView txtLocal;
-        ImageButton icFavorite;
         ImageButton icCompartilhar;
         ImageView imgEvento;
         LinearLayout imgEventoWrapper;
@@ -126,7 +116,6 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
             txtNome = (TextView) view.findViewById(R.id.txtNome);
             txtData = (TextView) view.findViewById(R.id.txtData);
             txtLocal = (TextView) view.findViewById(R.id.txtLocal);
-            icFavorite = (ImageButton) view.findViewById(R.id.icFavorito);
             icCompartilhar = (ImageButton) view.findViewById(R.id.icCompartilhar);
             imgEvento = (ImageView) view.findViewById(R.id.imgEvento);
             imgEventoWrapper = (LinearLayout) view.findViewById(R.id.imgEventoWrapper);

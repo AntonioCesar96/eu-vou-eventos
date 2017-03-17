@@ -13,14 +13,13 @@ import livroandroid.lib.utils.Prefs;
 /**
  * Created by Antonio Cesar on 18/07/2016.
  */
-public class EventosApplication extends Application{
+public class EventosApplication extends Application {
 
-    private static String URL = "http://10.100.3.49:8080/eventos/rest/";
+    private static String URL = "http://192.168.0.2:8080/eventos/rest/";
     private static EventosApplication instance = null;
     private Usuario usuario = null;
     private DataBaseHelper dataBaseHelper = null;
-
-    int count = 0;
+    private Long idFaculdade = 0L;
 
     @Override
     public void onCreate() {
@@ -50,6 +49,14 @@ public class EventosApplication extends Application{
         this.usuario = usuario;
     }
 
+    public Long getIdFaculdade() {
+        return idFaculdade;
+    }
+
+    public void setIdFaculdade(Long idFaculdade) {
+        this.idFaculdade = idFaculdade;
+    }
+
     public DataBaseHelper getDataBaseHelper() {
         if (dataBaseHelper == null) {
             dataBaseHelper = OpenHelperManager.getHelper(this, DataBaseHelper.class);
@@ -64,10 +71,10 @@ public class EventosApplication extends Application{
 
     public static String getURL(Context context) {
         String url = Prefs.getString(context, "url");
-
         if (url != null && !"".equals(url)) {
             return url;
         }
+
         return URL;
     }
 }

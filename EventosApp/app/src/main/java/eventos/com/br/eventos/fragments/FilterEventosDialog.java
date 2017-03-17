@@ -1,5 +1,6 @@
 package eventos.com.br.eventos.fragments;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -44,6 +46,7 @@ public class FilterEventosDialog extends DialogFragment {
     private BaseActivity activity;
     private Callback callback;
     private TextView tNome;
+    private ProgressBar progress;
 
     // Método utilitário para criar o dialog
     public static void show(FragmentManager fm, AppCompatActivity activity, Callback callback) {
@@ -73,7 +76,7 @@ public class FilterEventosDialog extends DialogFragment {
         final int height = metrics.heightPixels;
 
         if (getDialog().getWindow() != null) {
-            getDialog().getWindow().setLayout(width, width);
+           // getDialog().getWindow().setLayout(width, width);
         }
     }
 
@@ -89,6 +92,7 @@ public class FilterEventosDialog extends DialogFragment {
         spFaculdades = (Spinner) view.findViewById(R.id.spFaculdades);
         spEstados = (Spinner) view.findViewById(R.id.spEstados);
         spCidades = (Spinner) view.findViewById(R.id.spCidades);
+        progress = (ProgressBar) view.findViewById(R.id.progress);
 
         buscar();
 
@@ -101,9 +105,8 @@ public class FilterEventosDialog extends DialogFragment {
             public void onClick(View view) {
 
                 Context context = view.getContext();
-
                 if (callback != null) {
-                    callback.onFilter();
+                    callback.onFilter(faculdadeSelecionada);
                 }
 
                 // Fecha o DialogFragment
@@ -114,7 +117,7 @@ public class FilterEventosDialog extends DialogFragment {
 
     // Interface para retornar o resultado
     public interface Callback {
-        void onFilter();
+        void onFilter(Faculdade faculdadeSelecionada);
     }
 
     // Spinners
@@ -127,11 +130,10 @@ public class FilterEventosDialog extends DialogFragment {
     }
 
     private class FaculdadesTask extends AsyncTask<Long, Void, List<Faculdade>> {
-        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(getContext(), "Buscando faculdades", "Aguarde...", false, false);
+            progress.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -150,7 +152,7 @@ public class FilterEventosDialog extends DialogFragment {
 
         @Override
         protected void onPostExecute(List<Faculdade> faculdades) {
-            progressDialog.dismiss();
+            progress.setVisibility(View.GONE);
             configSpinnerFaculdades(faculdades);
         }
     }
@@ -186,13 +188,11 @@ public class FilterEventosDialog extends DialogFragment {
         });
     }
 
-
     private class EstadosTask extends AsyncTask<Void, Void, List<Estado>> {
-        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(getContext(), "Buscando estados", "Aguarde...", false, false);
+            progress.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -209,9 +209,7 @@ public class FilterEventosDialog extends DialogFragment {
 
         @Override
         protected void onPostExecute(List<Estado> estados) {
-
-            progressDialog.dismiss();
-
+            progress.setVisibility(View.GONE);
             configSpinnerEstados(estados);
         }
     }
@@ -265,7 +263,7 @@ public class FilterEventosDialog extends DialogFragment {
         // Spinner Faculdades
         List<Faculdade> faculdades = new ArrayList<>();
         Faculdade f = new Faculdade();
-        f.setNome("Selecione uma faculdade");
+        f.setNome("Faculdade");
         f.setId(Long.MAX_VALUE);
         faculdades.add(0, f);
 
@@ -276,17 +274,15 @@ public class FilterEventosDialog extends DialogFragment {
 
 
     private class CidadesTask extends AsyncTask<Long, Void, List<Cidade>> {
-        ProgressDialog progressDialog;
 
         @Override
         protected void onPreExecute() {
-            progressDialog = ProgressDialog.show(getContext(), "Buscando cidades", "Aguarde...", false, false);
+            progress.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected List<Cidade> doInBackground(Long... ids) {
             Long idEstado = ids[0];
-
             EnderecoRest service = new EnderecoRest(getContext());
 
             try {
@@ -299,8 +295,7 @@ public class FilterEventosDialog extends DialogFragment {
 
         @Override
         protected void onPostExecute(List<Cidade> cidades) {
-
-            progressDialog.dismiss();
+            progress.setVisibility(View.GONE);
             configSpinnerCidades(cidades);
         }
     }

@@ -56,4 +56,15 @@
         <item>FACSUL</item>
         <item>UCDB</item>
     </string-array>
+
+    <string-array name="array_periodos">
+        <item>Data do evento</item>
+        <item>Nenhum</item>
+        <item>Hoje</item>
+        <item>Amanhã</item>
+        <item>Esta semana</item>
+        <item>Este fim de semana</item>
+        <item>Próxima semana</item>
+        <item>Este mês</item>
+    </string-array>
 </resources>

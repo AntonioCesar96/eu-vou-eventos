@@ -1,62 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_gravity="center"
     android:orientation="vertical"
-    android:padding="6dp">
+    android:padding="16dp">
 
-    <Spinner
-        android:id="@+id/spEstados"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/array_estados">
+        android:layout_height="wrap_content">
 
-    </Spinner>
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/cinzaBBB" />
+            <Spinner
+                android:id="@+id/spEstados"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/array_estados"></Spinner>
 
-    <Spinner
-        android:id="@+id/spCidades"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/array_cidades">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/cinzaBBB" />
 
-    </Spinner>
+            <Spinner
+                android:id="@+id/spCidades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/array_cidades"></Spinner>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/cinzaBBB" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/cinzaBBB" />
 
-    <Spinner
-        android:id="@+id/spFaculdades"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:entries="@array/array_faculdades">
+            <Spinner
+                android:id="@+id/spFaculdades"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/array_faculdades">
+            </Spinner>
 
-    </Spinner>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/cinzaBBB" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="15dp"
-        android:layout_marginTop="15dp"
-        android:background="@color/cinzaBBB" />
+            <Spinner
+                android:id="@+id/spPeriodo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:entries="@array/array_periodos">
+            </Spinner>
 
-    <Button
-        android:id="@+id/btnFiltrar"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_gravity="center"
-        android:background="@color/primary"
-        android:text="Filtrar"
-        android:textColor="@color/white" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:background="@color/cinzaBBB" />
+
+            <Button
+                android:id="@+id/btnFiltrar"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:background="@color/primary"
+                android:text="Buscar"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+        <include layout="@layout/include_progress"/>
+    </FrameLayout>
+
 </LinearLayout>

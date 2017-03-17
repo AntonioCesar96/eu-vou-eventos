@@ -36,6 +36,11 @@ public class EventosService {
 		Evento evento = db.getEventosPorId(idEvento);
 		return EventoFullDTO.createEventoFullDTO(evento);
 	}
+	
+	public List<EventosFeedDTO> getEventosPorFaculdade(Long idFaculdade) {
+		List<Evento> eventos = db.getEventosPorFaculdade(idFaculdade);
+		return EventosFeedDTO.createListEventoFeedDTO(eventos);
+	}
 
 	public void save(Evento e) {
 		db.save(e);

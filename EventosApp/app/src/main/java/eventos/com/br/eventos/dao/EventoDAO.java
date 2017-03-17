@@ -87,6 +87,8 @@ public class EventoDAO extends BaseDaoImpl<Evento, Long> {
             DeleteBuilder<Evento, Long> deleteBuilder = deleteBuilder();
             deleteBuilder.where().eq("id", e.getId());
             deleteBuilder.delete();
+
+            new LocalDAO(cs).deletar(e.getLocal());
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

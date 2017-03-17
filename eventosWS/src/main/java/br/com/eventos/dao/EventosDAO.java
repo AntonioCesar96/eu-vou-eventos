@@ -87,4 +87,18 @@ public class EventosDAO {
 	public void update(Evento e) {
 		manager.merge(e);
 	}
+
+	public List<Evento> getEventosPorFaculdade(Long idFaculdade) {
+		TypedQuery<Evento> query = manager.createQuery(
+				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+						+ "from Evento e where e.faculdade.id = :idFaculdade order by e.dataHora",
+				Evento.class);
+
+		query.setParameter("idFaculdade", idFaculdade);
+
+		List<Evento> list = query.getResultList();
+		
+		Calendar dataAtual = Calendar.getInstance();
+		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
+	}
 }

@@ -35,6 +35,7 @@ import eventos.com.br.eventos.util.TipoBusca;
 import livroandroid.lib.utils.FileUtils;
 import livroandroid.lib.utils.HttpHelper;
 import livroandroid.lib.utils.IOUtils;
+import livroandroid.lib.utils.Prefs;
 
 /**
  * Created by antonio on 16/07/16.
@@ -56,18 +57,28 @@ public class EventoRest {
 
             return eventoDAO.all();
         }
+
         if (tipoDeBusca.equals(TipoBusca.USUARIO)) {
             return getEventosPorUsuario();
         }
-        //return getEventosProximos();
-        return getEventosFromRaw();
+
+        return getEventosProximos();
+        //return getEventosFromRaw();
     }
 
     private List<Evento> getEventosProximos() throws IOException {
+
+        Long idFaculdade = EventosApplication.getInstance().getIdFaculdade();
+
+        String urlProximos = url + "/proximos";
+        if (idFaculdade != 0) {
+            urlProximos = url + "/faculdade/" + idFaculdade;
+        }
+
         HttpHelper helper = new HttpHelper();
         helper.LOG_ON = true;
 
-        String json = helper.doGet(url + "/proximos");
+        String json = helper.doGet(urlProximos);
 
         Type listType = new TypeToken<ArrayList<Evento>>() {
         }.getType();
@@ -91,7 +102,7 @@ public class EventoRest {
             HttpHelper helper = new HttpHelper();
             helper.LOG_ON = true;
 
-            String json = helper.doGet(url + "/usuario/"+usuario.getId());
+            String json = helper.doGet(url + "/usuario/" + usuario.getId());
 
             Type listType = new TypeToken<ArrayList<Evento>>() {
             }.getType();

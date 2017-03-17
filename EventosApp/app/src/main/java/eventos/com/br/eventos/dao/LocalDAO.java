@@ -28,4 +28,12 @@ public class LocalDAO extends BaseDaoImpl<Local, Long> {
             new CidadeDAO(connectionSource).save(l.getCidade());
         }
     }
+
+    public void deletar(Local l) throws SQLException {
+        if (l != null) {
+            if (!idExists(l.getId())){
+                delete(l);
+            }
+        }
+    }
 }

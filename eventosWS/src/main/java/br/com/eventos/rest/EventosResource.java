@@ -58,6 +58,12 @@ public class EventosResource {
 	public EventoFullDTO getEventoPorId(@PathParam("id") Long idEvento) {
 		return service.getEventosPorId(idEvento);
 	}
+	
+	@GET
+	@Path("/faculdade/{id}")
+	public List<EventosFeedDTO> getEventosPorFaculdade(@PathParam("id") Long idFaculdade) {
+		return service.getEventosPorFaculdade(idFaculdade);
+	}
 
 	@POST
 	public Response save(Evento e) {

@@ -12,7 +12,10 @@ import android.widget.Toast;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.TabsAdapter;
+import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.fragments.FilterEventosDialog;
+import eventos.com.br.eventos.model.Evento;
+import eventos.com.br.eventos.model.Faculdade;
 import livroandroid.lib.utils.Prefs;
 
 public class MainActivity extends BaseActivity {
@@ -82,8 +85,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
 
+        int id = item.getItemId();
         if (id == R.id.editar_config_ws) {
             Intent intent = new Intent(getApplicationContext(), ConfiguracaoActivity.class);
             startActivity(intent);
@@ -101,10 +104,15 @@ public class MainActivity extends BaseActivity {
     }
 
     private void openDialogFilter() {
-        FilterEventosDialog.show(getSupportFragmentManager(),getActivity(), new FilterEventosDialog.Callback() {
+        FilterEventosDialog.show(getSupportFragmentManager(), getActivity(), new FilterEventosDialog.Callback() {
             @Override
-            public void onFilter() {
-                Toast.makeText(getContext(), "Volta", Toast.LENGTH_SHORT).show();
+            public void onFilter(Faculdade faculdadeSelecionada) {
+
+                if (faculdadeSelecionada != null && faculdadeSelecionada.getId() != null) {
+                    EventosApplication.getInstance().setIdFaculdade(faculdadeSelecionada.getId());
+                    startActivity(new Intent(getContext(), MainActivity.class));
+                    finish();
+                }
             }
         });
     }
