@@ -2,7 +2,6 @@ package eventos.com.br.eventos.config;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 
@@ -15,7 +14,7 @@ import livroandroid.lib.utils.Prefs;
  */
 public class EventosApplication extends Application {
 
-    private static String URL = "http://192.168.0.2:8080/eventos/rest/";
+    private static String URL = "http://192.168.1.26:8080/eventos/rest/";
     private static EventosApplication instance = null;
     private Usuario usuario = null;
     private DataBaseHelper dataBaseHelper = null;

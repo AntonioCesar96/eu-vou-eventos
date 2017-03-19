@@ -1,0 +1,1 @@
+﻿select e.* from evento e inner join local l on (l.cidade = 1506) group by e.id

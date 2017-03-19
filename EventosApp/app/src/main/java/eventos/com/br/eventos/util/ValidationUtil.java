@@ -11,6 +11,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import eventos.com.br.eventos.model.Cidade;
+import eventos.com.br.eventos.model.Estado;
 import eventos.com.br.eventos.model.Faculdade;
 
 /**
@@ -33,6 +35,50 @@ public class ValidationUtil {
                     selectedTextView.setError("Selecione uma faculdade");
                     spFaculdades.setFocusable(true);
                     spFaculdades.requestFocus();
+                }
+
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean validaSpinnerCidade(Spinner spCidades) {
+        Object obj = spCidades.getSelectedItem();
+
+        if (obj != null && obj instanceof Cidade) {
+            Cidade c = (Cidade) obj;
+
+            if (Long.MAX_VALUE == c.getId()) {
+
+                View selectedView = spCidades.getSelectedView();
+                if (selectedView != null && selectedView instanceof TextView) {
+                    TextView selectedTextView = (TextView) selectedView;
+                    selectedTextView.setError("Selecione uma cidade");
+                    spCidades.setFocusable(true);
+                    spCidades.requestFocus();
+                }
+
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean validaSpinnerEstado(Spinner spEstados) {
+        Object obj = spEstados.getSelectedItem();
+
+        if (obj != null && obj instanceof Estado) {
+            Estado e = (Estado) obj;
+
+            if (Long.MAX_VALUE == e.getId()) {
+
+                View selectedView = spEstados.getSelectedView();
+                if (selectedView != null && selectedView instanceof TextView) {
+                    TextView selectedTextView = (TextView) selectedView;
+                    selectedTextView.setError("Selecione um estado");
+                    spEstados.setFocusable(true);
+                    spEstados.requestFocus();
                 }
 
                 return false;

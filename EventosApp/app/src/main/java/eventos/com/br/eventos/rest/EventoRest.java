@@ -2,7 +2,6 @@ package eventos.com.br.eventos.rest;
 
 import android.content.Context;
 import android.util.Base64;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -28,14 +27,12 @@ import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.model.Response;
 import eventos.com.br.eventos.model.ResponseWithURL;
 import eventos.com.br.eventos.model.Usuario;
-import eventos.com.br.eventos.dao.UsuarioDAO;
 import eventos.com.br.eventos.util.CalendarDeserializer;
-import eventos.com.br.eventos.util.CalendarSerializer;
+import eventos.com.br.eventos.util.FiltroUtil;
+import eventos.com.br.eventos.util.HttpHelper;
 import eventos.com.br.eventos.util.TipoBusca;
 import livroandroid.lib.utils.FileUtils;
-import livroandroid.lib.utils.HttpHelper;
 import livroandroid.lib.utils.IOUtils;
-import livroandroid.lib.utils.Prefs;
 
 /**
  * Created by antonio on 16/07/16.
@@ -52,10 +49,7 @@ public class EventoRest {
     public List<Evento> getEventos(TipoBusca tipoDeBusca) throws Exception {
 
         if (tipoDeBusca.equals(TipoBusca.FAVORITOS)) {
-            DataBaseHelper dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
-            EventoDAO eventoDAO = new EventoDAO(dataBaseHelper.getConnectionSource());
-
-            return eventoDAO.all();
+            return getEventosFavoritos();
         }
 
         if (tipoDeBusca.equals(TipoBusca.USUARIO)) {
@@ -66,30 +60,22 @@ public class EventoRest {
         //return getEventosFromRaw();
     }
 
+    private List<Evento> getEventosFavoritos() throws SQLException {
+        DataBaseHelper dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
+        EventoDAO eventoDAO = new EventoDAO(dataBaseHelper.getConnectionSource());
+
+        return eventoDAO.all();
+    }
+
     private List<Evento> getEventosProximos() throws IOException {
-
-        Long idFaculdade = EventosApplication.getInstance().getIdFaculdade();
-
-        String urlProximos = url + "/proximos";
-        if (idFaculdade != 0) {
-            urlProximos = url + "/faculdade/" + idFaculdade;
-        }
+        String urlProximos = FiltroUtil.gerarUrl(url);
 
         HttpHelper helper = new HttpHelper();
-        helper.LOG_ON = true;
-
         String json = helper.doGet(urlProximos);
 
         Type listType = new TypeToken<ArrayList<Evento>>() {
         }.getType();
-
-        GsonBuilder builder = new GsonBuilder();
-
-        // Serializador para classe Calendar
-        builder.registerTypeAdapter(Calendar.class, new CalendarDeserializer());
-        builder.registerTypeAdapter(GregorianCalendar.class, new CalendarDeserializer());
-
-        Gson gson = builder.create();
+        Gson gson = createGsonObject();
 
         return gson.fromJson(json, listType);
     }
@@ -100,20 +86,12 @@ public class EventoRest {
 
         if (usuario != null) {
             HttpHelper helper = new HttpHelper();
-            helper.LOG_ON = true;
-
             String json = helper.doGet(url + "/usuario/" + usuario.getId());
 
             Type listType = new TypeToken<ArrayList<Evento>>() {
             }.getType();
 
-            GsonBuilder builder = new GsonBuilder();
-
-            // Serializador para classe Calendar
-            builder.registerTypeAdapter(Calendar.class, new CalendarDeserializer());
-            builder.registerTypeAdapter(GregorianCalendar.class, new CalendarDeserializer());
-
-            Gson gson = builder.create();
+            Gson gson = createGsonObject();
 
             return gson.fromJson(json, listType);
         }
@@ -125,16 +103,9 @@ public class EventoRest {
         HttpHelper helper = new HttpHelper();
         String json = helper.doGet(url + "/" + id);
 
-        GsonBuilder builder = new GsonBuilder();
+        Gson gson = createGsonObject();
 
-        // Serializador para classe Calendar
-        builder.registerTypeAdapter(Calendar.class, new CalendarDeserializer());
-        builder.registerTypeAdapter(GregorianCalendar.class, new CalendarDeserializer());
-
-        Gson gson = builder.create();
-        Evento evento = gson.fromJson(json, Evento.class);
-
-        return evento;
+        return gson.fromJson(json, Evento.class);
     }
 
     public List<Evento> getEventosFromRaw() throws IOException {
@@ -144,13 +115,7 @@ public class EventoRest {
         Type listType = new TypeToken<ArrayList<Evento>>() {
         }.getType();
 
-        GsonBuilder builder = new GsonBuilder();
-
-        // Serializador para classe Calendar
-        builder.registerTypeAdapter(Calendar.class, new CalendarDeserializer());
-        builder.registerTypeAdapter(GregorianCalendar.class, new CalendarDeserializer());
-
-        Gson gson = builder.create();
+        Gson gson = createGsonObject();
 
         return gson.fromJson(json, listType);
     }
@@ -175,15 +140,7 @@ public class EventoRest {
     }
 
     public Response save(Evento evento) throws IOException {
-
-        GsonBuilder builder = new GsonBuilder();
-
-        // Serializador para classe Calendar
-        builder.registerTypeAdapter(Calendar.class, new CalendarSerializer());
-        builder.registerTypeAdapter(GregorianCalendar.class, new CalendarSerializer());
-
-        Gson gson = builder.create();
-
+        Gson gson = createGsonObject();
         String jsonEvento = gson.toJson(evento);
 
         HttpHelper http = new HttpHelper();
@@ -191,5 +148,15 @@ public class EventoRest {
         String json = http.doPost(url, jsonEvento.getBytes(), "UTF-8");
 
         return new Gson().fromJson(json, Response.class);
+    }
+
+    private Gson createGsonObject() {
+        GsonBuilder builder = new GsonBuilder();
+
+        // Serializador para classe Calendar
+        builder.registerTypeAdapter(Calendar.class, new CalendarDeserializer());
+        builder.registerTypeAdapter(GregorianCalendar.class, new CalendarDeserializer());
+
+        return builder.create();
     }
 }

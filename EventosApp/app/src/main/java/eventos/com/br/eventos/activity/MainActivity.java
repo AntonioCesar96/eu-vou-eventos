@@ -8,14 +8,14 @@ import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+
+import java.sql.SQLException;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.TabsAdapter;
-import eventos.com.br.eventos.config.EventosApplication;
+import eventos.com.br.eventos.dao.FiltroDAO;
 import eventos.com.br.eventos.fragments.FilterEventosDialog;
-import eventos.com.br.eventos.model.Evento;
-import eventos.com.br.eventos.model.Faculdade;
+import eventos.com.br.eventos.model.Filtro;
 import livroandroid.lib.utils.Prefs;
 
 public class MainActivity extends BaseActivity {
@@ -106,12 +106,16 @@ public class MainActivity extends BaseActivity {
     private void openDialogFilter() {
         FilterEventosDialog.show(getSupportFragmentManager(), getActivity(), new FilterEventosDialog.Callback() {
             @Override
-            public void onFilter(Faculdade faculdadeSelecionada) {
+            public void onFilter(Filtro filtro) {
 
-                if (faculdadeSelecionada != null && faculdadeSelecionada.getId() != null) {
-                    EventosApplication.getInstance().setIdFaculdade(faculdadeSelecionada.getId());
+                try {
+                    FiltroDAO dao = new FiltroDAO();
+                    dao.save(filtro);
+
                     startActivity(new Intent(getContext(), MainActivity.class));
                     finish();
+                } catch (SQLException e) {
+
                 }
             }
         });

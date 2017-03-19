@@ -27,7 +27,7 @@ public class EventosDAO {
 				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
 						+ "from Evento e order by e.dataHora",
 				Evento.class);
-		//query.setHint("org.hibernate.cacheable", "true");
+		// query.setHint("org.hibernate.cacheable", "true");
 		return query.getResultList();
 	}
 
@@ -36,7 +36,7 @@ public class EventosDAO {
 				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
 						+ "from Evento e order by e.dataHora",
 				Evento.class);
-		//query.setHint("org.hibernate.cacheable", "true");
+		// query.setHint("org.hibernate.cacheable", "true");
 
 		List<Evento> list = query.getResultList();
 
@@ -89,15 +89,30 @@ public class EventosDAO {
 	}
 
 	public List<Evento> getEventosPorFaculdade(Long idFaculdade) {
-		TypedQuery<Evento> query = manager.createQuery(
-				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
-						+ "from Evento e where e.faculdade.id = :idFaculdade order by e.dataHora",
-				Evento.class);
+		TypedQuery<Evento> query = manager
+				.createQuery(
+						"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+								+ "from Evento e where e.faculdade.id = :idFaculdade order by e.dataHora",
+						Evento.class);
 
 		query.setParameter("idFaculdade", idFaculdade);
 
 		List<Evento> list = query.getResultList();
-		
+
+		Calendar dataAtual = Calendar.getInstance();
+		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
+	}
+
+	public List<Evento> getEventosPorCidade(Long idCidade) {
+		TypedQuery<Evento> query = manager.createQuery(
+				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+						+ "from Evento e inner join e.local l on (l.cidade.id = :idCidade) order by e.dataHora",
+				Evento.class);
+
+		query.setParameter("idCidade", idCidade);
+
+		List<Evento> list = query.getResultList();
+
 		Calendar dataAtual = Calendar.getInstance();
 		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
 	}

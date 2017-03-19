@@ -13,6 +13,7 @@ import eventos.com.br.eventos.model.Cidade;
 import eventos.com.br.eventos.model.Estado;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.model.Faculdade;
+import eventos.com.br.eventos.model.Filtro;
 import eventos.com.br.eventos.model.Local;
 import eventos.com.br.eventos.model.Pais;
 import eventos.com.br.eventos.model.Usuario;
@@ -39,6 +40,7 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(cs, Pais.class);
             TableUtils.createTable(cs, Evento.class);
             TableUtils.createTable(cs, Local.class);
+            TableUtils.createTable(cs, Filtro.class);
         }
         catch(SQLException e) {
             e.printStackTrace();
@@ -54,6 +56,7 @@ public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(cs, Pais.class, true);
             TableUtils.dropTable(cs, Evento.class, true);
             TableUtils.dropTable(cs, Local.class, true);
+            TableUtils.dropTable(cs, Filtro.class, true);
 
             onCreate(sd, cs);
         }
