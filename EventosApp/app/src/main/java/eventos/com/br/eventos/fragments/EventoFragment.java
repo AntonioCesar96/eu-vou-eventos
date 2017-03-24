@@ -1,5 +1,7 @@
 package eventos.com.br.eventos.fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,6 +17,8 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.config.EventosApplication;
@@ -28,6 +32,11 @@ public class EventoFragment extends BaseFragment {
     private Evento evento;
     private ProgressBar progress;
     private TextView txtDesc;
+    private TextView txtLocal;
+    private TextView txtRuaMostra;
+    private TextView txtNumeroMostra;
+    private TextView txtLocalBairro;
+    private TextView txtDataEvento;
     private FloatingActionButton fabFavorito;
     private boolean flagClickFab;
     private DataBaseHelper dataBaseHelper;
@@ -64,6 +73,11 @@ public class EventoFragment extends BaseFragment {
     private void initFields(View view) {
         txtDesc = (TextView) view.findViewById(R.id.txtDesc);
         progress = (ProgressBar) view.findViewById(R.id.progress);
+        txtLocal = (TextView) view.findViewById(R.id.txtLocal);
+        txtDataEvento =  (TextView) view.findViewById(R.id.txtDataEvento);
+        txtRuaMostra =  (TextView) view.findViewById(R.id.txtRuaMostra);
+        txtNumeroMostra = (TextView) view.findViewById(R.id.txtNumeroMostra);
+        txtLocalBairro = (TextView) view.findViewById(R.id.txtLocalBairro);
     }
 
     @Override
@@ -86,7 +100,15 @@ public class EventoFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.ic_share) {
-            Toast.makeText(getContext(), "Compartilhar", Toast.LENGTH_SHORT).show();
+
+            // CompartilharEvento2
+            Uri uriImage = Uri.parse( evento.getEnderecoImagem().toString() );
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra( Intent.EXTRA_STREAM, uriImage );
+            shareIntent.setType( "*/*" );
+            startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
+
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -138,7 +160,17 @@ public class EventoFragment extends BaseFragment {
 
     private void preencherEvento(Evento evento) {
         this.evento = evento;
+
+        SimpleDateFormat formatData = new SimpleDateFormat("EEE',' dd 'de' MMMM 'às' HH:mm", Locale.getDefault());
+        String data = formatData.format(evento.getDataHora().getTime()).toUpperCase();
+
+        txtDataEvento.setText(data);
         txtDesc.setText(evento.getDescricao());
+        txtLocal.setText(evento.getLocal().getNome());
+        txtRuaMostra.setText( evento.getLocal().getRua());
+        txtNumeroMostra.setText(  evento.getLocal().getNumero());
+        txtLocalBairro.setText("Bairro: " + evento.getLocal().getBairro());
+
         fabFavorito.setOnClickListener(clickFabFavorito());
     }
 

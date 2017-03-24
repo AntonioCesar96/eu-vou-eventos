@@ -2,6 +2,8 @@ package eventos.com.br.eventos.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -11,8 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.List;
 
 import eventos.com.br.eventos.R;
@@ -28,6 +32,7 @@ public class EventosFragment extends BaseFragment {
     private SwipeRefreshLayout swipeLayout;
     private List<Evento> eventos;
     private TipoBusca tipoDeBusca;
+    private ProgressBar progress;
 
     // Método para instanciar esse fragment pelo tipo.
     public static EventosFragment newInstance(TipoBusca tipo) {
@@ -55,6 +60,8 @@ public class EventosFragment extends BaseFragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_eventos, container, false);
 
+        progress = (ProgressBar) view.findViewById(R.id.progress);
+
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -79,6 +86,7 @@ public class EventosFragment extends BaseFragment {
                 if (AndroidUtils.isNetworkAvailable(getContext())) {
                     // Atualiza ao fazer o gesto Pull to Refresh
                     taskEventos(true);
+                    swipeLayout.setRefreshing(false);
                 } else {
                     swipeLayout.setRefreshing(false);
                     snack(recyclerView, R.string.msg_error_conexao_indisponivel);
@@ -95,9 +103,11 @@ public class EventosFragment extends BaseFragment {
 
     private void taskEventos(boolean pullToRefresh) {
         // Busca os eventos: Dispara a Task
-        startTask("carros", new GetEventosTask(pullToRefresh, getContext()), pullToRefresh ? R.id.swipeToRefresh : R.id.progress);
+        //startTask("eventos", new GetEventosTask(pullToRefresh, getContext()), pullToRefresh ? R.id.swipeToRefresh : R.id.progress);
+        new GetEventosTask().execute();
     }
 
+    /*
     // Task para buscar os eventos
     private class GetEventosTask implements TaskListener<List<Evento>> {
         private boolean refresh;
@@ -134,13 +144,56 @@ public class EventosFragment extends BaseFragment {
         public void onCancelled(String s) {
         }
     }
+*/
+
+    private class GetEventosTask extends AsyncTask<Void, Void, List<Evento>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progress.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected List<Evento> doInBackground(Void... longs) {
+            EventoRest service = new EventoRest(getContext());
+
+            try {
+                return service.getEventos(tipoDeBusca);
+            } catch (Exception e) {
+                return null;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(List<Evento> eventos) {
+            progress.setVisibility(View.GONE);
+
+            if (eventos != null) {
+                // Salva a lista de eventos no atributo da classe
+                EventosFragment.this.eventos = eventos;
+                // Atualiza a view na UI Thread
+                recyclerView.setAdapter(new EventoAdapter(getContext(), eventos, onClickEvento(), onClickCompartilhar(), onClickFavoritar()));
+                return;
+            }
+
+            snack(recyclerView ,"Ocorreu algum erro ao buscar os dados.");
+        }
+    }
 
     private EventoAdapter.CompartilharOnClickListener onClickCompartilhar() {
         return new EventoAdapter.CompartilharOnClickListener() {
             @Override
             public void onClickCompartilhar(EventoAdapter.EventoViewHolder holder, int idx) {
                 Evento e = eventos.get(idx);
-                Toast.makeText(getContext(), "Compartilhar evento " + e.getNome(), Toast.LENGTH_SHORT).show();
+
+                // CompartilharEvento2
+                Uri uriImage = Uri.parse( e.getEnderecoImagem().toString() );
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra( Intent.EXTRA_STREAM, uriImage );
+                shareIntent.setType( "*/*" );
+                startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
             }
         };
     }

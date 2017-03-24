@@ -14,7 +14,7 @@ import livroandroid.lib.utils.Prefs;
  */
 public class EventosApplication extends Application {
 
-    private static String URL = "http://192.168.1.26:8080/eventos/rest/";
+    private static String URL = "http://10.100.3.49:8080/eventos/rest/";
     private static EventosApplication instance = null;
     private Usuario usuario = null;
     private DataBaseHelper dataBaseHelper = null;

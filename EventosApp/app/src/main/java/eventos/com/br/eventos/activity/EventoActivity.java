@@ -76,6 +76,7 @@ public class EventoActivity extends BaseActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), PhotoViewActivity.class);
                 intent.putExtra("url", e.getEnderecoImagem());
+                intent.putExtra("nome", e.getNome());
                 startActivity(intent);
             }
         };

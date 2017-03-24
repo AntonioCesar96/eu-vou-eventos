@@ -16,11 +16,24 @@
         app:cardPreventCornerOverlap="false"
         app:cardUseCompatPadding="false">
 
+        <include layout="@layout/include_progress" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
+
+            <!-- DataEvento -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtDataEvento"
+                android:text=""
+                android:textAlignment="center"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textStyle="normal" />
 
             <!-- Desc -->
             <TextView
@@ -40,9 +53,88 @@
                 android:textColor="#525252"
                 android:textSize="14sp" />
 
-        </LinearLayout>
 
-        <include layout="@layout/include_progress" />
+            <!-- Local Inicio -->
+            <TextView
+                android:id="@+id/txtLocal"
+                android:paddingTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Local"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="normal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/txtRuaMostra"
+                    android:hint="Nome da rua"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:paddingRight="2dp"
+                    android:textColor="#525252"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:hint=","
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#525252"
+                    android:paddingRight="5dp"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/txtNumeroMostra"
+                    android:hint="5469"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#525252"
+                    android:textSize="15sp" />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/txtLocalBairro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"
+                android:textColor="#525252"
+                android:textSize="14sp" />
+            <!-- LocalFim -->
+
+
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:layout_marginTop="10dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="0dp"
+        app:cardPreventCornerOverlap="false"
+        app:cardUseCompatPadding="false">
+
+        <TextView
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="COMO CHEGAR"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:textStyle="normal" />
+
     </android.support.v7.widget.CardView>
 
 

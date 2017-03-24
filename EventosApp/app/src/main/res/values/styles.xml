@@ -21,12 +21,21 @@
 
 
     <!-- Tema PhotoView. -->
-    <style name="AppThemePhotoView" parent="AppTheme.NoActionBar">
+    <style name="AppThemePhotoView" parent="AppTheme">
+
         <!-- Cor primária do aplicativo -->
         <item name="colorPrimary">@color/black</item>
         <!-- Variação escura da cor primária para a status bar e contextual app bars -->
         <item name="colorPrimaryDark">@color/black</item>
     </style>
+
+    <!-- Tema PhotoView. -->
+    <!--<style name="AppThemePhotoView" parent="AppTheme.NoActionBar">
+        &lt;!&ndash; Cor primária do aplicativo &ndash;&gt;
+        <item name="colorPrimary">@color/black</item>
+        &lt;!&ndash; Variação escura da cor primária para a status bar e contextual app bars &ndash;&gt;
+        <item name="colorPrimaryDark">@color/black</item>
+    </style>-->
 
     <!-- Tema base + NoActionBar -->
     <style name="AppTheme.NoActionBar">
