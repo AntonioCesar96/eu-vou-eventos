@@ -41,20 +41,15 @@
     <string name="sair">Sair</string>
 
     <string-array name="array_estados">
-        <item>Amazonas</item>
-        <item>Mato Grosso do Sul</item>
-        <item>São Paulo</item>
+        <item>Todos os estados</item>
     </string-array>
 
     <string-array name="array_cidades">
-        <item>Campo Grande</item>
-        <item>São Paulo</item>
+        <item>Todas as cidades</item>
     </string-array>
 
     <string-array name="array_faculdades">
-        <item>UNIDERP</item>
-        <item>FACSUL</item>
-        <item>UCDB</item>
+        <item>Todas as faculdades</item>
     </string-array>
 
     <string-array name="array_periodos">

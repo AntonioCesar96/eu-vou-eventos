@@ -16,6 +16,7 @@ import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.fragments.EventoFragment;
+import eventos.com.br.eventos.fragments.EventosFragment;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.util.ImageUtils;
 
@@ -76,7 +77,6 @@ public class EventoActivity extends BaseActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), PhotoViewActivity.class);
                 intent.putExtra("url", e.getEnderecoImagem());
-                intent.putExtra("nome", e.getNome());
                 startActivity(intent);
             }
         };

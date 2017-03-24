@@ -38,7 +38,7 @@ public class EventoFragment extends BaseFragment {
     private TextView txtLocalBairro;
     private TextView txtDataEvento;
     private FloatingActionButton fabFavorito;
-    private boolean flagClickFab;
+    public boolean flagClickFab;
     private DataBaseHelper dataBaseHelper;
 
     @Override

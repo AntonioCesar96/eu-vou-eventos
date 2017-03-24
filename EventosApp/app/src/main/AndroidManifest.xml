@@ -63,11 +63,25 @@
         <activity
             android:name=".activity.AlterarDadosUsuarioActivity"
             android:label="@string/activity_alterar_dados"
-            android:parentActivityName=".activity.MainActivity" />
+            android:parentActivityName=".activity.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
         <activity
             android:name=".activity.PhotoViewActivity"
             android:theme="@style/AppThemePhotoView">
 
+        </activity>
+        <activity
+            android:name=".activity.FiltroActivity"
+            android:label="Filtrar eventos"
+            android:parentActivityName=".activity.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
         </activity>
     </application>
 

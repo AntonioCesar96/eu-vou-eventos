@@ -304,6 +304,7 @@ public class EventoPUActivity extends BaseActivity {
             }
         }, newCalendar.get(Calendar.HOUR_OF_DAY), newCalendar.get(Calendar.MINUTE), true);
 
+        dataInicioDialog.getDatePicker().setMinDate(Calendar.getInstance().getTime().getTime());
 
         txtDataInicio.setOnFocusChangeListener(focusGeneric(dataInicioDialog));
         txtDataInicio.setOnClickListener(clickGeneric(dataInicioDialog));

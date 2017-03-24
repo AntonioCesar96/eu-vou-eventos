@@ -24,6 +24,9 @@ public class Filtro implements Serializable {
     @DatabaseField
     private Long idCidade;
 
+    @DatabaseField
+    private Long idEstado;
+
     @DatabaseField(dataType = DataType.SERIALIZABLE)
     private Calendar dataInicial;
 
@@ -83,5 +86,13 @@ public class Filtro implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getIdEstado() {
+        return idEstado;
+    }
+
+    public void setIdEstado(Long idEstado) {
+        this.idEstado = idEstado;
     }
 }

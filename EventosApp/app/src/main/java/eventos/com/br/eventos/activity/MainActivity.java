@@ -19,6 +19,7 @@ import eventos.com.br.eventos.model.Filtro;
 import livroandroid.lib.utils.Prefs;
 
 public class MainActivity extends BaseActivity {
+    public static final int CODIGO_FILTRO = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,12 +96,24 @@ public class MainActivity extends BaseActivity {
         }
 
         if (id == R.id.filter_eventos) {
-            openDialogFilter();
+            //openDialogFilter();
+            startActivityForResult(new Intent(getContext(), FiltroActivity.class), CODIGO_FILTRO);
 
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (resultCode == CODIGO_FILTRO){
+            startActivity(new Intent(getContext(), MainActivity.class));
+            finish();
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void openDialogFilter() {

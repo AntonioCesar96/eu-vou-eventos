@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,6 +34,7 @@ public class EventosFragment extends BaseFragment {
     private List<Evento> eventos;
     private TipoBusca tipoDeBusca;
     private ProgressBar progress;
+    public static final int ATUALIZAR_FAVORITOS = 9;
 
     // Método para instanciar esse fragment pelo tipo.
     public static EventosFragment newInstance(TipoBusca tipo) {
@@ -96,6 +98,15 @@ public class EventosFragment extends BaseFragment {
     }
 
     @Override
+    public void onResume() {
+        if (TipoBusca.FAVORITOS.equals(tipoDeBusca)) {
+            taskEventos(false);
+        }
+
+        super.onResume();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         taskEventos(false);
@@ -104,7 +115,7 @@ public class EventosFragment extends BaseFragment {
     private void taskEventos(boolean pullToRefresh) {
         // Busca os eventos: Dispara a Task
         //startTask("eventos", new GetEventosTask(pullToRefresh, getContext()), pullToRefresh ? R.id.swipeToRefresh : R.id.progress);
-        new GetEventosTask().execute();
+        new GetEventosTask(pullToRefresh).execute();
     }
 
     /*
@@ -148,10 +159,18 @@ public class EventosFragment extends BaseFragment {
 
     private class GetEventosTask extends AsyncTask<Void, Void, List<Evento>> {
 
+        private boolean pullToRefresh;
+
+        public GetEventosTask(boolean pullToRefresh) {
+            this.pullToRefresh = pullToRefresh;
+        }
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            progress.setVisibility(View.VISIBLE);
+            if (!pullToRefresh) {
+                progress.setVisibility(View.VISIBLE);
+            }
         }
 
         @Override
@@ -167,17 +186,19 @@ public class EventosFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(List<Evento> eventos) {
-            progress.setVisibility(View.GONE);
+            if (!pullToRefresh) {
+                progress.setVisibility(View.GONE);
+            }
 
             if (eventos != null) {
                 // Salva a lista de eventos no atributo da classe
                 EventosFragment.this.eventos = eventos;
                 // Atualiza a view na UI Thread
-                recyclerView.setAdapter(new EventoAdapter(getContext(), eventos, onClickEvento(), onClickCompartilhar(), onClickFavoritar()));
+                recyclerView.setAdapter(new EventoAdapter(getContext(), eventos, onClickEvento(), onClickCompartilhar()));
                 return;
             }
 
-            snack(recyclerView ,"Ocorreu algum erro ao buscar os dados.");
+            snack(recyclerView, "Ocorreu algum erro ao buscar os dados.");
         }
     }
 
@@ -188,22 +209,12 @@ public class EventosFragment extends BaseFragment {
                 Evento e = eventos.get(idx);
 
                 // CompartilharEvento2
-                Uri uriImage = Uri.parse( e.getEnderecoImagem().toString() );
+                Uri uriImage = Uri.parse(e.getEnderecoImagem().toString());
                 Intent shareIntent = new Intent();
                 shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra( Intent.EXTRA_STREAM, uriImage );
-                shareIntent.setType( "*/*" );
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uriImage);
+                shareIntent.setType("*/*");
                 startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
-            }
-        };
-    }
-
-    private EventoAdapter.FavoritarOnClickListener onClickFavoritar() {
-        return new EventoAdapter.FavoritarOnClickListener() {
-            @Override
-            public void onClickFavoritar(EventoAdapter.EventoViewHolder holder, int idx) {
-                Evento e = eventos.get(idx);
-                Toast.makeText(getContext(), "Favoritar evento " + e.getNome(), Toast.LENGTH_SHORT).show();
             }
         };
     }
@@ -216,7 +227,9 @@ public class EventosFragment extends BaseFragment {
 
                 Intent intent = new Intent(getContext(), EventoActivity.class);
                 intent.putExtra("evento", e);
-                startActivity(intent);
+
+                startActivityForResult(intent, ATUALIZAR_FAVORITOS);
+                //startActivity(intent);
             }
         };
     }

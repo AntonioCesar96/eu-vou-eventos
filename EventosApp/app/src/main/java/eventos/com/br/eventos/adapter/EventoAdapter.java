@@ -32,15 +32,13 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
     private final Context context;
     private EventoOnClickListener eventoOnClickListener;
     private final CompartilharOnClickListener compartilharOnClickListener;
-    private final FavoritarOnClickListener favoritarOnClickListener;
 
     public EventoAdapter(Context context, List<Evento> eventos, EventoOnClickListener
-            eventoOnClickListener, CompartilharOnClickListener compartilharOnClickListener, FavoritarOnClickListener favoritarOnClickListener) {
+            eventoOnClickListener, CompartilharOnClickListener compartilharOnClickListener) {
         this.context = context;
         this.eventos = eventos;
         this.eventoOnClickListener = eventoOnClickListener;
         this.compartilharOnClickListener = compartilharOnClickListener;
-        this.favoritarOnClickListener = favoritarOnClickListener;
     }
 
     @Override
