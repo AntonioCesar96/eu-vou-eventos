@@ -104,7 +104,7 @@ public class FiltroActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
-                if (!ValidationUtil.validaSpinnerEstado(spEstados)) {
+                if (ValidationUtil.validaSpinnerEstadoFiltro(spEstados)) {
                     filtro.setFiltroTipo(FiltroTipo.TODOS);
                     onFilter(filtro);
                     createToast("Buscando todos os eventos");
@@ -116,7 +116,7 @@ public class FiltroActivity extends BaseActivity {
                     return;
                 }
 
-                if (ValidationUtil.validaSpinnerFaculdade(spFaculdades)) {
+                if (ValidationUtil.validaSpinnerFaculdadeFiltro(spFaculdades)) {
                     filtro.setFiltroTipo(FiltroTipo.FACULDADE);
                     onFilter(filtro);
                     createToast("Buscando todos os eventos da faculdade " + faculdadeSelecionada.getNome());
@@ -246,21 +246,21 @@ public class FiltroActivity extends BaseActivity {
         faculdades.add(0, f);
 
         BaseAdapter adapter = new FaculdadesAdapter(getContext(), faculdades);
-        FiltroActivity.this.spFaculdades.setAdapter(adapter);
-        FiltroActivity.this.spFaculdades.setSelection(0);
+        spFaculdades.setAdapter(adapter);
+        spFaculdades.setSelection(0);
 
         final List<Faculdade> faculdadesAux = faculdades;
 
-        FiltroActivity.this.spFaculdades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spFaculdades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 faculdadeSelecionada = faculdadesAux.get(i);
 
-                Log.e("BUG", ""+faculdadeSelecionada.getId());
+                Log.e("BUG", "Faculdades: "+faculdadeSelecionada.getId());
 
-                if (faculdadeSelecionada.getId().equals(Long.MAX_VALUE)) {
+               /* if (faculdadeSelecionada.getId().equals(Long.MAX_VALUE)) {
                     return;
-                }
+                }*/
                 filtro.setIdFaculdade(faculdadeSelecionada.getId());
             }
 
@@ -314,23 +314,26 @@ public class FiltroActivity extends BaseActivity {
         estados.add(0, estado);
 
         BaseAdapter adapter = new EstadosAdapter(getContext(), estados);
-        FiltroActivity.this.spEstados.setAdapter(adapter);
-        FiltroActivity.this.spEstados.setSelection(0);
+        spEstados.setAdapter(adapter);
+        spEstados.setSelection(0);
 
         final List<Estado> estadosAux = estados;
 
-        FiltroActivity.this.spEstados.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spEstados.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 estadoSelecionado = estadosAux.get(i);
+                filtro.setIdEstado(estadoSelecionado.getId());
 
-                Log.e("BUG", ""+estadoSelecionado.getId());
+                Log.e("BUG", "Estados: "+estadoSelecionado.getId());
 
                 if (estadoSelecionado.getId().equals(Long.MAX_VALUE)) {
+                    limparSpinnerCidades();
+                    limparSpinnerFaculdades();
+                    filtro.setIdFaculdade(Long.MAX_VALUE);
+                    filtro.setIdCidade(Long.MAX_VALUE);
                     return;
                 }
-
-                filtro.setIdEstado(estadoSelecionado.getId());
                 new FiltroActivity.CidadesTask().execute(estadoSelecionado.getId());
             }
 
@@ -341,32 +344,43 @@ public class FiltroActivity extends BaseActivity {
         });
 
         // Spinner cidades
-        List<Cidade> cidades = new ArrayList<>();
-        Cidade cidade = new Cidade();
-        cidade.setNome("Todas as cidades");
-        cidade.setId(Long.MAX_VALUE);
-        cidades.add(0, cidade);
-        filtro.setIdCidade(cidade.getId());
-
-        BaseAdapter adapterCidades = new CidadesAdapter(getContext(), cidades);
-        FiltroActivity.this.spCidades.setAdapter(adapterCidades);
-        FiltroActivity.this.spCidades.setSelection(0);
+        limparSpinnerCidades();
 
         // Spinner Faculdades
+        limparSpinnerFaculdades();
+
+        if (!updateCampos) {
+            filtro.setIdFaculdade(Long.MAX_VALUE);
+            filtro.setIdCidade(Long.MAX_VALUE);
+        }
+
+        if (updateCampos) {
+            selecionaItemSpinnerEstados(FiltroActivity.this.spEstados, filtro.getIdEstado());
+        }
+    }
+
+    private void limparSpinnerFaculdades() {
         List<Faculdade> faculdades = new ArrayList<>();
         Faculdade f = new Faculdade();
         f.setNome("Todas as faculdades");
         f.setId(Long.MAX_VALUE);
         faculdades.add(0, f);
-        filtro.setIdFaculdade(f.getId());
 
         BaseAdapter adapterFaculdades = new FaculdadesAdapter(getContext(), faculdades);
-        FiltroActivity.this.spFaculdades.setAdapter(adapterFaculdades);
-        FiltroActivity.this.spFaculdades.setSelection(0);
+        spFaculdades.setAdapter(adapterFaculdades);
+        spFaculdades.setSelection(0);
+    }
 
-        if (updateCampos) {
-            selecionaItemSpinnerEstados(FiltroActivity.this.spEstados, filtro.getIdEstado());
-        }
+    private void limparSpinnerCidades() {
+        List<Cidade> cidades = new ArrayList<>();
+        Cidade cidade = new Cidade();
+        cidade.setNome("Todas as cidades");
+        cidade.setId(Long.MAX_VALUE);
+        cidades.add(0, cidade);
+
+        BaseAdapter adapterCidades = new CidadesAdapter(getContext(), cidades);
+        spCidades.setAdapter(adapterCidades);
+        spCidades.setSelection(0);
     }
 
 
@@ -415,17 +429,19 @@ public class FiltroActivity extends BaseActivity {
 
         final List<Cidade> cidadesAux = cidades;
 
-        FiltroActivity.this.spCidades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spCidades.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 cidadeSelecionada = cidadesAux.get(i);
+                filtro.setIdCidade(cidadeSelecionada.getId());
 
-                Log.e("BUG", ""+cidadeSelecionada.getId());
+                Log.e("BUG", "Cidade: "+cidadeSelecionada.getId());
 
                 if (cidadeSelecionada.getId().equals(Long.MAX_VALUE)) {
+                    limparSpinnerFaculdades();
+                    filtro.setIdFaculdade(Long.MAX_VALUE);
                     return;
                 }
-                filtro.setIdCidade(cidadeSelecionada.getId());
                 new FiltroActivity.FaculdadesTask().execute(cidadeSelecionada.getId());
             }
 

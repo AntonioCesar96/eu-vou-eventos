@@ -31,7 +31,7 @@ public class FiltroUtil {
             }
 
             if (filtro.getFiltroTipo().equals(FiltroTipo.FACULDADE)) {
-                return url + "/faculdade/" + filtro.getIdCidade();
+                return url + "/faculdade/" + filtro.getIdFaculdade();
             }
 
             return url + "/proximos";

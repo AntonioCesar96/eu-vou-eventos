@@ -87,6 +87,33 @@ public class ValidationUtil {
         return true;
     }
 
+    public static boolean validaSpinnerEstadoFiltro(Spinner spEstados) {
+        Object obj = spEstados.getSelectedItem();
+
+        if (obj != null && obj instanceof Estado) {
+            Estado e = (Estado) obj;
+
+            if (Long.MAX_VALUE == e.getId()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean validaSpinnerFaculdadeFiltro(Spinner spFaculdades) {
+        Object obj = spFaculdades.getSelectedItem();
+
+        if (obj != null && obj instanceof Faculdade) {
+            Faculdade f = (Faculdade) obj;
+
+            if (Long.MAX_VALUE == f.getId()) {
+
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static boolean validateNotNull(List<EditText> editTexts) {
         for (EditText edText : editTexts) {
 

@@ -1,9 +1,11 @@
 package eventos.com.br.eventos.fragments;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -15,6 +17,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -26,6 +31,8 @@ import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.rest.EventoRest;
+import livroandroid.lib.utils.IOUtils;
+import livroandroid.lib.utils.SDCardUtils;
 
 public class EventoFragment extends BaseFragment {
 
@@ -101,17 +108,41 @@ public class EventoFragment extends BaseFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.ic_share) {
 
-            // CompartilharEvento2
-            Uri uriImage = Uri.parse( evento.getEnderecoImagem().toString() );
-            Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra( Intent.EXTRA_STREAM, uriImage );
-            shareIntent.setType( "*/*" );
-            startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
+            compartilharEvento();
 
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void compartilharEvento() {
+        new CompartilharTask().execute(evento.getEnderecoImagem());
+    }
+
+    private class CompartilharTask extends AsyncTask<String, Void, Uri> {
+
+        @Override
+        protected Uri doInBackground(String... urls) {
+            String url = urls[0];
+
+            String fileName = "foto_temp.jpg";
+            File file = SDCardUtils.getPrivateFile(getContext(), "eventos", fileName);
+
+            IOUtils.downloadToFile(url, file);
+
+            return Uri.fromFile(file);
+        }
+
+        @Override
+        protected void onPostExecute(Uri uri) {
+
+            // CompartilharEvento2
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+            shareIntent.setType("image/*");
+            startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
+        }
     }
 
     public void setFabButton(FloatingActionButton fabFavorito) {
