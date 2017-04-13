@@ -24,10 +24,12 @@ import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.model.Evento;
+import eventos.com.br.eventos.model.Filtro;
 import eventos.com.br.eventos.model.Response;
 import eventos.com.br.eventos.model.ResponseWithURL;
 import eventos.com.br.eventos.model.Usuario;
 import eventos.com.br.eventos.util.CalendarDeserializer;
+import eventos.com.br.eventos.util.CalendarSerializer;
 import eventos.com.br.eventos.util.FiltroUtil;
 import eventos.com.br.eventos.util.HttpHelper;
 import eventos.com.br.eventos.util.TipoBusca;
@@ -68,15 +70,18 @@ public class EventoRest {
     }
 
     private List<Evento> getEventosProximos() throws IOException {
-        String urlProximos = FiltroUtil.gerarUrl(url);
+        Filtro filtro = FiltroUtil.getFiltro();
+        String urlProximos = url + "/proximos";
 
-        HttpHelper helper = new HttpHelper();
-        String json = helper.doGet(urlProximos);
+        Gson gson = createGsonObject();
+        String jsonFiltro = gson.toJson(filtro);
+
+        HttpHelper http = new HttpHelper();
+        http.setContentType("application/json; charset=utf-8");
+        String json = http.doPost(urlProximos, jsonFiltro.getBytes(), "UTF-8");
 
         Type listType = new TypeToken<ArrayList<Evento>>() {
         }.getType();
-        Gson gson = createGsonObject();
-
         return gson.fromJson(json, listType);
     }
 
@@ -154,8 +159,11 @@ public class EventoRest {
         GsonBuilder builder = new GsonBuilder();
 
         // Serializador para classe Calendar
-        builder.registerTypeAdapter(Calendar.class, new CalendarDeserializer());
+       /* builder.registerTypeAdapter(Calendar.class, new CalendarDeserializer());
         builder.registerTypeAdapter(GregorianCalendar.class, new CalendarDeserializer());
+
+        builder.registerTypeAdapter(Calendar.class, new CalendarSerializer());
+        builder.registerTypeAdapter(GregorianCalendar.class, new CalendarSerializer());*/
 
         return builder.create();
     }

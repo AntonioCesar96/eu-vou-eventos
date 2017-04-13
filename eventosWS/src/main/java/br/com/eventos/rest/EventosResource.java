@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import br.com.eventos.model.Evento;
+import br.com.eventos.model.Filtro;
 import br.com.eventos.model.dto.EventoFullDTO;
 import br.com.eventos.model.dto.EventosFeedDTO;
 import br.com.eventos.service.EventosService;
@@ -34,10 +35,10 @@ public class EventosResource {
 	@Autowired
 	private UploadService uploadService;
 
-	@GET
+	@POST
 	@Path("/proximos")
-	public List<EventosFeedDTO> getProximosEventos() {
-		return service.getProximosEventos();
+	public List<EventosFeedDTO> getProximosEventos(Filtro filtro) {
+		return service.getProximosEventos(filtro);
 	}
 
 	@GET
@@ -57,18 +58,6 @@ public class EventosResource {
 	@Path("/{id}")
 	public EventoFullDTO getEventoPorId(@PathParam("id") Long idEvento) {
 		return service.getEventosPorId(idEvento);
-	}
-	
-	@GET
-	@Path("/faculdade/{id}")
-	public List<EventosFeedDTO> getEventosPorFaculdade(@PathParam("id") Long idFaculdade) {
-		return service.getEventosPorFaculdade(idFaculdade);
-	}
-	
-	@GET
-	@Path("/cidade/{id}")
-	public List<EventosFeedDTO> getEventosPorCidade(@PathParam("id") Long idCidade) {
-		return service.getEventosPorCidade(idCidade);
 	}
 
 	@POST

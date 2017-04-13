@@ -89,11 +89,10 @@ public class EventosDAO {
 	}
 
 	public List<Evento> getEventosPorFaculdade(Long idFaculdade) {
-		TypedQuery<Evento> query = manager
-				.createQuery(
-						"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
-								+ "from Evento e where e.faculdade.id = :idFaculdade order by e.dataHora",
-						Evento.class);
+		TypedQuery<Evento> query = manager.createQuery(
+				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+						+ "from Evento e where e.faculdade.id = :idFaculdade order by e.dataHora",
+				Evento.class);
 
 		query.setParameter("idFaculdade", idFaculdade);
 
@@ -110,6 +109,20 @@ public class EventosDAO {
 				Evento.class);
 
 		query.setParameter("idCidade", idCidade);
+
+		List<Evento> list = query.getResultList();
+
+		Calendar dataAtual = Calendar.getInstance();
+		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
+	}
+
+	public List<Evento> getEventosPorEstado(Long idEstado) {
+		TypedQuery<Evento> query = manager.createQuery(
+				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) from Evento e "
+						+ "inner join e.local l inner join l.cidade c inner join c.estado et on (et.id = :idEstado) order by e.dataHora",
+				Evento.class);
+
+		query.setParameter("idEstado", idEstado);
 
 		List<Evento> list = query.getResultList();
 

@@ -22,8 +22,10 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.CidadesAdapter;
@@ -59,6 +61,7 @@ public class FiltroActivity extends BaseActivity {
         setUpNavigation();
 
         findViewById(R.id.btnFiltrar).setOnClickListener(onClickFiltrar());
+        findViewById(R.id.btnLimpar).setOnClickListener(onClickLimpar());
 
         spFaculdades = (Spinner) findViewById(R.id.spFaculdades);
         spEstados = (Spinner) findViewById(R.id.spEstados);
@@ -86,6 +89,26 @@ public class FiltroActivity extends BaseActivity {
         buscar();
     }
 
+    private View.OnClickListener onClickLimpar() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                tDataInicio.setText("");
+                tDataFinal.setText("");
+                spFaculdades.setSelection(0);
+                spEstados.setSelection(0);
+                spCidades.setSelection(0);
+
+                filtro.setDataFinal(null);
+                filtro.setDataInicial(null);
+                filtro.setIdFaculdade(Long.MAX_VALUE);
+                filtro.setIdEstado(Long.MAX_VALUE);
+                filtro.setIdCidade(Long.MAX_VALUE);
+            }
+        };
+    }
+
     public void onFilter(Filtro filtro) {
 
         try {
@@ -104,6 +127,9 @@ public class FiltroActivity extends BaseActivity {
             @Override
             public void onClick(View view) {
 
+                onFilter(filtro);
+
+                /*
                 if (ValidationUtil.validaSpinnerEstadoFiltro(spEstados)) {
                     filtro.setFiltroTipo(FiltroTipo.TODOS);
                     onFilter(filtro);
@@ -131,6 +157,7 @@ public class FiltroActivity extends BaseActivity {
                 }
 
                 createToast("Selecione algum critério de filtro");
+                */
             }
         };
     }
@@ -148,16 +175,13 @@ public class FiltroActivity extends BaseActivity {
         Calendar dataInicial = Calendar.getInstance();
         Calendar dataFinal = Calendar.getInstance();
 
-        filtro.setDataInicial(dataInicial);
-        filtro.setDataFinal(dataFinal);
-
         DatePickerDialog dataInicioDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
-                filtro.getDataInicial().set(year, monthOfYear, dayOfMonth);
+                filtro.setDataInicial(new GregorianCalendar(year, monthOfYear, dayOfMonth, 0, 0, 0));
                 tDataInicio.setText(dateFormatter.format(filtro.getDataInicial().getTime()));
             }
 
@@ -169,7 +193,7 @@ public class FiltroActivity extends BaseActivity {
 
                 SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
-                filtro.getDataFinal().set(year, monthOfYear, dayOfMonth);
+                filtro.setDataFinal(new GregorianCalendar(year, monthOfYear, dayOfMonth, 23, 59, 59));
                 tDataFinal.setText(dateFormatter.format(filtro.getDataFinal().getTime()));
             }
 
@@ -183,6 +207,18 @@ public class FiltroActivity extends BaseActivity {
 
         tDataFinal.setOnFocusChangeListener(focusGeneric(dataFimDialog));
         tDataFinal.setOnClickListener(clickGeneric(dataFimDialog));
+
+        if (updateCampos) {
+            SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+            if (filtro.getDataInicial() != null) {
+                tDataInicio.setText(dateFormatter.format(filtro.getDataInicial().getTime()));
+            }
+
+            if (filtro.getDataFinal() != null) {
+                tDataFinal.setText(dateFormatter.format(filtro.getDataFinal().getTime()));
+            }
+        }
     }
 
     private View.OnClickListener clickGeneric(final AlertDialog dialog) {
@@ -484,7 +520,6 @@ public class FiltroActivity extends BaseActivity {
             }
         }
     }
-
 
     public static void selecionaItemSpinnerCidades(Spinner spnr, Long id) {
         BaseAdapter adapter = (BaseAdapter) spnr.getAdapter();

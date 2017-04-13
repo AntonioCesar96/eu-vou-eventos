@@ -7,6 +7,7 @@ import com.google.gson.JsonSerializer;
 
 import java.lang.reflect.Type;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class CalendarSerializer implements JsonSerializer<Calendar> {
 

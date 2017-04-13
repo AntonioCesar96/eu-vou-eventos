@@ -37,12 +37,12 @@ public final class GsonMessageBodyHandler implements MessageBodyWriter<Object>, 
 			GsonBuilder builder = new GsonBuilder().setPrettyPrinting();
 
 			// Serializador para classe Calendar
-			builder.registerTypeAdapter(Calendar.class, new CalendarSerializer());
+			/*builder.registerTypeAdapter(Calendar.class, new CalendarSerializer());
 			builder.registerTypeAdapter(GregorianCalendar.class, new CalendarSerializer());
 			
 			// Descerializador para classe Calendar
 			builder.registerTypeAdapter(Calendar.class, new CalendarDeserializer());
-			builder.registerTypeAdapter(GregorianCalendar.class, new CalendarDeserializer());
+			builder.registerTypeAdapter(GregorianCalendar.class, new CalendarDeserializer());*/
 
 			
 			//builder.registerTypeAdapterFactory(HibernateProxyTypeAdapter.FACTORY);

@@ -7,6 +7,7 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 import java.util.Calendar;
+import java.util.TimeZone;
 
 public class CalendarDeserializer implements JsonDeserializer<Calendar> {
 

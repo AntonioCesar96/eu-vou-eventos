@@ -12,12 +12,13 @@ import eventos.com.br.eventos.model.FiltroTipo;
 
 public class FiltroUtil {
 
-    public static String gerarUrl(String url) {
+    public static Filtro getFiltro() {
 
         try {
             FiltroDAO dao = new FiltroDAO();
             Filtro filtro = dao.getFiltro();
-
+            return  filtro;
+            /*
             if (filtro == null) {
                 return url + "/proximos";
             }
@@ -35,9 +36,11 @@ public class FiltroUtil {
             }
 
             return url + "/proximos";
+            */
         } catch (SQLException e) {
             e.printStackTrace();
-            return url + "/proximos";
+            //return url + "/proximos";
+            return null;
         }
 
     }

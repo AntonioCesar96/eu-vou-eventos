@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -164,6 +165,17 @@
                     android:background="@color/primary"
                     android:text="Buscar"
                     android:textColor="@color/white" />
+
+                <Button
+                    android:id="@+id/btnLimpar"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/primary"
+                    android:text="Limpar"
+                    android:textColor="@color/white" />
+
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>
