@@ -17,7 +17,16 @@ public class FiltroUtil {
         try {
             FiltroDAO dao = new FiltroDAO();
             Filtro filtro = dao.getFiltro();
-            return  filtro;
+
+            if (filtro == null) {
+                filtro = new Filtro();
+                filtro.setId(Long.MAX_VALUE);
+                filtro.setIdCidade(Long.MAX_VALUE);
+                filtro.setIdEstado(Long.MAX_VALUE);
+                filtro.setIdFaculdade(Long.MAX_VALUE);
+            }
+
+            return filtro;
             /*
             if (filtro == null) {
                 return url + "/proximos";
@@ -40,7 +49,7 @@ public class FiltroUtil {
         } catch (SQLException e) {
             e.printStackTrace();
             //return url + "/proximos";
-            return null;
+            return new Filtro();
         }
 
     }

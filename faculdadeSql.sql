@@ -1,10 +1,2 @@
-﻿select * from faculdade
-
-insert into faculdade (id, nome, cidade) values
-(1, 'Uniderp Matriz', 1506),
-(2, 'Uniderp Unidade 2', 1506),
-(3, 'UCDB', 1506);
-
-select * from cidade where nome like 'Campo Grande'
-
-select * from estado where id = 12
+﻿insert into token (id, access_token, account_id, account_username, expires_in, refresh_token, token_type)
+values (1, '13dd2609522f927de902a511d96b9f8bad412582', 55073425, 'antoniocesar', 2419200, '2c192b847b54d35d56d42345be05a2e633fdf81c', 'bearer')
