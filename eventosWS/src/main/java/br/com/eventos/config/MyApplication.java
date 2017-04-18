@@ -7,15 +7,11 @@ import java.util.Set;
 
 import javax.ws.rs.core.Application;
 
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
-
 public class MyApplication extends Application {
 
 	@Override
 	public Set<Object> getSingletons() {
 		Set<Object> singletons = new HashSet<>();
-		// suporte a file upload
-		singletons.add(new MultiPartFeature());
 		
 		return singletons;
 	}

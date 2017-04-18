@@ -35,6 +35,20 @@ public class EventosResource {
 	@Autowired
 	private UploadService uploadService;
 
+	@GET
+	@Path("/testGet")
+	@Produces(MediaType.TEXT_PLAIN + ";charset=utf-8")
+	public String testGet() {
+		return "testGet";
+	}
+
+	@POST
+	@Path("/testPost")
+	@Produces(MediaType.TEXT_PLAIN + ";charset=utf-8")
+	public String testPost() {
+		return "testPost";
+	}
+
 	@POST
 	@Path("/proximos")
 	public List<EventosFeedDTO> getProximosEventos(Filtro filtro) {

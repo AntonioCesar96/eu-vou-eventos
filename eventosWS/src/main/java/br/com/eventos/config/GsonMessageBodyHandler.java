@@ -7,8 +7,6 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -21,9 +19,6 @@ import javax.ws.rs.ext.Provider;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
-import br.com.eventos.util.CalendarDeserializer;
-import br.com.eventos.util.CalendarSerializer;
 
 @Provider
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
