@@ -51,20 +51,20 @@ public class EventosService {
 
 	private List<Evento> filtrarPorData(List<Evento> eventos, Filtro filtro) {
 
-		if (filtro.getDataInicial() == null && filtro.getDataFinal() == null) {
+		if (filtro.getDataInicial() == null) {
 			return eventos;
 		}
 
-		eventos.forEach(
-				e -> System.out.println(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(e.getDataHora().getTime())));
-		System.out.println("Data Inicial "
-				+ new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(filtro.getDataInicial().getTime()));
-		System.out.println(
-				"Data Final " + new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(filtro.getDataFinal().getTime()));
+		if (filtro.getDataFinal() != null) {
+			Stream<Evento> stream = eventos.stream();
+			Stream<Evento> filter = stream.filter(e -> e.getDataHora().after(filtro.getDataInicial())
+					&& e.getDataHora().before(filtro.getDataFinal()));
+			List<Evento> list = filter.collect(Collectors.toList());
+			return list;
+		}
 
 		Stream<Evento> stream = eventos.stream();
-		Stream<Evento> filter = stream.filter(
-				e -> e.getDataHora().after(filtro.getDataInicial()) && e.getDataHora().before(filtro.getDataFinal()));
+		Stream<Evento> filter = stream.filter(e -> e.getDataHora().after(filtro.getDataInicial()));
 		List<Evento> list = filter.collect(Collectors.toList());
 		return list;
 	}

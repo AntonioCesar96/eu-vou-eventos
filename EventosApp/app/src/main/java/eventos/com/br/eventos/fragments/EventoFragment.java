@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +24,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
 
 import eventos.com.br.eventos.R;
@@ -31,6 +33,9 @@ import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.rest.EventoRest;
+import eventos.com.br.eventos.tasks.CompartilharTask;
+import eventos.com.br.eventos.tasks.LembreteEvento;
+import eventos.com.br.eventos.util.AlarmUtil;
 import livroandroid.lib.utils.IOUtils;
 import livroandroid.lib.utils.SDCardUtils;
 
@@ -81,8 +86,8 @@ public class EventoFragment extends BaseFragment {
         txtDesc = (TextView) view.findViewById(R.id.txtDesc);
         progress = (ProgressBar) view.findViewById(R.id.progress);
         txtLocal = (TextView) view.findViewById(R.id.txtLocal);
-        txtDataEvento =  (TextView) view.findViewById(R.id.txtDataEvento);
-        txtRuaMostra =  (TextView) view.findViewById(R.id.txtRuaMostra);
+        txtDataEvento = (TextView) view.findViewById(R.id.txtDataEvento);
+        txtRuaMostra = (TextView) view.findViewById(R.id.txtRuaMostra);
         txtNumeroMostra = (TextView) view.findViewById(R.id.txtNumeroMostra);
         txtLocalBairro = (TextView) view.findViewById(R.id.txtLocalBairro);
     }
@@ -107,42 +112,14 @@ public class EventoFragment extends BaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.ic_share) {
-
             compartilharEvento();
-
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void compartilharEvento() {
-        new CompartilharTask().execute(evento.getEnderecoImagem());
-    }
-
-    private class CompartilharTask extends AsyncTask<String, Void, Uri> {
-
-        @Override
-        protected Uri doInBackground(String... urls) {
-            String url = urls[0];
-
-            String fileName = "foto_temp.jpg";
-            File file = SDCardUtils.getPrivateFile(getContext(), "eventos", fileName);
-
-            IOUtils.downloadToFile(url, file);
-
-            return Uri.fromFile(file);
-        }
-
-        @Override
-        protected void onPostExecute(Uri uri) {
-
-            // CompartilharEvento2
-            Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-            shareIntent.setType("image/*");
-            startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
-        }
+        new CompartilharTask(getAppCompatActivity()).execute(evento.getEnderecoImagem());
     }
 
     public void setFabButton(FloatingActionButton fabFavorito) {
@@ -198,8 +175,8 @@ public class EventoFragment extends BaseFragment {
         txtDataEvento.setText(data);
         txtDesc.setText(evento.getDescricao());
         txtLocal.setText(evento.getLocal().getNome());
-        txtRuaMostra.setText( evento.getLocal().getRua());
-        txtNumeroMostra.setText(  evento.getLocal().getNumero());
+        txtRuaMostra.setText(evento.getLocal().getRua());
+        txtNumeroMostra.setText(evento.getLocal().getNumero());
         txtLocalBairro.setText("Bairro: " + evento.getLocal().getBairro());
 
         fabFavorito.setOnClickListener(clickFabFavorito());
@@ -228,6 +205,7 @@ public class EventoFragment extends BaseFragment {
         try {
             EventoDAO eventoDAO = new EventoDAO(dataBaseHelper.getConnectionSource());
             eventoDAO.save(evento);
+            agendar(evento.getId());
             Toast.makeText(getContext(), "Adicionado aos favoritos", Toast.LENGTH_SHORT).show();
         } catch (SQLException e1) {
             e1.printStackTrace();
@@ -238,10 +216,34 @@ public class EventoFragment extends BaseFragment {
         try {
             EventoDAO eventoDAO = new EventoDAO(dataBaseHelper.getConnectionSource());
             eventoDAO.remove(evento);
+            cancelar();
             Toast.makeText(getContext(), "Removido dos favoritos", Toast.LENGTH_SHORT).show();
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
+    }
+
+    public long getTime() {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        c.add(Calendar.SECOND, 5);
+        long time = c.getTimeInMillis();
+        return time;
+    }
+
+    public void agendar(Long idEvento) {
+        Intent intent = new Intent(LembreteEvento.ACTION);
+        intent.putExtra("idEvento", idEvento);
+        // Agenda para daqui a 5 seg
+        AlarmUtil.schedule(getContext(), intent, getTime());
+        //sendBroadcast(intent);
+        Toast.makeText(getContext(), "Alarme agendado.", Toast.LENGTH_SHORT).show();
+    }
+
+    public void cancelar() {
+        Intent intent = new Intent(LembreteEvento.ACTION);
+        AlarmUtil.cancel(getContext(), intent);
+        Toast.makeText(getContext(), "Alarme cancelado", Toast.LENGTH_SHORT).show();
     }
 }
 

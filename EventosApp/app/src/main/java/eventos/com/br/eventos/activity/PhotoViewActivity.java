@@ -14,6 +14,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import eventos.com.br.eventos.R;
+import eventos.com.br.eventos.tasks.CompartilharTask;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class PhotoViewActivity extends BaseActivity {
@@ -80,20 +81,16 @@ public class PhotoViewActivity extends BaseActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-        } if (item.getItemId() == R.id.ic_share) {
+        }
+        if (item.getItemId() == R.id.ic_share) {
 
-            // CompartilharEvento2
-            Uri uriImage = Uri.parse(url);
-            Intent shareIntent = new Intent();
-            shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra( Intent.EXTRA_STREAM, uriImage );
-            shareIntent.setType( "*/*" );
-            startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
-
+            compartilharEvento();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
+    private void compartilharEvento() {
+        new CompartilharTask(getAppCompatActivity()).execute(url);
+    }
 }

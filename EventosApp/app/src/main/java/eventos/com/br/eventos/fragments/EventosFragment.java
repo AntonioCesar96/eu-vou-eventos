@@ -25,6 +25,7 @@ import eventos.com.br.eventos.activity.EventoActivity;
 import eventos.com.br.eventos.adapter.EventoAdapter;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.rest.EventoRest;
+import eventos.com.br.eventos.tasks.CompartilharTask;
 import eventos.com.br.eventos.util.TipoBusca;
 import livroandroid.lib.utils.AndroidUtils;
 
@@ -206,15 +207,9 @@ public class EventosFragment extends BaseFragment {
         return new EventoAdapter.CompartilharOnClickListener() {
             @Override
             public void onClickCompartilhar(EventoAdapter.EventoViewHolder holder, int idx) {
-                Evento e = eventos.get(idx);
 
-                // CompartilharEvento2
-                Uri uriImage = Uri.parse(e.getEnderecoImagem().toString());
-                Intent shareIntent = new Intent();
-                shareIntent.setAction(Intent.ACTION_SEND);
-                shareIntent.putExtra(Intent.EXTRA_STREAM, uriImage);
-                shareIntent.setType("*/*");
-                startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
+                Evento e = eventos.get(idx);
+                new CompartilharTask(getAppCompatActivity()).execute(e.getEnderecoImagem());
             }
         };
     }
