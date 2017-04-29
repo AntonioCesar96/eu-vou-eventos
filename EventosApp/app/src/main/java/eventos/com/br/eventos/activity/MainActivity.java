@@ -19,7 +19,7 @@ import eventos.com.br.eventos.model.Filtro;
 import livroandroid.lib.utils.Prefs;
 
 public class MainActivity extends BaseActivity {
-    public static final int CODIGO_FILTRO = 5;
+    public static final int RECRIAR_ACTIVITY = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +97,7 @@ public class MainActivity extends BaseActivity {
 
         if (id == R.id.filter_eventos) {
             //openDialogFilter();
-            startActivityForResult(new Intent(getContext(), FiltroActivity.class), CODIGO_FILTRO);
-
+            startActivityForResult(new Intent(getContext(), FiltroActivity.class), RECRIAR_ACTIVITY);
             return true;
         }
 
@@ -108,7 +107,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == CODIGO_FILTRO){
+        if (resultCode == RECRIAR_ACTIVITY){
             startActivity(new Intent(getContext(), MainActivity.class));
             finish();
         }

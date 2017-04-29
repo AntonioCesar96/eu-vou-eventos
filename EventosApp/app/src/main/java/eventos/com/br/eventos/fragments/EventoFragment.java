@@ -1,13 +1,11 @@
 package eventos.com.br.eventos.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.net.Uri;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,9 +16,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -36,10 +31,10 @@ import eventos.com.br.eventos.rest.EventoRest;
 import eventos.com.br.eventos.tasks.CompartilharTask;
 import eventos.com.br.eventos.tasks.LembreteEvento;
 import eventos.com.br.eventos.util.AlarmUtil;
-import livroandroid.lib.utils.IOUtils;
-import livroandroid.lib.utils.SDCardUtils;
 
 public class EventoFragment extends BaseFragment {
+    public static final String ACTION = "eventos.com.br.eventos.LEMBRAR_EVENTO_";
+    private BroadcastReceiver lembrarEvento = new LembreteEvento();
 
     private Evento evento;
     private ProgressBar progress;
@@ -216,7 +211,7 @@ public class EventoFragment extends BaseFragment {
         try {
             EventoDAO eventoDAO = new EventoDAO(dataBaseHelper.getConnectionSource());
             eventoDAO.remove(evento);
-            cancelar();
+            cancelar(evento.getId());
             Toast.makeText(getContext(), "Removido dos favoritos", Toast.LENGTH_SHORT).show();
         } catch (SQLException e1) {
             e1.printStackTrace();
@@ -232,17 +227,24 @@ public class EventoFragment extends BaseFragment {
     }
 
     public void agendar(Long idEvento) {
-        Intent intent = new Intent(LembreteEvento.ACTION);
+        // Registra o receiver
+        String actionName = ACTION + idEvento;
+        getActivity().registerReceiver(lembrarEvento, new IntentFilter(actionName));
+
+        Intent intent = new Intent(actionName);
         intent.putExtra("idEvento", idEvento);
-        // Agenda para daqui a 5 seg
         AlarmUtil.schedule(getContext(), intent, getTime());
-        //sendBroadcast(intent);
+
         Toast.makeText(getContext(), "Alarme agendado.", Toast.LENGTH_SHORT).show();
     }
 
-    public void cancelar() {
-        Intent intent = new Intent(LembreteEvento.ACTION);
+    public void cancelar(Long idEvento) {
+        String actionName = ACTION + idEvento;
+        Intent intent = new Intent(actionName);
+
         AlarmUtil.cancel(getContext(), intent);
+        getActivity().unregisterReceiver(lembrarEvento);
+
         Toast.makeText(getContext(), "Alarme cancelado", Toast.LENGTH_SHORT).show();
     }
 }

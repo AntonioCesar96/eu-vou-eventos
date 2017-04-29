@@ -21,7 +21,6 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 
 import java.io.File;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +33,6 @@ import eventos.com.br.eventos.adapter.CidadesAdapter;
 import eventos.com.br.eventos.adapter.EstadosAdapter;
 import eventos.com.br.eventos.adapter.FaculdadesAdapter;
 import eventos.com.br.eventos.config.EventosApplication;
-import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Cidade;
 import eventos.com.br.eventos.model.Estado;
 import eventos.com.br.eventos.model.Evento;
@@ -43,7 +41,6 @@ import eventos.com.br.eventos.model.Local;
 import eventos.com.br.eventos.model.Response;
 import eventos.com.br.eventos.model.ResponseWithURL;
 import eventos.com.br.eventos.model.Usuario;
-import eventos.com.br.eventos.dao.UsuarioDAO;
 import eventos.com.br.eventos.rest.EnderecoRest;
 import eventos.com.br.eventos.rest.EventoRest;
 import eventos.com.br.eventos.rest.FaculdadeRest;
@@ -267,7 +264,8 @@ public class EventoPUActivity extends BaseActivity {
 
             if (response != null && "OK".equals(response.getStatus())) {
                 // Fecha a tela
-                getActivity().finish();
+                setResult(MainActivity.RECRIAR_ACTIVITY);
+                finish();
             } else {
                 AlertUtils.alert(getAppCompatActivity(), "Alerta", "Erro ao tentar salvar evento " + evento.getNome());
             }

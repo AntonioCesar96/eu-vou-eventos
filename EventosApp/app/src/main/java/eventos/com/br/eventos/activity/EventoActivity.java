@@ -4,19 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
-import java.sql.SQLException;
-
 import eventos.com.br.eventos.R;
-import eventos.com.br.eventos.dao.DataBaseHelper;
-import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.fragments.EventoFragment;
-import eventos.com.br.eventos.fragments.EventosFragment;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.util.ImageUtils;
 
@@ -92,15 +85,5 @@ public class EventoActivity extends BaseActivity {
     public void setTitle(String s) {
         // O título deve ser setado na CollapsingToolbarLayout
         collapsingToolbar.setTitle(s);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                ActivityCompat.finishAfterTransition(getActivity());
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 }

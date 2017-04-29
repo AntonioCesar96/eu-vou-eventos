@@ -25,8 +25,8 @@ import java.sql.SQLException;
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
-import eventos.com.br.eventos.model.Usuario;
 import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.model.Usuario;
 import eventos.com.br.eventos.util.AlertUtils;
 import eventos.com.br.eventos.util.ImageUtils;
 
@@ -155,7 +155,8 @@ public class BaseActivity extends AppCompatActivity {
                         // Trata o evento do menu
                         switch (menuItem.getItemId()) {
                             case R.id.c_evento:
-                                startActivity(new Intent(getAppCompatActivity(), EventoPUActivity.class));
+                                startActivityForResult(new Intent(getAppCompatActivity(), EventoPUActivity.class),
+                                        MainActivity.RECRIAR_ACTIVITY);
                                 break;
                             case R.id.l_eventos:
                                 startActivity(new Intent(getAppCompatActivity(), MeusEventosActivity.class));

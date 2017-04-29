@@ -2,10 +2,7 @@ package eventos.com.br.eventos.activity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,7 +12,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import java.sql.SQLException;
@@ -25,22 +21,18 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.CidadesAdapter;
 import eventos.com.br.eventos.adapter.EstadosAdapter;
 import eventos.com.br.eventos.adapter.FaculdadesAdapter;
 import eventos.com.br.eventos.dao.FiltroDAO;
-import eventos.com.br.eventos.fragments.FilterEventosDialog;
 import eventos.com.br.eventos.model.Cidade;
 import eventos.com.br.eventos.model.Estado;
 import eventos.com.br.eventos.model.Faculdade;
 import eventos.com.br.eventos.model.Filtro;
-import eventos.com.br.eventos.model.FiltroTipo;
 import eventos.com.br.eventos.rest.EnderecoRest;
 import eventos.com.br.eventos.rest.FaculdadeRest;
-import eventos.com.br.eventos.util.ValidationUtil;
 import livroandroid.lib.utils.AndroidUtils;
 
 public class FiltroActivity extends BaseActivity {
@@ -115,7 +107,7 @@ public class FiltroActivity extends BaseActivity {
             FiltroDAO dao = new FiltroDAO();
             dao.save(filtro);
 
-            setResult(MainActivity.CODIGO_FILTRO);
+            setResult(MainActivity.RECRIAR_ACTIVITY);
             finish();
         } catch (SQLException e) {
 

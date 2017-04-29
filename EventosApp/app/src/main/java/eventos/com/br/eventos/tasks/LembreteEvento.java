@@ -8,11 +8,9 @@ import java.sql.SQLException;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.activity.EventoActivity;
-import eventos.com.br.eventos.activity.MainActivity;
 import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.dao.EventoDAO;
-import eventos.com.br.eventos.dao.UsuarioDAO;
 import eventos.com.br.eventos.model.Evento;
 import livroandroid.lib.utils.NotificationUtil;
 
@@ -21,7 +19,6 @@ import livroandroid.lib.utils.NotificationUtil;
  */
 
 public class LembreteEvento extends BroadcastReceiver {
-    public static final String ACTION = "eventos.com.br.eventos.LEMBRETE_EVENTO";
 
     @Override
     public void onReceive(Context context, Intent intent) {
