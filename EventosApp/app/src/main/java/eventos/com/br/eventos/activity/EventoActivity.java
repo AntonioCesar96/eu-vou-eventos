@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -85,5 +86,19 @@ public class EventoActivity extends BaseActivity {
     public void setTitle(String s) {
         // O título deve ser setado na CollapsingToolbarLayout
         collapsingToolbar.setTitle(s);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                boolean notificacao = getIntent().getBooleanExtra("notificacao", false);
+                if (notificacao) {
+                    startActivity(new Intent(getContext(), MainActivity.class));
+                    finish();
+                }
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

@@ -1,8 +1,5 @@
 package eventos.com.br.eventos.fragments;
 
-import android.content.BroadcastReceiver;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -29,12 +26,9 @@ import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.rest.EventoRest;
 import eventos.com.br.eventos.tasks.CompartilharTask;
-import eventos.com.br.eventos.tasks.LembreteEvento;
-import eventos.com.br.eventos.util.AlarmUtil;
+import eventos.com.br.eventos.util.AlarmEventoUtil;
 
 public class EventoFragment extends BaseFragment {
-    public static final String ACTION = "eventos.com.br.eventos.LEMBRAR_EVENTO_";
-    private BroadcastReceiver lembrarEvento = new LembreteEvento();
 
     private Evento evento;
     private ProgressBar progress;
@@ -200,8 +194,10 @@ public class EventoFragment extends BaseFragment {
         try {
             EventoDAO eventoDAO = new EventoDAO(dataBaseHelper.getConnectionSource());
             eventoDAO.save(evento);
-            agendar(evento.getId());
-            Toast.makeText(getContext(), "Adicionado aos favoritos", Toast.LENGTH_SHORT).show();
+
+            agendarAlarm(evento.getId(), evento.getDataHora());
+
+            Toast.makeText(getContext(), evento.getNome() + " adicionado aos favoritos", Toast.LENGTH_SHORT).show();
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
@@ -211,41 +207,25 @@ public class EventoFragment extends BaseFragment {
         try {
             EventoDAO eventoDAO = new EventoDAO(dataBaseHelper.getConnectionSource());
             eventoDAO.remove(evento);
-            cancelar(evento.getId());
-            Toast.makeText(getContext(), "Removido dos favoritos", Toast.LENGTH_SHORT).show();
+
+            cancelarAlarm(evento.getId());
+
+            Toast.makeText(getContext(), evento.getNome() + " removido dos favoritos", Toast.LENGTH_SHORT).show();
         } catch (SQLException e1) {
             e1.printStackTrace();
         }
     }
 
-    public long getTime() {
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(System.currentTimeMillis());
-        c.add(Calendar.SECOND, 5);
-        long time = c.getTimeInMillis();
-        return time;
+    public void agendarAlarm(Long idEvento, Calendar data) {
+        AlarmEventoUtil alarmEventoUtil = new AlarmEventoUtil(getContext(), dataBaseHelper);
+        alarmEventoUtil.agendarAlarm(idEvento, data.getTimeInMillis());
     }
 
-    public void agendar(Long idEvento) {
-        // Registra o receiver
-        String actionName = ACTION + idEvento;
-        getActivity().registerReceiver(lembrarEvento, new IntentFilter(actionName));
-
-        Intent intent = new Intent(actionName);
-        intent.putExtra("idEvento", idEvento);
-        AlarmUtil.schedule(getContext(), intent, getTime());
-
-        Toast.makeText(getContext(), "Alarme agendado.", Toast.LENGTH_SHORT).show();
+    public void cancelarAlarm(Long idEvento) {
+        AlarmEventoUtil alarmEventoUtil = new AlarmEventoUtil(getContext(), dataBaseHelper);
+        alarmEventoUtil.cancelarAlarm(idEvento);
     }
 
-    public void cancelar(Long idEvento) {
-        String actionName = ACTION + idEvento;
-        Intent intent = new Intent(actionName);
 
-        AlarmUtil.cancel(getContext(), intent);
-        getActivity().unregisterReceiver(lembrarEvento);
-
-        Toast.makeText(getContext(), "Alarme cancelado", Toast.LENGTH_SHORT).show();
-    }
 }
 

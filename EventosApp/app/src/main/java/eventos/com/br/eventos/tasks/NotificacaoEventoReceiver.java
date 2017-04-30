@@ -12,13 +12,13 @@ import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.model.Evento;
-import livroandroid.lib.utils.NotificationUtil;
+import eventos.com.br.eventos.util.NotificationUtil;
 
 /**
  * Created by Matheus on 26/04/2017.
  */
 
-public class LembreteEvento extends BroadcastReceiver {
+public class NotificacaoEventoReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -31,9 +31,10 @@ public class LembreteEvento extends BroadcastReceiver {
             Evento evento = dao.getById(idEvento);
 
             Intent notifIntent = new Intent(context, EventoActivity.class);
+            notifIntent.putExtra("notificacao", true);
             notifIntent.putExtra("evento", evento);
 
-            NotificationUtil.create(context, 1, notifIntent, R.mipmap.ic_launcher, "É amanha!!!!!!!!!", evento.getNome());
+            NotificationUtil.create(context, idEvento.intValue(), notifIntent, R.mipmap.ic_launcher, "É amanha!!!!!!!!!", evento.getNome());
         } catch (SQLException e) {
             e.printStackTrace();
         }

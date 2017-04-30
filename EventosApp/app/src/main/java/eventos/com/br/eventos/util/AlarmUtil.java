@@ -12,22 +12,15 @@ import android.content.Intent;
 public class AlarmUtil {
 
     // Agenda o alarme
-    public static void schedule(Context context, Intent intent, long triggerAtMillis) {
-        PendingIntent p = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    public static void schedule(Context context, int requestCode, Intent intent, long triggerAtMillis) {
+        PendingIntent p = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarme = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarme.set(AlarmManager.RTC_WAKEUP, triggerAtMillis, p);
     }
 
-    // Agenda o alarme com repeat
-    public static void scheduleRepeat(Context context, Intent intent, long triggerAtMillis, long intervalMillis) {
-        PendingIntent p = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+    public static void cancel(Context context, int requestCode, Intent intent) {
         AlarmManager alarme = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        alarme.setInexactRepeating(AlarmManager.RTC_WAKEUP, triggerAtMillis, intervalMillis, p);
-    }
-
-    public static void cancel(Context context, Intent intent) {
-        AlarmManager alarme = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent p = PendingIntent.getBroadcast(context, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent p = PendingIntent.getBroadcast(context, requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarme.cancel(p);
     }
 }
