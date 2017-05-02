@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,13 +26,11 @@ import eventos.com.br.eventos.model.Filtro;
 import eventos.com.br.eventos.model.Response;
 import eventos.com.br.eventos.model.ResponseWithURL;
 import eventos.com.br.eventos.model.Usuario;
-import eventos.com.br.eventos.util.CalendarDeserializer;
-import eventos.com.br.eventos.util.CalendarSerializer;
+import eventos.com.br.eventos.util.FileUtils;
 import eventos.com.br.eventos.util.FiltroUtil;
 import eventos.com.br.eventos.util.HttpHelper;
+import eventos.com.br.eventos.util.IOUtils;
 import eventos.com.br.eventos.util.TipoBusca;
-import livroandroid.lib.utils.FileUtils;
-import livroandroid.lib.utils.IOUtils;
 
 /**
  * Created by antonio on 16/07/16.

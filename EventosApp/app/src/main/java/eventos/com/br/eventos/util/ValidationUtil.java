@@ -194,7 +194,6 @@ public class ValidationUtil {
             String textoInput = text.toString();
 
             // Valida campo DATE
-
             SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
             try {
                 format.parse(textoInput);
@@ -206,7 +205,7 @@ public class ValidationUtil {
             }
         }
 
-        edText.setError("Sem erro");
+        edText.setError(null);
         edText.setFocusable(false);
         return true;
     }
@@ -229,7 +228,7 @@ public class ValidationUtil {
             }
         }
 
-        edText.setError("Sem erro");
+        edText.setError(null);
         edText.setFocusable(false);
         return true;
     }

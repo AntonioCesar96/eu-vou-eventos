@@ -1,13 +1,10 @@
 package eventos.com.br.eventos.fragments;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,9 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
-import java.io.IOException;
 import java.util.List;
 
 import eventos.com.br.eventos.R;
@@ -26,8 +21,8 @@ import eventos.com.br.eventos.adapter.EventoAdapter;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.rest.EventoRest;
 import eventos.com.br.eventos.tasks.CompartilharTask;
+import eventos.com.br.eventos.util.AndroidUtils;
 import eventos.com.br.eventos.util.TipoBusca;
-import livroandroid.lib.utils.AndroidUtils;
 
 public class EventosFragment extends BaseFragment {
     protected RecyclerView recyclerView;

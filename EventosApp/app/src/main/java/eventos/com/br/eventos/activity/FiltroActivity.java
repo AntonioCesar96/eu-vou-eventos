@@ -33,7 +33,7 @@ import eventos.com.br.eventos.model.Faculdade;
 import eventos.com.br.eventos.model.Filtro;
 import eventos.com.br.eventos.rest.EnderecoRest;
 import eventos.com.br.eventos.rest.FaculdadeRest;
-import livroandroid.lib.utils.AndroidUtils;
+import eventos.com.br.eventos.util.AndroidUtils;
 
 public class FiltroActivity extends BaseActivity {
     private Spinner spFaculdades, spEstados, spCidades;
@@ -352,8 +352,6 @@ public class FiltroActivity extends BaseActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 estadoSelecionado = estadosAux.get(i);
                 filtro.setIdEstado(estadoSelecionado.getId());
-
-                Log.e("BUG", "Estados: "+estadoSelecionado.getId());
 
                 if (estadoSelecionado.getId().equals(Long.MAX_VALUE)) {
                     limparSpinnerCidades();

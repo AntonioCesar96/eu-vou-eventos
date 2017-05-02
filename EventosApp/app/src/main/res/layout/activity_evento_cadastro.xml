@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:orientation="vertical"
-    tools:context="eventos.com.br.eventos.activity.EventoPUActivity">
+    tools:context="eventos.com.br.eventos.activity.EventoCadastroActivity">
 
     <!-- Toolbar -->
     <include layout="@layout/include_toolbar" />

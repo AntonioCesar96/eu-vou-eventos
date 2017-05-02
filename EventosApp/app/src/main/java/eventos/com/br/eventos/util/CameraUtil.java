@@ -11,9 +11,6 @@ import android.widget.ImageView;
 
 import java.io.File;
 
-import livroandroid.lib.utils.ImageResizeUtils;
-import livroandroid.lib.utils.SDCardUtils;
-
 /**
  * Created by antonio on 26/02/17.
  */

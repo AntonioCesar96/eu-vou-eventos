@@ -6,7 +6,6 @@ import com.j256.ormlite.support.ConnectionSource;
 import java.sql.SQLException;
 
 import eventos.com.br.eventos.model.Cidade;
-import eventos.com.br.eventos.model.Local;
 
 /**
  * Created by antonio on 12/03/17.
@@ -24,6 +23,8 @@ public class CidadeDAO extends BaseDaoImpl<Cidade, Long> {
             if (!idExists(c.getId())){
                 create(c);
             }
+
+            new EstadoDAO(connectionSource).save(c.getEstado());
         }
     }
 }

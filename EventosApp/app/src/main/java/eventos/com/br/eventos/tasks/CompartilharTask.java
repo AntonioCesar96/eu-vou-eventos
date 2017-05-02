@@ -7,8 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
 
-import livroandroid.lib.utils.IOUtils;
-import livroandroid.lib.utils.SDCardUtils;
+import eventos.com.br.eventos.util.IOUtils;
+import eventos.com.br.eventos.util.SDCardUtils;
+
 
 /**
  * Created by Matheus on 26/04/2017.

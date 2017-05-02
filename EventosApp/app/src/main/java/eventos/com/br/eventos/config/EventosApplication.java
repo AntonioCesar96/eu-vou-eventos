@@ -7,7 +7,7 @@ import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.model.Usuario;
-import livroandroid.lib.utils.Prefs;
+import eventos.com.br.eventos.util.Prefs;
 
 /**
  * Created by Antonio Cesar on 18/07/2016.

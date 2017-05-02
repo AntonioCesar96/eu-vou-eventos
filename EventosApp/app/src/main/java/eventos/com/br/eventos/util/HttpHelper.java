@@ -9,8 +9,6 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.Map;
 
-import livroandroid.lib.utils.IOUtils;
-
 public class HttpHelper {
     public int TIMEOUT_MILLIS = 30000;
     private String contentType;

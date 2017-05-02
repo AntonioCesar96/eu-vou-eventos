@@ -35,6 +35,7 @@
         </receiver>
 
         <service android:name=".tasks.AgendarNotificacoesService" />
+        <service android:name=".tasks.NotificacaoEventoService" />
 
         <activity
             android:name=".activity.MainActivity"
@@ -62,7 +63,7 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
-            android:name=".activity.EventoPUActivity"
+            android:name=".activity.EventoCadastroActivity"
             android:label="@string/activity_novo_evento"
             android:parentActivityName=".activity.MainActivity">
             <meta-data

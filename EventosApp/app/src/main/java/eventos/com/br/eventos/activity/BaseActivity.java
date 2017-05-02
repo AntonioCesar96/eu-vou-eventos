@@ -155,7 +155,7 @@ public class BaseActivity extends AppCompatActivity {
                         // Trata o evento do menu
                         switch (menuItem.getItemId()) {
                             case R.id.c_evento:
-                                startActivityForResult(new Intent(getAppCompatActivity(), EventoPUActivity.class),
+                                startActivityForResult(new Intent(getAppCompatActivity(), EventoCadastroActivity.class),
                                         MainActivity.RECRIAR_ACTIVITY);
                                 break;
                             case R.id.l_eventos:

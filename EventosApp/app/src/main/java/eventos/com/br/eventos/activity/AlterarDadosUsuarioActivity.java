@@ -26,17 +26,17 @@ import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.FaculdadesAdapter;
 import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
+import eventos.com.br.eventos.dao.UsuarioDAO;
 import eventos.com.br.eventos.model.Faculdade;
 import eventos.com.br.eventos.model.ResponseWithURL;
 import eventos.com.br.eventos.model.Usuario;
-import eventos.com.br.eventos.dao.UsuarioDAO;
 import eventos.com.br.eventos.rest.EventoRest;
 import eventos.com.br.eventos.rest.FaculdadeRest;
 import eventos.com.br.eventos.rest.UsuarioRest;
+import eventos.com.br.eventos.util.AndroidUtils;
 import eventos.com.br.eventos.util.CameraUtil;
 import eventos.com.br.eventos.util.ImageUtils;
 import eventos.com.br.eventos.util.ValidationUtil;
-import livroandroid.lib.utils.AndroidUtils;
 
 public class AlterarDadosUsuarioActivity extends BaseActivity {
 

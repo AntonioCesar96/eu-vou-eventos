@@ -5,6 +5,8 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +14,7 @@ import java.util.List;
 import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.model.Cidade;
 import eventos.com.br.eventos.model.Estado;
+import eventos.com.br.eventos.model.Localizacao;
 import eventos.com.br.eventos.util.HttpHelper;
 
 /**
@@ -51,4 +54,24 @@ public class EnderecoRest {
         Gson gson = new Gson();
         return gson.fromJson(retorno, listType);
     }
+
+    public Localizacao getLocalizacao(String cep) throws Exception {
+        String url = "http://viacep.com.br/ws/" + cep + "/json";
+
+        HttpHelper helper = new HttpHelper();
+        String retorno = helper.doGet(url);
+
+        JSONObject obj = new JSONObject(retorno);
+
+        if (!obj.has("erro")) {
+            Type listType = new TypeToken<Localizacao>() {
+            }.getType();
+
+            Gson gson = new Gson();
+            return gson.fromJson(retorno, listType);
+        } else {
+            return new Localizacao();
+        }
+    }
+
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Eventos</string>
+    <string name="app_name">Eu Vou</string>
 
     <!-- A -->
     <string name="txt_alterar_ws">Alterar endereço do webservice</string>

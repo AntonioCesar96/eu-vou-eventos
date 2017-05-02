@@ -23,7 +23,9 @@ import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.dao.EventoDAO;
+import eventos.com.br.eventos.dao.NotificacaoDAO;
 import eventos.com.br.eventos.model.Evento;
+import eventos.com.br.eventos.model.Notificacao;
 import eventos.com.br.eventos.rest.EventoRest;
 import eventos.com.br.eventos.tasks.CompartilharTask;
 import eventos.com.br.eventos.util.AlarmEventoUtil;
@@ -217,8 +219,18 @@ public class EventoFragment extends BaseFragment {
     }
 
     public void agendarAlarm(Long idEvento, Calendar data) {
-        AlarmEventoUtil alarmEventoUtil = new AlarmEventoUtil(getContext(), dataBaseHelper);
-        alarmEventoUtil.agendarAlarm(idEvento, data.getTimeInMillis());
+
+        long diaNotificacao = pegarMilisegundosDiaDaNotificacao(data);
+
+        try {
+            Notificacao n = criarNotificacao(idEvento, diaNotificacao);
+            new NotificacaoDAO(dataBaseHelper.getConnectionSource()).save(n);
+
+            AlarmEventoUtil alarmEventoUtil = new AlarmEventoUtil(getContext(), dataBaseHelper);
+            alarmEventoUtil.agendarAlarm(idEvento, diaNotificacao);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void cancelarAlarm(Long idEvento) {
@@ -226,6 +238,21 @@ public class EventoFragment extends BaseFragment {
         alarmEventoUtil.cancelarAlarm(idEvento);
     }
 
+    private Notificacao criarNotificacao(Long idEvento, long dia) {
+        Notificacao n = new Notificacao();
+        n.setDataEvento(dia);
+        n.setIdEvento(idEvento);
+        n.setPrimeiraNotificacao(true);
+        return n;
+    }
 
+    private long pegarMilisegundosDiaDaNotificacao(Calendar data) {
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(System.currentTimeMillis());
+        c.add(Calendar.SECOND, 10);
+        long time = c.getTimeInMillis();
+
+        return time;
+    }
 }
 

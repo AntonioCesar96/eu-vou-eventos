@@ -24,14 +24,15 @@ import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 public class ImageUtils {
 
     public static void setImageFeed(final Context context, String url_img, final ImageView img, LinearLayout imgEventoWrapper, final ProgressBar progress) {
+
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        final int largura = metrics.widthPixels;
+        final int altura = largura / 2;
+
+        img.getLayoutParams().width = largura;
+        img.getLayoutParams().height = altura;
+
         if (url_img != null && url_img.trim().length() > 0 && URLUtil.isValidUrl(url_img)) {
-
-            DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-            final int largura = metrics.widthPixels;
-            final int altura = largura / 2;
-
-            img.getLayoutParams().width = largura;
-            img.getLayoutParams().height = altura;
 
             progress.setVisibility(View.VISIBLE);
             Picasso.with(context).load(url_img).resize(largura, altura).centerCrop().into(img, new Callback() {
@@ -43,10 +44,11 @@ public class ImageUtils {
                 @Override
                 public void onError() {
                     progress.setVisibility(View.GONE);
+                    Picasso.with(context).load(R.drawable.sem_imagem).resize(largura, altura).centerCrop().into(img, null);
                 }
             });
         } else {
-            imgEventoWrapper.setVisibility(View.GONE);
+            Picasso.with(context).load(R.drawable.sem_imagem).resize(largura, altura).centerCrop().into(img, null);
         }
     }
 
@@ -86,7 +88,6 @@ public class ImageUtils {
 
         }
     }
-
 
 
     public static void setImageUsuario(Context context, File file, ImageView img) {

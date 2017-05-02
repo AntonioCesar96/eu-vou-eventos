@@ -35,8 +35,8 @@ import eventos.com.br.eventos.model.Filtro;
 import eventos.com.br.eventos.model.FiltroTipo;
 import eventos.com.br.eventos.rest.EnderecoRest;
 import eventos.com.br.eventos.rest.FaculdadeRest;
+import eventos.com.br.eventos.util.AndroidUtils;
 import eventos.com.br.eventos.util.ValidationUtil;
-import livroandroid.lib.utils.AndroidUtils;
 
 public class FilterEventosDialog extends DialogFragment {
     private Spinner spFaculdades, spEstados, spCidades;

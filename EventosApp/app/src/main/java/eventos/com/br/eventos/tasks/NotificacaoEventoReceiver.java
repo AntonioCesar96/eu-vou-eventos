@@ -4,16 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import java.sql.SQLException;
-
-import eventos.com.br.eventos.R;
-import eventos.com.br.eventos.activity.EventoActivity;
-import eventos.com.br.eventos.config.EventosApplication;
-import eventos.com.br.eventos.dao.DataBaseHelper;
-import eventos.com.br.eventos.dao.EventoDAO;
-import eventos.com.br.eventos.model.Evento;
-import eventos.com.br.eventos.util.NotificationUtil;
-
 /**
  * Created by Matheus on 26/04/2017.
  */
@@ -23,20 +13,9 @@ public class NotificacaoEventoReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        try {
-            Long idEvento = (Long) intent.getSerializableExtra("idEvento");
+        Intent intentService = new Intent(context, NotificacaoEventoService.class);
+        intentService.putExtra("idEvento", intent.getSerializableExtra("idEvento"));
 
-            DataBaseHelper dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
-            EventoDAO dao = new EventoDAO(dataBaseHelper.getConnectionSource());
-            Evento evento = dao.getById(idEvento);
-
-            Intent notifIntent = new Intent(context, EventoActivity.class);
-            notifIntent.putExtra("notificacao", true);
-            notifIntent.putExtra("evento", evento);
-
-            NotificationUtil.create(context, idEvento.intValue(), notifIntent, R.mipmap.ic_launcher, "É amanha!!!!!!!!!", evento.getNome());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        context.startService(intentService);
     }
 }

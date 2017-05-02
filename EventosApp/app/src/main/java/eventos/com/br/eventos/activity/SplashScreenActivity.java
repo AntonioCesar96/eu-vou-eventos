@@ -12,10 +12,10 @@ import java.sql.SQLException;
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.DataBaseHelper;
-import eventos.com.br.eventos.model.Usuario;
 import eventos.com.br.eventos.dao.UsuarioDAO;
+import eventos.com.br.eventos.model.Usuario;
 import eventos.com.br.eventos.rest.UsuarioRest;
-import livroandroid.lib.utils.AndroidUtils;
+import eventos.com.br.eventos.util.AndroidUtils;
 
 public class SplashScreenActivity extends BaseActivity {
     protected DataBaseHelper dataBaseHelper;

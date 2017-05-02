@@ -15,6 +15,8 @@ public class Notificacao implements Serializable {
     @DatabaseField
     private Long dataEvento;
 
+    @DatabaseField
+    private boolean primeiraNotificacao;
 
     public Notificacao() {
 
@@ -34,5 +36,13 @@ public class Notificacao implements Serializable {
 
     public void setDataEvento(Long dataEvento) {
         this.dataEvento = dataEvento;
+    }
+
+    public boolean isPrimeiraNotificacao() {
+        return primeiraNotificacao;
+    }
+
+    public void setPrimeiraNotificacao(boolean primeiraNotificacao) {
+        this.primeiraNotificacao = primeiraNotificacao;
     }
 }

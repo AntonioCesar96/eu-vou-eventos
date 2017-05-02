@@ -85,7 +85,6 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
         return this.eventos != null ? this.eventos.size() : 0;
     }
 
-
     public interface EventoOnClickListener {
         void onClickEvento(EventoViewHolder holder, int idx);
     }

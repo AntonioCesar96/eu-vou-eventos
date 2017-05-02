@@ -24,19 +24,25 @@ public class AgendarNotificacoesService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        new WorkerThread().start();
+        new WorkerThread(startId).start();
 
         return super.onStartCommand(intent, flags, startId);
     }
 
     // Thread que faz o trabalho pesado
     class WorkerThread extends Thread {
+        private int startId;
+
+        public WorkerThread(int startId) {
+            this.startId = startId;
+        }
+
         public void run() {
+
             try {
-
                 DataBaseHelper dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
-                AlarmEventoUtil alarmEventoUtil = new AlarmEventoUtil(getApplicationContext(), dataBaseHelper);
 
+                AlarmEventoUtil alarmEventoUtil = new AlarmEventoUtil(getApplicationContext(), dataBaseHelper);
                 NotificacaoDAO dao = new NotificacaoDAO(dataBaseHelper.getConnectionSource());
 
                 List<Notificacao> notificacoes = dao.all();
@@ -44,10 +50,11 @@ public class AgendarNotificacoesService extends Service {
                 for (Notificacao n : notificacoes) {
                     alarmEventoUtil.agendarAlarm(n.getIdEvento(), n.getDataEvento());
                 }
-
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+
+            stopSelf(startId);
         }
     }
 }

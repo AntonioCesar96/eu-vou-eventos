@@ -32,7 +32,7 @@
                     android:id="@+id/imgEvento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/calourada" />
+                    android:src="@drawable/sem_imagem" />
 
                 <!-- Barra de progresso enquanto carrega a foto -->
                 <ProgressBar

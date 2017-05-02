@@ -16,7 +16,7 @@ import eventos.com.br.eventos.adapter.TabsAdapter;
 import eventos.com.br.eventos.dao.FiltroDAO;
 import eventos.com.br.eventos.fragments.FilterEventosDialog;
 import eventos.com.br.eventos.model.Filtro;
-import livroandroid.lib.utils.Prefs;
+import eventos.com.br.eventos.util.Prefs;
 
 public class MainActivity extends BaseActivity {
     public static final int RECRIAR_ACTIVITY = 5;
