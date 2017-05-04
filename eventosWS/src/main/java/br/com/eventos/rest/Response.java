@@ -19,7 +19,7 @@ public class Response {
 
 	public static Response Error(String string) {
 		Response r = new Response();
-		r.setStatus("ERROR");
+		r.setStatus("ERRO");
 		r.setMsg(string);
 		return r;
 	}

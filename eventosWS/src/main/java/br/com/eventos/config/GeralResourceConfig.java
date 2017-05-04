@@ -1,7 +1,5 @@
 package br.com.eventos.config;
 
-import javax.ws.rs.ApplicationPath;
-
 import org.glassfish.jersey.server.ResourceConfig;
 
 //@ApplicationPath("/rest/*")

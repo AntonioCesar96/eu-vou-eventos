@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -80,7 +81,9 @@ public class EventosDAO {
 
 	@Transactional
 	public void delete(Evento e) {
-		manager.remove(e);
+		Query query = manager.createQuery("delete from Evento where id = :id");
+		query.setParameter("id", e.getId());
+		query.executeUpdate();
 	}
 
 	@Transactional

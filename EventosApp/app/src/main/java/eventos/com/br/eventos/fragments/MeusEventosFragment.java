@@ -218,8 +218,8 @@ public class MeusEventosFragment extends BaseFragment {
 
     private void abrirDialogexcluir(final Evento evento) {
         final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext());
-        builder.setTitle("Deseja deletar este evento?");
-        builder.setMessage("");
+        builder.setTitle("Alerta");
+        builder.setMessage("Deseja deletar este evento?");
 
         builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
             @Override
@@ -238,7 +238,6 @@ public class MeusEventosFragment extends BaseFragment {
         builder.setNegativeButton("Não", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-
                 dialogInterface.cancel();
             }
         });
@@ -258,7 +257,7 @@ public class MeusEventosFragment extends BaseFragment {
                 }
 
                 final android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext());
-                builder.setTitle(response.getStatus());
+                builder.setTitle("Alerta");
                 builder.setMessage(response.getMsg());
 
                 builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -270,6 +269,8 @@ public class MeusEventosFragment extends BaseFragment {
 
                 android.support.v7.app.AlertDialog dialog = builder.create();
                 dialog.show();
+
+                taskEventos(false);
             }
         };
     }

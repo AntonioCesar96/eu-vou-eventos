@@ -90,19 +90,12 @@ public class EventosService {
 	public Response excluir(Usuario u, Long id) {
 
 		Evento e = db.getEventosPorId(id);
-		
-		System.out.println(e);
-		System.out.println(u);
 
 		if (u.getId().equals(e.getUsuario().getId())) {
 			db.delete(e);
-			System.out.println("Evento excluindo com sucesso!");
-			return Response.Ok("Evento excluindo com sucesso!");
+			return Response.Ok("Evento excluindo!");
 		}
-		
-		System.out.println("O usuário não tem permissão para excluir este evento");
-
-		return Response.Error("O usuário não tem permissão para excluir este evento");
+		return Response.Error("Você não tem permissão para excluir este evento");
 	}
 
 	public void update(Evento e) {

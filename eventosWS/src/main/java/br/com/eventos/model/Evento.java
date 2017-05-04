@@ -24,8 +24,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "evento")
 public class Evento implements Serializable {
 	private static final long serialVersionUID = 1L;
-
-	@Id
+ 
+	@Id 
 	@Column(unique = true, nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
