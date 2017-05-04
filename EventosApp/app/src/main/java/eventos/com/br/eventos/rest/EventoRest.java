@@ -163,4 +163,19 @@ public class EventoRest {
 
         return builder.create();
     }
+
+    public Response excluir(Long id) throws IOException {
+        String urlExcluir = url + "/excluir/" + id;
+
+        Usuario usuario = EventosApplication.getInstance().getUsuario();
+
+        Gson gson = createGsonObject();
+        String jsonUsuario = gson.toJson(usuario);
+
+        HttpHelper http = new HttpHelper();
+        http.setContentType("application/json; charset=utf-8");
+        String json = http.doPost(urlExcluir, jsonUsuario.getBytes(), "UTF-8");
+
+        return new Gson().fromJson(json, Response.class);
+    }
 }

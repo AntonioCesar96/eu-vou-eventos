@@ -5,6 +5,7 @@
     <string name="txt_alterar_ws">Alterar endereço do webservice</string>
     <string name="l_config">Alterar dados</string>
     <string name="activity_cadastro_usuario">Cadastro</string>
+    <string name="activity_meus_eventos">Meus Eventos</string>
     <string name="activity_login">Login</string>
     <string name="activity_alterar_dados">Alterar Dados</string>
     <string name="activity_novo_evento">Novo Evento</string>

@@ -38,6 +38,8 @@ public class EventoRascunhoDAO extends BaseDaoImpl<EventoRascunho, Long> {
                 create(evento);
             }
 
+            new FaculdadeDAO(cs).save(evento.getFaculdade());
+
         } catch (SQLException e) {
             e.printStackTrace();
         }

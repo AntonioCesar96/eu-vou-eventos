@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.io.File;
@@ -21,7 +22,7 @@ public class CameraUtil {
     private AppCompatActivity activity;
     private File fileImage;
 
-    public CameraUtil(AppCompatActivity activity){
+    public CameraUtil(AppCompatActivity activity) {
         this.activity = activity;
     }
 
@@ -73,5 +74,21 @@ public class CameraUtil {
         Intent i = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         i.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(fileImage));
         activity.startActivityForResult(i, CAMERA);
+    }
+
+
+    public File setImage(String diretorioImagem, ImageView imgView) {
+        // Imagem da Galeria
+        if (diretorioImagem != null && diretorioImagem.trim().length() > 0) {
+
+            File fileImage = new File(diretorioImagem);
+
+            if (fileImage.exists()) {
+                Bitmap bitmap = ImageResizeUtils.getResizedImage(Uri.fromFile(fileImage), 0, 0, false);
+                imgView.setImageBitmap(bitmap);
+                return fileImage;
+            }
+        }
+        return null;
     }
 }

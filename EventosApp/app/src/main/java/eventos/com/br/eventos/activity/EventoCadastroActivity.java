@@ -126,10 +126,7 @@ public class EventoCadastroActivity extends BaseActivity {
             eventoRascunho = new EventoRascunho();
         }
 
-        Log.e("OOOO", "" + eventoRascunho);
-
         if (eventoRascunho.getDataHora() != null) {
-
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             txtDataInicio.setText(dateFormat.format(eventoRascunho.getDataHora().getTime()));
 
@@ -145,11 +142,13 @@ public class EventoCadastroActivity extends BaseActivity {
         txtLocalRua.setText(eventoRascunho.getRua());
         txtLocalBairro.setText(eventoRascunho.getBairro());
         txtLocalNumero.setText(eventoRascunho.getNumero());
+
         txtLocalCep.setText(eventoRascunho.getCep());
+
+        fileImage = cameraUtil.setImage(eventoRascunho.getEnderecoImagem(), imgView);
     }
 
     public void focusEditText() {
-
         final View viewNome = findViewById(R.id.viewNome);
 
         txtNome.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -201,9 +200,7 @@ public class EventoCadastroActivity extends BaseActivity {
                 String cep = s.toString();
 
                 if (cep.matches(padrao1) || cep.matches(padrao2)) {
-                    progress.setVisibility(View.VISIBLE);
                     new LocalizacaoTask(getActivity(), onCallbackSearchLocation()).execute(cep);
-                    progress.setVisibility(View.GONE);
                 }
             }
 
@@ -244,6 +241,19 @@ public class EventoCadastroActivity extends BaseActivity {
 
             if (cidade.getNome() != null && cidade.getNome().equals(localizacao.getLocalidade())) {
                 spCidades.setSelection(position);
+            }
+        }
+
+        localizacao = null;
+    }
+
+    private void selecionarFaculdade() {
+        BaseAdapter adapterspFaculdades = (BaseAdapter) spFaculdades.getAdapter();
+        for (int position = 0; position < adapterspFaculdades.getCount(); position++) {
+            Faculdade f = (Faculdade) adapterspFaculdades.getItem(position);
+
+            if (eventoRascunho.getFaculdade() != null && f.getId().equals(eventoRascunho.getFaculdade().getId())) {
+                spFaculdades.setSelection(position);
             }
         }
 
@@ -439,6 +449,8 @@ public class EventoCadastroActivity extends BaseActivity {
 
                     }
                 });
+
+                selecionarFaculdade();
             }
         };
     }
@@ -596,6 +608,12 @@ public class EventoCadastroActivity extends BaseActivity {
                 eventoRascunho.setNomeEvento(txtNome.getText().toString());
                 eventoRascunho.setNomeAtletica(txtNomeAtletica.getText().toString());
                 eventoRascunho.setDescricao(txtDesc.getText().toString());
+
+                eventoRascunho.setFaculdade(faculdadeSelecionada);
+
+                if (fileImage != null) {
+                    eventoRascunho.setEnderecoImagem(fileImage.getAbsolutePath());
+                }
 
                 try {
                     EventoRascunhoDAO dao = new EventoRascunhoDAO();

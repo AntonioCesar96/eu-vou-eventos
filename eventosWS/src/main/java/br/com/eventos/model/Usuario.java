@@ -103,4 +103,12 @@ public class Usuario implements Serializable {
 	public void setFotoPerfil(String fotoPerfil) {
 		this.fotoPerfil = fotoPerfil;
 	}
+
+	@Override
+	public String toString() {
+		return "Usuario [id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", queroSerAdmin="
+				+ queroSerAdmin + ", administrador=" + administrador + ", faculdade=" + faculdade + ", fotoPerfil="
+				+ fotoPerfil + "]";
+	}
+
 }

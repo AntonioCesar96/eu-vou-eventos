@@ -137,7 +137,7 @@ public class EventosFragment extends BaseFragment {
                 // Salva a lista de eventos no atributo da classe
                 EventosFragment.this.eventos = eventos;
                 // Atualiza a view na UI Thread
-                recyclerView.setAdapter(new EventoAdapter(getContext(), eventos, onClickEvento(), onClickCompartilhar(), onClickFavoritar()));
+                recyclerView.setAdapter(new EventoAdapter(getContext(), eventos, onClickEvento(), onClickEditar(), onClickFavoritar()));
             }
         }
 

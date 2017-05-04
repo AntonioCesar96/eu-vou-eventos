@@ -25,7 +25,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 public class Evento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	@Id 
+	@Id
 	@Column(unique = true, nullable = false)
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -33,7 +33,7 @@ public class Evento implements Serializable {
 	@Column(nullable = false)
 	private String nome;
 
-	@Column(columnDefinition="TEXT")
+	@Column(columnDefinition = "TEXT")
 	private String descricao;
 
 	@Column(name = "endereco_imagem")
@@ -141,6 +141,13 @@ public class Evento implements Serializable {
 
 	public void setLocal(Local local) {
 		this.local = local;
+	}
+
+	@Override
+	public String toString() {
+		return "Evento [id=" + id + ", nome=" + nome + ", descricao=" + descricao + ", enderecoImagem=" + enderecoImagem
+				+ ", dataHora=" + dataHora + ", usuario=" + usuario + ", faculdade=" + faculdade + ", nomeAtletica="
+				+ nomeAtletica + ", local=" + local + "]";
 	}
 
 }

@@ -44,6 +44,8 @@ public class EventoRascunho implements Serializable {
     @DatabaseField
     private String numero;
 
+    @DatabaseField(foreign = true, foreignAutoRefresh = true)
+    private Faculdade faculdade;
 
     public EventoRascunho() {
 
@@ -135,6 +137,14 @@ public class EventoRascunho implements Serializable {
 
     public void setNumero(String numero) {
         this.numero = numero;
+    }
+
+    public Faculdade getFaculdade() {
+        return faculdade;
+    }
+
+    public void setFaculdade(Faculdade faculdade) {
+        this.faculdade = faculdade;
     }
 
     @Override

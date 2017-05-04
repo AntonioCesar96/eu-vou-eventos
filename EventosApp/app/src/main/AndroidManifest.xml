@@ -76,6 +76,7 @@
             android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".activity.MeusEventosActivity"
+            android:label="@string/activity_meus_eventos"
             android:theme="@style/AppTheme.NoActionBar.NavDrawer" />
         <activity android:name=".activity.SplashScreenActivity">
             <intent-filter>

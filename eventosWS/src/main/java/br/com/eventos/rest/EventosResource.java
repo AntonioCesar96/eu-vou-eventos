@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.eventos.model.Evento;
 import br.com.eventos.model.Filtro;
+import br.com.eventos.model.Usuario;
 import br.com.eventos.model.dto.EventoFullDTO;
 import br.com.eventos.model.dto.EventosFeedDTO;
 import br.com.eventos.service.EventosService;
@@ -86,10 +87,10 @@ public class EventosResource {
 		return Response.Ok("Evento atualizado com sucesso");
 	}
 
-	@DELETE
-	public Response delete(Evento e) {
-		service.delete(e);
-		return Response.Ok("Evento deletado com sucesso");
+	@POST
+	@Path("/excluir/{id}")
+	public Response excluir(Usuario u, @PathParam("id") Long id) {
+		return service.excluir(u, id);
 	}
 
 	@POST

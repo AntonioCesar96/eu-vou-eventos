@@ -1,8 +1,6 @@
 package br.com.eventos.service;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -13,9 +11,10 @@ import org.springframework.stereotype.Component;
 import br.com.eventos.dao.EventosDAO;
 import br.com.eventos.model.Evento;
 import br.com.eventos.model.Filtro;
+import br.com.eventos.model.Usuario;
 import br.com.eventos.model.dto.EventoFullDTO;
 import br.com.eventos.model.dto.EventosFeedDTO;
-import javassist.expr.NewArray;
+import br.com.eventos.rest.Response;
 
 @Component
 public class EventosService {
@@ -88,8 +87,22 @@ public class EventosService {
 		db.save(e);
 	}
 
-	public void delete(Evento e) {
-		db.delete(e);
+	public Response excluir(Usuario u, Long id) {
+
+		Evento e = db.getEventosPorId(id);
+		
+		System.out.println(e);
+		System.out.println(u);
+
+		if (u.getId().equals(e.getUsuario().getId())) {
+			db.delete(e);
+			System.out.println("Evento excluindo com sucesso!");
+			return Response.Ok("Evento excluindo com sucesso!");
+		}
+		
+		System.out.println("O usuário não tem permissão para excluir este evento");
+
+		return Response.Error("O usuário não tem permissão para excluir este evento");
 	}
 
 	public void update(Evento e) {

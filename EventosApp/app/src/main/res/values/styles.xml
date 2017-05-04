@@ -19,7 +19,6 @@
         <item name="actionModeBackground">@color/primary</item>
     </style>
 
-
     <!-- Tema PhotoView. -->
     <style name="AppThemePhotoView" parent="AppTheme">
 
@@ -46,7 +45,6 @@
 
     <!-- Tema base + NoActionBar -->
     <style name="AppTheme.NoActionBar.NavDrawer">
-
     </style>
 
     <!-- Temas para a Toolbar, ver include_toolbar.xml -->
