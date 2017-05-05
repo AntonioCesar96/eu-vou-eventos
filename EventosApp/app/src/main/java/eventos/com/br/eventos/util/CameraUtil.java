@@ -12,6 +12,8 @@ import android.widget.ImageView;
 
 import java.io.File;
 
+import eventos.com.br.eventos.tasks.DownloadImagemTask;
+
 /**
  * Created by antonio on 26/02/17.
  */
@@ -82,6 +84,23 @@ public class CameraUtil {
         if (diretorioImagem != null && diretorioImagem.trim().length() > 0) {
 
             File fileImage = new File(diretorioImagem);
+
+            if (fileImage.exists()) {
+                Bitmap bitmap = ImageResizeUtils.getResizedImage(Uri.fromFile(fileImage), 0, 0, false);
+                imgView.setImageBitmap(bitmap);
+                return fileImage;
+            }
+        }
+        return null;
+    }
+
+    public File setImageAtualizar(String urlImagem, ImageView imgView) {
+        // Imagem da Galeria
+        if (urlImagem != null && urlImagem.trim().length() > 0) {
+
+
+
+
 
             if (fileImage.exists()) {
                 Bitmap bitmap = ImageResizeUtils.getResizedImage(Uri.fromFile(fileImage), 0, 0, false);

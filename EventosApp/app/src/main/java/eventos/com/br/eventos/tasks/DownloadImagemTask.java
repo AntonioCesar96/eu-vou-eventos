@@ -6,7 +6,9 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 
 import java.io.File;
+import java.util.List;
 
+import eventos.com.br.eventos.model.Estado;
 import eventos.com.br.eventos.util.IOUtils;
 import eventos.com.br.eventos.util.SDCardUtils;
 
@@ -15,32 +17,32 @@ import eventos.com.br.eventos.util.SDCardUtils;
  * Created by Matheus on 26/04/2017.
  */
 
-public class CompartilharTask extends AsyncTask<String, Void, Uri> {
+public class DownloadImagemTask extends AsyncTask<String, Void, File> {
     private AppCompatActivity activity;
+    private CallbackDownloadImagem callbackDownloadImagem;
 
-    public CompartilharTask(AppCompatActivity activity) {
+    public DownloadImagemTask(AppCompatActivity activity, CallbackDownloadImagem callbackDownloadImagem) {
         this.activity = activity;
+        this.callbackDownloadImagem = callbackDownloadImagem;
     }
 
     @Override
-    protected Uri doInBackground(String... urls) {
+    protected File doInBackground(String... urls) {
         String url = urls[0];
 
         String fileName = "foto_temp.jpg";
         File file = SDCardUtils.getPrivateFile(activity, fileName, "DIRECTORY_PICTURES");
 
         IOUtils.downloadToFile(url, file);
-        return Uri.fromFile(file);
+        return file;
     }
 
     @Override
-    protected void onPostExecute(Uri uri) {
+    protected void onPostExecute(File imagem) {
+        callbackDownloadImagem.onCallbackDownloadImagem(imagem);
+    }
 
-        // CompartilharEvento2
-        Intent shareIntent = new Intent();
-        shareIntent.setAction(Intent.ACTION_SEND);
-        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-        shareIntent.setType("image/*");
-        activity.startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
+    public interface CallbackDownloadImagem {
+        void onCallbackDownloadImagem(File imagem);
     }
 }

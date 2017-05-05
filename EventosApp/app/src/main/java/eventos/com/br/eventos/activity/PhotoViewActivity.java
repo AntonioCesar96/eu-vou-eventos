@@ -13,8 +13,10 @@ import android.widget.ProgressBar;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+
 import eventos.com.br.eventos.R;
-import eventos.com.br.eventos.tasks.CompartilharTask;
+import eventos.com.br.eventos.tasks.DownloadImagemTask;
 import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class PhotoViewActivity extends BaseActivity {
@@ -91,6 +93,21 @@ public class PhotoViewActivity extends BaseActivity {
     }
 
     private void compartilharEvento() {
-        new CompartilharTask(getAppCompatActivity()).execute(url);
+        new DownloadImagemTask(getAppCompatActivity(), onCallbackDownloadImagem()).execute(url);
+    }
+
+    public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem(){
+        return new DownloadImagemTask.CallbackDownloadImagem() {
+            @Override
+            public void onCallbackDownloadImagem(File imagem) {
+
+                Uri uri = Uri.fromFile(imagem);
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                shareIntent.setType("image/*");
+                getAppCompatActivity().startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
+            }
+        };
     }
 }

@@ -2,6 +2,7 @@ package eventos.com.br.eventos.rest;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -151,9 +152,19 @@ public class EventoRest {
         return new Gson().fromJson(json, Response.class);
     }
 
+    public Response update(Evento evento) throws IOException {
+        Gson gson = createGsonObject();
+        String jsonEvento = gson.toJson(evento);
+
+        HttpHelper http = new HttpHelper();
+        http.setContentType("application/json; charset=utf-8");
+        String json = http.doPut(url, jsonEvento.getBytes(), "UTF-8");
+
+        return new Gson().fromJson(json, Response.class);
+    }
+
     private Gson createGsonObject() {
         GsonBuilder builder = new GsonBuilder();
-
         // Serializador para classe Calendar
        /* builder.registerTypeAdapter(Calendar.class, new CalendarDeserializer());
         builder.registerTypeAdapter(GregorianCalendar.class, new CalendarDeserializer());

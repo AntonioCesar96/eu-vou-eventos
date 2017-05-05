@@ -24,14 +24,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.activity.EventoActivity;
+import eventos.com.br.eventos.activity.EventoAtualizarActivity;
 import eventos.com.br.eventos.adapter.MeusEventoAdapter;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.model.Response;
 import eventos.com.br.eventos.rest.EventoRest;
+import eventos.com.br.eventos.tasks.BuscarEventoTask;
 import eventos.com.br.eventos.tasks.EventoExcluirTask;
 import eventos.com.br.eventos.util.AndroidUtils;
 import eventos.com.br.eventos.util.TipoBusca;
@@ -186,7 +190,6 @@ public class MeusEventosFragment extends BaseFragment {
         Context themeContext = getAppCompatActivity().getSupportActionBar().getThemedContext();
         if (ancoraView != null && themeContext != null) {
 
-            // Cria o PopupMenu posicionado na âncora
             PopupMenu popupMenu = new PopupMenu(themeContext, ancoraView);
 
             MenuItem m1 = popupMenu.getMenu().add(0, 0, 0, "Excluir");
@@ -196,7 +199,6 @@ public class MeusEventosFragment extends BaseFragment {
                 public boolean onMenuItemClick(MenuItem menuItem) {
 
                     abrirDialogexcluir(evento);
-
                     return true;
                 }
             });
@@ -207,7 +209,7 @@ public class MeusEventosFragment extends BaseFragment {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
 
-                    Toast.makeText(getContext(), "Editar " + evento.getId(), Toast.LENGTH_LONG).show();
+                    new BuscarEventoTask(getAppCompatActivity(), onCallbackBuscarEvento()).execute(evento.getId());
                     return true;
                 }
             });
@@ -271,6 +273,19 @@ public class MeusEventosFragment extends BaseFragment {
                 dialog.show();
 
                 taskEventos(false);
+            }
+        };
+    }
+
+    private BuscarEventoTask.CallbackBuscarEvento onCallbackBuscarEvento() {
+        return new BuscarEventoTask.CallbackBuscarEvento() {
+            @Override
+            public void onCallbackBuscarEvento(Evento e) {
+                if (e != null) {
+                    Intent intent = new Intent(getAppCompatActivity(), EventoAtualizarActivity.class);
+                    intent.putExtra("evento", e);
+                    startActivity(intent);
+                }
             }
         };
     }

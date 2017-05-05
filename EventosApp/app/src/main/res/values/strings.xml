@@ -9,6 +9,7 @@
     <string name="activity_login">Login</string>
     <string name="activity_alterar_dados">Alterar Dados</string>
     <string name="activity_novo_evento">Novo Evento</string>
+    <string name="activity_atualizar_evento">Atualizar Evento</string>
 
     <!-- C -->
     <string name="c_evento">Cadastrar Evento</string>

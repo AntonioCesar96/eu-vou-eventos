@@ -5,7 +5,9 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 @DatabaseTable(tableName = "evento")
 public class Evento implements Serializable {
@@ -114,4 +116,19 @@ public class Evento implements Serializable {
         this.local = local;
     }
 
+    @Override
+    public String toString() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
+        return "Evento{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", enderecoImagem='" + enderecoImagem + '\'' +
+                ", dataHora=" + dateFormat.format(dataHora.getTime()) +
+                ", nomeAtletica='" + nomeAtletica + '\'' +
+                ", usuario=" + usuario +
+                ", faculdade=" + faculdade +
+                ", local=" + local +
+                '}';
+    }
 }

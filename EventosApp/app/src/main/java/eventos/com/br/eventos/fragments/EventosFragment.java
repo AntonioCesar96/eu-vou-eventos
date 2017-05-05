@@ -1,6 +1,7 @@
 package eventos.com.br.eventos.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import java.io.File;
 import java.util.List;
 
 import eventos.com.br.eventos.R;
@@ -20,7 +22,7 @@ import eventos.com.br.eventos.activity.EventoActivity;
 import eventos.com.br.eventos.adapter.EventoAdapter;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.rest.EventoRest;
-import eventos.com.br.eventos.tasks.CompartilharTask;
+import eventos.com.br.eventos.tasks.DownloadImagemTask;
 import eventos.com.br.eventos.util.AndroidUtils;
 import eventos.com.br.eventos.util.TipoBusca;
 
@@ -204,7 +206,22 @@ public class EventosFragment extends BaseFragment {
             public void onClickCompartilhar(EventoAdapter.EventoViewHolder holder, int idx) {
 
                 Evento e = eventos.get(idx);
-                new CompartilharTask(getAppCompatActivity()).execute(e.getEnderecoImagem());
+                new DownloadImagemTask(getAppCompatActivity(), onCallbackDownloadImagem()).execute(e.getEnderecoImagem());
+            }
+        };
+    }
+
+    public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem(){
+        return new DownloadImagemTask.CallbackDownloadImagem() {
+            @Override
+            public void onCallbackDownloadImagem(File imagem) {
+
+                Uri uri = Uri.fromFile(imagem);
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                shareIntent.setType("image/*");
+                getAppCompatActivity().startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
             }
         };
     }

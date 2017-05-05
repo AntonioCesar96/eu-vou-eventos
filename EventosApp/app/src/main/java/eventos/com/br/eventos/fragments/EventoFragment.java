@@ -1,6 +1,7 @@
 package eventos.com.br.eventos.fragments;
 
-import android.os.AsyncTask;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
@@ -13,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
+import java.io.File;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,8 +27,8 @@ import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.dao.NotificacaoDAO;
 import eventos.com.br.eventos.model.Evento;
 import eventos.com.br.eventos.model.Notificacao;
-import eventos.com.br.eventos.rest.EventoRest;
-import eventos.com.br.eventos.tasks.CompartilharTask;
+import eventos.com.br.eventos.tasks.BuscarEventoTask;
+import eventos.com.br.eventos.tasks.DownloadImagemTask;
 import eventos.com.br.eventos.util.AlarmEventoUtil;
 
 public class EventoFragment extends BaseFragment {
@@ -91,7 +92,7 @@ public class EventoFragment extends BaseFragment {
     }
 
     private void buscaEvento() {
-        new EventoTask().execute(evento.getId());
+        new BuscarEventoTask(getAppCompatActivity(), onCallbackBuscarEvento()).execute(evento.getId());
     }
 
     @Override
@@ -110,7 +111,22 @@ public class EventoFragment extends BaseFragment {
     }
 
     private void compartilharEvento() {
-        new CompartilharTask(getAppCompatActivity()).execute(evento.getEnderecoImagem());
+        new DownloadImagemTask(getAppCompatActivity(), onCallbackDownloadImagem()).execute(evento.getEnderecoImagem());
+    }
+
+    public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem(){
+        return new DownloadImagemTask.CallbackDownloadImagem() {
+            @Override
+            public void onCallbackDownloadImagem(File imagem) {
+
+                Uri uri = Uri.fromFile(imagem);
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                shareIntent.setType("image/*");
+                getAppCompatActivity().startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
+            }
+        };
     }
 
     public void setFabButton(FloatingActionButton fabFavorito) {
@@ -128,49 +144,27 @@ public class EventoFragment extends BaseFragment {
         };
     }
 
-    private class EventoTask extends AsyncTask<Long, Void, Evento> {
+    private BuscarEventoTask.CallbackBuscarEvento onCallbackBuscarEvento() {
+        return new BuscarEventoTask.CallbackBuscarEvento() {
+            @Override
+            public void onCallbackBuscarEvento(Evento e) {
+                if (e != null) {
+                    evento = e;
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            progress.setVisibility(View.VISIBLE);
-        }
+                    SimpleDateFormat formatData = new SimpleDateFormat("EEE',' dd 'de' MMMM 'às' HH:mm", Locale.getDefault());
+                    String data = formatData.format(evento.getDataHora().getTime()).toUpperCase();
 
-        @Override
-        protected Evento doInBackground(Long... longs) {
-            Long idEvento = longs[0];
-            EventoRest service = new EventoRest(getContext());
+                    txtDataEvento.setText(data);
+                    txtDesc.setText(evento.getDescricao());
+                    txtLocal.setText(evento.getLocal().getNome());
+                    txtRuaMostra.setText(evento.getLocal().getRua());
+                    txtNumeroMostra.setText(evento.getLocal().getNumero());
+                    txtLocalBairro.setText("Bairro: " + evento.getLocal().getBairro());
 
-            try {
-                return service.getEvento(idEvento);
-            } catch (IOException e) {
-                return null;
+                    fabFavorito.setOnClickListener(clickFabFavorito());
+                }
             }
-        }
-
-        @Override
-        protected void onPostExecute(Evento evento) {
-            progress.setVisibility(View.GONE);
-            if (evento != null) {
-                preencherEvento(evento);
-            }
-        }
-    }
-
-    private void preencherEvento(Evento evento) {
-        this.evento = evento;
-
-        SimpleDateFormat formatData = new SimpleDateFormat("EEE',' dd 'de' MMMM 'às' HH:mm", Locale.getDefault());
-        String data = formatData.format(evento.getDataHora().getTime()).toUpperCase();
-
-        txtDataEvento.setText(data);
-        txtDesc.setText(evento.getDescricao());
-        txtLocal.setText(evento.getLocal().getNome());
-        txtRuaMostra.setText(evento.getLocal().getRua());
-        txtNumeroMostra.setText(evento.getLocal().getNumero());
-        txtLocalBairro.setText("Bairro: " + evento.getLocal().getBairro());
-
-        fabFavorito.setOnClickListener(clickFabFavorito());
+        };
     }
 
     private View.OnClickListener clickFabFavorito() {

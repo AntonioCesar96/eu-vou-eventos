@@ -50,7 +50,11 @@ public class EventoTask extends AsyncTask<Evento, Void, Response> {
                 }
             }
             // Salva o evento
-            response = service.save(evento);
+            if (evento.getId() != null) {
+                response = service.update(evento);
+            }else{
+                response = service.save(evento);
+            }
 
         } catch (Exception e) {
             response = null;

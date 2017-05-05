@@ -71,6 +71,14 @@
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
+            android:name=".activity.EventoAtualizarActivity"
+            android:label="@string/activity_atualizar_evento"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
             android:name=".activity.CadastroUsuarioActivity"
             android:label="@string/activity_cadastro_usuario"
             android:parentActivityName=".activity.MainActivity" />
