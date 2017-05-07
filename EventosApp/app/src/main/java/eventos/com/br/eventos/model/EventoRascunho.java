@@ -44,6 +44,12 @@ public class EventoRascunho implements Serializable {
     @DatabaseField
     private String numero;
 
+    @DatabaseField
+    private String longitude;
+
+    @DatabaseField
+    private String latitude;
+
     @DatabaseField(foreign = true, foreignAutoRefresh = true)
     private Faculdade faculdade;
 
@@ -145,6 +151,22 @@ public class EventoRascunho implements Serializable {
 
     public void setFaculdade(Faculdade faculdade) {
         this.faculdade = faculdade;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
     }
 
     @Override

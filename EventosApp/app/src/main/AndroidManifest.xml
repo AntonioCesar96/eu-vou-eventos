@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".config.EventosApplication"
@@ -16,20 +18,35 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
+        <!-- Google Play Services -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <!-- Maps V2 -->
+        <uses-feature
+            android:glEsVersion="0x00020000"
+            android:required="true" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDVKvlFjjbkEdnz5Fr4-JS9goYVzNabSOI" />
+
         <receiver
             android:name=".tasks.NotificacaoEventoReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="eventos.com.br.eventos.NOTIFICAR_EVENTO" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
-
         <receiver
             android:name=".tasks.AgendarNotificacoesReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </receiver>
@@ -87,6 +104,7 @@
             android:label="@string/activity_meus_eventos"
             android:theme="@style/AppTheme.NoActionBar.NavDrawer" />
         <activity android:name=".activity.SplashScreenActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -97,21 +115,34 @@
             android:name=".activity.AlterarDadosUsuarioActivity"
             android:label="@string/activity_alterar_dados"
             android:parentActivityName=".activity.MainActivity">
-
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
         <activity
             android:name=".activity.PhotoViewActivity"
-            android:theme="@style/AppThemePhotoView">
-
-        </activity>
+            android:theme="@style/AppThemePhotoView"></activity>
         <activity
             android:name=".activity.FiltroActivity"
             android:label="Filtrar eventos"
             android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.MapaActivity"
+            android:label="Localização"
+            android:parentActivityName=".activity.MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
 
+        <activity
+            android:name=".activity.BuscaLocalActivity"
+            android:label="Buscar Local"
+            android:parentActivityName=".activity.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />

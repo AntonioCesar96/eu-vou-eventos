@@ -21,6 +21,10 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.File;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
@@ -29,6 +33,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.adapter.CidadesAdapter;
@@ -57,6 +63,8 @@ import eventos.com.br.eventos.util.CameraUtil;
 import eventos.com.br.eventos.util.ValidationUtil;
 
 public class EventoAtualizarActivity extends BaseActivity {
+    private final int PLACE_PICKER_REQUEST = 3;
+
     private EditText txtNome, txtDesc, txtDataInicio, txtHoraInicio, txtLocalNome, txtLocalCep, txtLocalRua, txtLocalBairro, txtLocalNumero, txtNomeAtletica;
     private ImageView imgView;
     private Evento evento;
@@ -68,6 +76,7 @@ public class EventoAtualizarActivity extends BaseActivity {
     private Localizacao localizacao;
     private File fileImage;
     private CameraUtil cameraUtil;
+    private LatLng latLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +128,12 @@ public class EventoAtualizarActivity extends BaseActivity {
 
             SimpleDateFormat hourFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
             txtHoraInicio.setText(hourFormat.format(e.getDataHora().getTime()));
+        }
+
+        if (e.getLocal() != null && e.getLocal().getLatitude() != null) {
+            Double v1 = Double.parseDouble(e.getLocal().getLatitude());
+            Double v2 = Double.parseDouble(e.getLocal().getLongitude());
+            latLng = new LatLng(v1, v2);
         }
 
         txtNome.setText(e.getNome());
@@ -261,13 +276,6 @@ public class EventoAtualizarActivity extends BaseActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        this.fileImage = cameraUtil.pegarImagem(requestCode, resultCode, data, imgView);
-    }
-
     private View.OnClickListener onClickSalvar() {
         return new View.OnClickListener() {
             @Override
@@ -289,6 +297,11 @@ public class EventoAtualizarActivity extends BaseActivity {
                     local.setRua(txtLocalRua.getText().toString());
                     local.setBairro(txtLocalBairro.getText().toString());
                     local.setNumero(txtLocalNumero.getText().toString());
+
+                    if (latLng != null) {
+                        local.setLatitude("" + latLng.latitude);
+                        local.setLongitude("" + latLng.longitude);
+                    }
 
                     evento.setNome(txtNome.getText().toString());
                     evento.setDescricao(txtDesc.getText().toString());
@@ -571,5 +584,50 @@ public class EventoAtualizarActivity extends BaseActivity {
         cidade.setNome("Cidade");
         cidade.setId(Long.MAX_VALUE);
         cidades.add(0, cidade);
+    }
+
+    public void buscarLocal(View view) {
+        PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+        try {
+            startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
+        } catch (Exception e) {
+            e.printStackTrace();
+            AlertUtils.alert(getActivity(), "Alerta", "O recurso de buscar o local usando o google maps não esta disponível");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        this.fileImage = cameraUtil.pegarImagem(requestCode, resultCode, data, imgView);
+
+        if (requestCode == PLACE_PICKER_REQUEST && resultCode == RESULT_OK) {
+
+            Place place = PlacePicker.getPlace(this, data);
+
+            latLng = place.getLatLng();
+            CharSequence enderecoCompleto = place.getAddress();
+            CharSequence nomeLocal = place.getName();
+            CharSequence cep = null;
+            CharSequence numero = null;
+
+            String padraoCep = "[0-9]+[-][0-9]+";
+            String padraoNumero = "[0-9]+[ ]";
+
+            Matcher matcherCep = Pattern.compile(padraoCep).matcher(enderecoCompleto);
+            while (matcherCep.find()) {
+                cep = matcherCep.group();
+            }
+
+            Matcher matcherNumero = Pattern.compile(padraoNumero).matcher(enderecoCompleto);
+            while (matcherNumero.find()) {
+                numero = matcherNumero.group();
+            }
+
+            txtLocalNome.setText(nomeLocal);
+            txtLocalNumero.setText(numero);
+            txtLocalCep.setText(cep);
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

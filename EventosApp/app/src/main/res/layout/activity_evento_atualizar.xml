@@ -197,27 +197,44 @@
                     </LinearLayout>
                 </LinearLayout>
 
-                <android.support.design.widget.TextInputLayout
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:textColorHint="@color/cinzaBBB">
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/localNome"
-                        android:layout_width="match_parent"
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:ems="14"
-                        android:hint="Nome do local"
-                        android:paddingBottom="10dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="5dp"
-                        android:textColorHint="#ccc"
-                        android:background="@color/white"
-                        app:backgroundTint="#fff" />
-                </android.support.design.widget.TextInputLayout>
+                        android:layout_weight="1"
+                        android:textColorHint="@color/cinzaBBB">
+
+                        <EditText
+                            android:id="@+id/localNome"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_weight="1"
+                            android:background="@color/white"
+                            android:ems="14"
+                            android:hint="Nome do local"
+                            android:paddingBottom="10dp"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:paddingTop="5dp"
+                            android:textColorHint="#ccc"
+                            app:backgroundTint="#fff" />
+                    </android.support.design.widget.TextInputLayout>
+
+                    <ImageButton
+                        android:onClick="buscarLocal"
+                        android:layout_width="50dp"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_search"
+                        android:background="@android:color/transparent"
+                        android:foreground="?attr/selectableItemBackground" />
+                </LinearLayout>
 
                 <View
                     android:id="@+id/viewLocalNome"

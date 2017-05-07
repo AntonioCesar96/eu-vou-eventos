@@ -26,7 +26,7 @@ import eventos.com.br.eventos.model.Usuario;
 
 public class DataBaseHelper extends OrmLiteSqliteOpenHelper {
     private static final String dataBaseName = "eventos.db";
-    private static final int dataBaseVersion = 3;
+    private static final int dataBaseVersion = 1;
 
     public DataBaseHelper(Context context) {
         super(context, dataBaseName, null, dataBaseVersion);
