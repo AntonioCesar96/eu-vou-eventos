@@ -85,7 +85,7 @@ public class EventosFragment extends BaseFragment {
                 // Valida se existe conexão ao fazer o gesto Pull to Refresh
                 if (AndroidUtils.isNetworkAvailable(getContext())) {
                     // Atualiza ao fazer o gesto Pull to Refresh
-                    taskEventos(true);
+                    taskEventos();
                     swipeLayout.setRefreshing(false);
                 } else {
                     swipeLayout.setRefreshing(false);
@@ -98,7 +98,7 @@ public class EventosFragment extends BaseFragment {
     @Override
     public void onResume() {
         if (TipoBusca.FAVORITOS.equals(tipoDeBusca)) {
-            taskEventos(false);
+            taskEventos();
         }
 
         super.onResume();
@@ -107,13 +107,13 @@ public class EventosFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        taskEventos(false);
+        taskEventos();
     }
 
-    private void taskEventos(boolean pullToRefresh) {
+    private void taskEventos() {
         // Busca os eventos: Dispara a Task
         //startTask("eventos", new GetEventosTask(pullToRefresh, getContext()), pullToRefresh ? R.id.swipeToRefresh : R.id.progress);
-        new GetEventosTask(pullToRefresh).execute();
+        new GetEventosTask().execute();
     }
 
     /*
@@ -157,18 +157,11 @@ public class EventosFragment extends BaseFragment {
 
     private class GetEventosTask extends AsyncTask<Void, Void, List<Evento>> {
 
-        private boolean pullToRefresh;
-
-        public GetEventosTask(boolean pullToRefresh) {
-            this.pullToRefresh = pullToRefresh;
-        }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (!pullToRefresh) {
-                progress.setVisibility(View.VISIBLE);
-            }
+            progress.setVisibility(View.VISIBLE);
+            recyclerView.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -184,9 +177,8 @@ public class EventosFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(List<Evento> eventos) {
-            if (!pullToRefresh) {
-                progress.setVisibility(View.GONE);
-            }
+            progress.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
 
             if (eventos != null) {
                 // Salva a lista de eventos no atributo da classe
@@ -211,7 +203,7 @@ public class EventosFragment extends BaseFragment {
         };
     }
 
-    public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem(){
+    public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem() {
         return new DownloadImagemTask.CallbackDownloadImagem() {
             @Override
             public void onCallbackDownloadImagem(File imagem) {

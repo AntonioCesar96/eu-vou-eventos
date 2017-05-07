@@ -10,7 +10,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +33,6 @@ import eventos.com.br.eventos.util.AlarmEventoUtil;
 public class EventoFragment extends BaseFragment {
 
     private Evento evento;
-    private ProgressBar progress;
     private TextView txtDesc;
     private TextView txtLocal;
     private TextView txtRuaMostra;
@@ -76,7 +74,6 @@ public class EventoFragment extends BaseFragment {
 
     private void initFields(View view) {
         txtDesc = (TextView) view.findViewById(R.id.txtDesc);
-        progress = (ProgressBar) view.findViewById(R.id.progress);
         txtLocal = (TextView) view.findViewById(R.id.txtLocal);
         txtDataEvento = (TextView) view.findViewById(R.id.txtDataEvento);
         txtRuaMostra = (TextView) view.findViewById(R.id.txtRuaMostra);

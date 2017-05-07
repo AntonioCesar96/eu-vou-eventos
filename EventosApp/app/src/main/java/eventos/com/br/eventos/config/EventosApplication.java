@@ -15,12 +15,11 @@ import eventos.com.br.eventos.util.Prefs;
 public class EventosApplication extends Application {
 
     //private static String URL = "http://10.100.3.49:8080/eventos/rest/";
-    private static String URL = "http://192.168.42.74:8080/eventos/rest/";
-    //private static String URL = "https://eventostest.herokuapp.com/rest/";
+    //private static String URL = "http://192.168.42.74:8080/eventos/rest/";
+    private static String URL = "https://eventostest.herokuapp.com/rest/";
     private static EventosApplication instance = null;
     private Usuario usuario = null;
     private DataBaseHelper dataBaseHelper = null;
-    private Long idFaculdade = 0L;
 
     @Override
     public void onCreate() {
@@ -48,14 +47,6 @@ public class EventosApplication extends Application {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
-    }
-
-    public Long getIdFaculdade() {
-        return idFaculdade;
-    }
-
-    public void setIdFaculdade(Long idFaculdade) {
-        this.idFaculdade = idFaculdade;
     }
 
     public DataBaseHelper getDataBaseHelper() {

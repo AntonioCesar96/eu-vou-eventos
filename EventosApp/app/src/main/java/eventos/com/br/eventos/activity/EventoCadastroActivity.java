@@ -19,7 +19,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
@@ -59,7 +58,6 @@ import eventos.com.br.eventos.util.ValidationUtil;
 
 public class EventoCadastroActivity extends BaseActivity {
     private EditText txtNome, txtDesc, txtDataInicio, txtHoraInicio, txtLocalNome, txtLocalCep, txtLocalRua, txtLocalBairro, txtLocalNumero, txtNomeAtletica;
-    private List<EditText> editTexts;
     private ImageView imgView;
     private Evento evento;
     private Button btnSalvar;
@@ -70,7 +68,6 @@ public class EventoCadastroActivity extends BaseActivity {
     private Localizacao localizacao;
     private File fileImage;
     private CameraUtil cameraUtil;
-    private ProgressBar progress;
     private EventoRascunho eventoRascunho;
 
     @Override
@@ -84,17 +81,6 @@ public class EventoCadastroActivity extends BaseActivity {
         evento = new Evento();
 
         initFields();
-
-        Intent intent = getIntent();
-        if (intent != null) {
-            Bundle bundle = intent.getExtras();
-            if (bundle != null) {
-                this.evento = (Evento) bundle.getSerializable("Evento");
-                if (evento != null) {
-                    txtNome.setText(evento.getNome());
-                }
-            }
-        }
 
         // Botão salvar
         btnSalvar.setOnClickListener(onClickSalvar());
@@ -179,8 +165,6 @@ public class EventoCadastroActivity extends BaseActivity {
         spEstados = (Spinner) findViewById(R.id.spLocalEstado);
         spCidades = (Spinner) findViewById(R.id.spLocalCidade);
         btnSalvar = (Button) findViewById(R.id.btSalvar);
-        progress = (ProgressBar) findViewById(R.id.progress);
-        editTexts = Arrays.asList(txtNome, txtDesc, txtDataInicio, txtHoraInicio, txtLocalNome, txtLocalCep, txtLocalRua, txtLocalBairro, txtLocalNumero, txtNomeAtletica);
 
         txtLocalCep.addTextChangedListener(LocalCepTextChangedListener());
     }
@@ -216,19 +200,27 @@ public class EventoCadastroActivity extends BaseActivity {
             @Override
             public void onCallbackSearchLocation(Localizacao localizacao) {
 
-                EventoCadastroActivity.this.localizacao = localizacao;
+                if (localizacao != null) {
+                    EventoCadastroActivity.this.localizacao = localizacao;
 
-                txtLocalRua.setText(localizacao.getLogradouro());
-                txtLocalBairro.setText(localizacao.getBairro());
+                    txtLocalRua.setText(localizacao.getLogradouro());
+                    txtLocalBairro.setText(localizacao.getBairro());
 
-                BaseAdapter adapterEstados = (BaseAdapter) spEstados.getAdapter();
+                    BaseAdapter adapterEstados = (BaseAdapter) spEstados.getAdapter();
 
-                for (int position = 0; position < adapterEstados.getCount(); position++) {
-                    Estado estado = (Estado) adapterEstados.getItem(position);
+                    for (int position = 0; position < adapterEstados.getCount(); position++) {
+                        Estado estado = (Estado) adapterEstados.getItem(position);
 
-                    if (estado.getUf() != null && estado.getUf().equals(localizacao.getUf())) {
-                        spEstados.setSelection(position);
+                        if (estado.getUf() != null && estado.getUf().equals(localizacao.getUf())) {
+                            spEstados.setSelection(position);
+                        }
                     }
+                } else {
+                    txtLocalRua.setText("");
+                    txtLocalBairro.setText("");
+                    spEstados.setSelection(0);
+                    spCidades.setSelection(0);
+                    spFaculdades.setSelection(0);
                 }
             }
         };
@@ -239,7 +231,7 @@ public class EventoCadastroActivity extends BaseActivity {
         for (int position = 0; position < adapterCidades.getCount(); position++) {
             Cidade cidade = (Cidade) adapterCidades.getItem(position);
 
-            if (cidade.getNome() != null && cidade.getNome().equals(localizacao.getLocalidade())) {
+            if (localizacao != null && cidade.getNome().equals(localizacao.getLocalidade())) {
                 spCidades.setSelection(position);
             }
         }
@@ -316,13 +308,19 @@ public class EventoCadastroActivity extends BaseActivity {
             validaOk = ValidationUtil.validateTime(txtHoraInicio);
         }
         if (validaOk) {
+            validaOk = ValidationUtil.validaSpinnerEstado(spEstados);
+        }
+        if (validaOk) {
+            validaOk = ValidationUtil.validaSpinnerCidade(spCidades);
+        }
+        if (validaOk) {
             validaOk = ValidationUtil.validaSpinnerFaculdade(spFaculdades);
         }
         return validaOk;
     }
 
     private void salvarTask(Evento evento) {
-        new EventoTask(fileImage, getActivity(), onCallbackSaveEvento()).execute(evento);
+        new EventoTask(evento, fileImage, getActivity(), onCallbackSaveEvento()).execute();
     }
 
     private EventoTask.CallbackSaveEvento onCallbackSaveEvento() {
@@ -547,9 +545,7 @@ public class EventoCadastroActivity extends BaseActivity {
                     }
                 });
 
-                if (localizacao != null) {
-                    selecionarCidade();
-                }
+                selecionarCidade();
             }
         };
     }

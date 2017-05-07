@@ -27,7 +27,7 @@ public class EstadoTask extends AsyncTask<Void, Void, List<Estado>> {
 
     @Override
     protected void onPreExecute() {
-        progressDialog = ProgressDialog.show(activity, "Buscando estados", "Aguarde...", false, false);
+        progressDialog = ProgressDialog.show(activity, "Buscando Estados", "Aguarde...", false, false);
     }
 
     @Override

@@ -3,17 +3,14 @@ package eventos.com.br.eventos.activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
+import android.webkit.URLUtil;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -21,7 +18,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
@@ -40,10 +36,10 @@ import eventos.com.br.eventos.adapter.EstadosAdapter;
 import eventos.com.br.eventos.adapter.FaculdadesAdapter;
 import eventos.com.br.eventos.config.EventosApplication;
 import eventos.com.br.eventos.dao.EventoRascunhoDAO;
+import eventos.com.br.eventos.fragments.MeusEventosFragment;
 import eventos.com.br.eventos.model.Cidade;
 import eventos.com.br.eventos.model.Estado;
 import eventos.com.br.eventos.model.Evento;
-import eventos.com.br.eventos.model.EventoRascunho;
 import eventos.com.br.eventos.model.Faculdade;
 import eventos.com.br.eventos.model.Local;
 import eventos.com.br.eventos.model.Localizacao;
@@ -62,7 +58,6 @@ import eventos.com.br.eventos.util.ValidationUtil;
 
 public class EventoAtualizarActivity extends BaseActivity {
     private EditText txtNome, txtDesc, txtDataInicio, txtHoraInicio, txtLocalNome, txtLocalCep, txtLocalRua, txtLocalBairro, txtLocalNumero, txtNomeAtletica;
-    private List<EditText> editTexts;
     private ImageView imgView;
     private Evento evento;
     private Button btnSalvar;
@@ -137,15 +132,17 @@ public class EventoAtualizarActivity extends BaseActivity {
 
         txtLocalCep.setText(e.getLocal().getCep());
 
-        new DownloadImagemTask(getAppCompatActivity(), onCallbackDownloadImagem()).execute(e.getEnderecoImagem());
+        if (e.getEnderecoImagem() != null && e.getEnderecoImagem().trim().length() > 0 && URLUtil.isValidUrl(e.getEnderecoImagem())) {
+            new DownloadImagemTask(getAppCompatActivity(), onCallbackDownloadImagem()).execute(e.getEnderecoImagem());
+        }
     }
 
-    public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem(){
+    public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem() {
         return new DownloadImagemTask.CallbackDownloadImagem() {
             @Override
             public void onCallbackDownloadImagem(File imagem) {
 
-                fileImage = cameraUtil.setImage(imagem.getAbsolutePath(), imgView);
+                cameraUtil.setImage(imagem.getAbsolutePath(), imgView);
             }
         };
     }
@@ -181,7 +178,6 @@ public class EventoAtualizarActivity extends BaseActivity {
         spEstados = (Spinner) findViewById(R.id.spLocalEstado);
         spCidades = (Spinner) findViewById(R.id.spLocalCidade);
         btnSalvar = (Button) findViewById(R.id.btSalvar);
-        editTexts = Arrays.asList(txtNome, txtDesc, txtDataInicio, txtHoraInicio, txtLocalNome, txtLocalCep, txtLocalRua, txtLocalBairro, txtLocalNumero, txtNomeAtletica);
 
         txtLocalCep.addTextChangedListener(LocalCepTextChangedListener());
     }
@@ -217,19 +213,27 @@ public class EventoAtualizarActivity extends BaseActivity {
             @Override
             public void onCallbackSearchLocation(Localizacao localizacao) {
 
-                EventoAtualizarActivity.this.localizacao = localizacao;
+                if (localizacao != null) {
+                    EventoAtualizarActivity.this.localizacao = localizacao;
 
-                txtLocalRua.setText(localizacao.getLogradouro());
-                txtLocalBairro.setText(localizacao.getBairro());
+                    txtLocalRua.setText(localizacao.getLogradouro());
+                    txtLocalBairro.setText(localizacao.getBairro());
 
-                BaseAdapter adapterEstados = (BaseAdapter) spEstados.getAdapter();
+                    BaseAdapter adapterEstados = (BaseAdapter) spEstados.getAdapter();
 
-                for (int position = 0; position < adapterEstados.getCount(); position++) {
-                    Estado estado = (Estado) adapterEstados.getItem(position);
+                    for (int position = 0; position < adapterEstados.getCount(); position++) {
+                        Estado estado = (Estado) adapterEstados.getItem(position);
 
-                    if (estado.getUf() != null && estado.getUf().equals(localizacao.getUf())) {
-                        spEstados.setSelection(position);
+                        if (estado.getUf() != null && estado.getUf().equals(localizacao.getUf())) {
+                            spEstados.setSelection(position);
+                        }
                     }
+                } else {
+                    txtLocalRua.setText("");
+                    txtLocalBairro.setText("");
+                    spEstados.setSelection(0);
+                    spCidades.setSelection(0);
+                    spFaculdades.setSelection(0);
                 }
             }
         };
@@ -240,12 +244,10 @@ public class EventoAtualizarActivity extends BaseActivity {
         for (int position = 0; position < adapterCidades.getCount(); position++) {
             Cidade cidade = (Cidade) adapterCidades.getItem(position);
 
-            if (cidade.getNome() != null && cidade.getNome().equals(localizacao.getLocalidade())) {
+            if (localizacao != null && cidade.getNome().equals(localizacao.getLocalidade())) {
                 spCidades.setSelection(position);
             }
         }
-
-        localizacao = null;
     }
 
     private void selecionarFaculdade() {
@@ -257,8 +259,6 @@ public class EventoAtualizarActivity extends BaseActivity {
                 spFaculdades.setSelection(position);
             }
         }
-
-        localizacao = null;
     }
 
     @Override
@@ -317,13 +317,19 @@ public class EventoAtualizarActivity extends BaseActivity {
             validaOk = ValidationUtil.validateTime(txtHoraInicio);
         }
         if (validaOk) {
+            validaOk = ValidationUtil.validaSpinnerEstado(spEstados);
+        }
+        if (validaOk) {
+            validaOk = ValidationUtil.validaSpinnerCidade(spCidades);
+        }
+        if (validaOk) {
             validaOk = ValidationUtil.validaSpinnerFaculdade(spFaculdades);
         }
         return validaOk;
     }
 
     private void salvarTask(Evento evento) {
-        new EventoTask(fileImage, getActivity(), onCallbackSaveEvento()).execute(evento);
+        new EventoTask(evento, fileImage, getActivity(), onCallbackSaveEvento()).execute();
     }
 
     private EventoTask.CallbackSaveEvento onCallbackSaveEvento() {
@@ -340,10 +346,10 @@ public class EventoAtualizarActivity extends BaseActivity {
                         Log.i("ERRO", e.getMessage());
                     }
 
-                    setResult(MainActivity.RECRIAR_ACTIVITY);
+                    setResult(MeusEventosFragment.RECARREGAR_EVENTOS);
                     finish();
                 } else {
-                    AlertUtils.alert(getAppCompatActivity(), "Alerta", "Erro ao tentar salvar evento " + evento.getNome());
+                    AlertUtils.alert(getAppCompatActivity(), "Alerta", "Erro ao tentar atualizar evento " + evento.getNome());
                 }
             }
         };
@@ -542,9 +548,7 @@ public class EventoAtualizarActivity extends BaseActivity {
                     }
                 });
 
-                if (localizacao != null) {
-                    selecionarCidade();
-                }
+                selecionarCidade();
             }
         };
     }

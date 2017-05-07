@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,11 +21,8 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.Locale;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.activity.EventoActivity;
@@ -37,16 +33,14 @@ import eventos.com.br.eventos.model.Response;
 import eventos.com.br.eventos.rest.EventoRest;
 import eventos.com.br.eventos.tasks.BuscarEventoTask;
 import eventos.com.br.eventos.tasks.EventoExcluirTask;
-import eventos.com.br.eventos.util.AndroidUtils;
 import eventos.com.br.eventos.util.TipoBusca;
 
 public class MeusEventosFragment extends BaseFragment {
     protected RecyclerView recyclerView;
-    private SwipeRefreshLayout swipeLayout;
     private List<Evento> eventos;
     private TipoBusca tipoDeBusca;
     private ProgressBar progress;
-    public static final int ATUALIZAR_FAVORITOS = 9;
+    public static final int RECARREGAR_EVENTOS = 5;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +52,7 @@ public class MeusEventosFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_eventos, container, false);
+        View view = inflater.inflate(R.layout.fragment_meus_eventos, container, false);
 
         progress = (ProgressBar) view.findViewById(R.id.progress);
 
@@ -67,38 +61,13 @@ public class MeusEventosFragment extends BaseFragment {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setHasFixedSize(true);
 
-        // Swipe to Refresh
-        swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeToRefresh);
-        swipeLayout.setOnRefreshListener(OnRefreshListener());
-        swipeLayout.setColorSchemeResources(
-                R.color.refresh_progress_1,
-                R.color.refresh_progress_2,
-                R.color.refresh_progress_3);
-
         return view;
-    }
-
-    private SwipeRefreshLayout.OnRefreshListener OnRefreshListener() {
-        return new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Valida se existe conexão ao fazer o gesto Pull to Refresh
-                if (AndroidUtils.isNetworkAvailable(getContext())) {
-                    // Atualiza ao fazer o gesto Pull to Refresh
-                    taskEventos(true);
-                    swipeLayout.setRefreshing(false);
-                } else {
-                    swipeLayout.setRefreshing(false);
-                    snack(recyclerView, R.string.msg_error_conexao_indisponivel);
-                }
-            }
-        };
     }
 
     @Override
     public void onResume() {
         if (TipoBusca.FAVORITOS.equals(tipoDeBusca)) {
-            taskEventos(false);
+            taskEventos();
         }
 
         super.onResume();
@@ -107,29 +76,21 @@ public class MeusEventosFragment extends BaseFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        taskEventos(false);
+        taskEventos();
     }
 
-    private void taskEventos(boolean pullToRefresh) {
+    public void taskEventos() {
         // Busca os eventos: Dispara a Task
         //startTask("eventos", new GetEventosTask(pullToRefresh, getContext()), pullToRefresh ? R.id.swipeToRefresh : R.id.progress);
-        new GetEventosTask(pullToRefresh).execute();
+        new GetEventosTask().execute();
     }
 
     private class GetEventosTask extends AsyncTask<Void, Void, List<Evento>> {
 
-        private boolean pullToRefresh;
-
-        public GetEventosTask(boolean pullToRefresh) {
-            this.pullToRefresh = pullToRefresh;
-        }
-
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            if (!pullToRefresh) {
-                progress.setVisibility(View.VISIBLE);
-            }
+            progress.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -145,9 +106,7 @@ public class MeusEventosFragment extends BaseFragment {
 
         @Override
         protected void onPostExecute(List<Evento> eventos) {
-            if (!pullToRefresh) {
-                progress.setVisibility(View.GONE);
-            }
+            progress.setVisibility(View.GONE);
 
             if (eventos != null) {
                 // Salva a lista de eventos no atributo da classe
@@ -180,8 +139,7 @@ public class MeusEventosFragment extends BaseFragment {
 
                 Intent intent = new Intent(getContext(), EventoActivity.class);
                 intent.putExtra("evento", e);
-
-                startActivityForResult(intent, ATUALIZAR_FAVORITOS);
+                startActivity(intent);
             }
         };
     }
@@ -272,7 +230,7 @@ public class MeusEventosFragment extends BaseFragment {
                 android.support.v7.app.AlertDialog dialog = builder.create();
                 dialog.show();
 
-                taskEventos(false);
+                taskEventos();
             }
         };
     }
@@ -284,10 +242,19 @@ public class MeusEventosFragment extends BaseFragment {
                 if (e != null) {
                     Intent intent = new Intent(getAppCompatActivity(), EventoAtualizarActivity.class);
                     intent.putExtra("evento", e);
-                    startActivity(intent);
+                    startActivityForResult(intent, RECARREGAR_EVENTOS);
                 }
             }
         };
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RECARREGAR_EVENTOS) {
+            taskEventos();
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     public void showListPopup(View anchor) {

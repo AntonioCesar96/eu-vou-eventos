@@ -70,8 +70,7 @@ public class EnderecoRest {
             Gson gson = new Gson();
             return gson.fromJson(retorno, listType);
         } else {
-            return new Localizacao();
+            return null;
         }
     }
-
 }

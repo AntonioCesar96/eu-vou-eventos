@@ -29,7 +29,7 @@ public class LocalizacaoTask extends AsyncTask<String, Void, Localizacao> {
             return rest.getLocalizacao(cep);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Localizacao();
+            return null;
         }
     }
 

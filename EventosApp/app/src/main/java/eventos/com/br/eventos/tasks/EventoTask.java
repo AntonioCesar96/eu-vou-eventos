@@ -16,13 +16,15 @@ import eventos.com.br.eventos.rest.EventoRest;
  * Created by Matheus on 26/04/2017.
  */
 
-public class EventoTask extends AsyncTask<Evento, Void, Response> {
+public class EventoTask extends AsyncTask<Void, Void, Response> {
     ProgressDialog progressDialog;
+    private Evento evento;
     private File fileImage;
     private AppCompatActivity activity;
     private CallbackSaveEvento callbackSaveEvento;
 
-    public EventoTask(File fileImage, AppCompatActivity activity, CallbackSaveEvento callbackSaveEvento){
+    public EventoTask(Evento evento, File fileImage, AppCompatActivity activity, CallbackSaveEvento callbackSaveEvento) {
+        this.evento = evento;
         this.fileImage = fileImage;
         this.activity = activity;
         this.callbackSaveEvento = callbackSaveEvento;
@@ -30,12 +32,15 @@ public class EventoTask extends AsyncTask<Evento, Void, Response> {
 
     @Override
     protected void onPreExecute() {
-        progressDialog = ProgressDialog.show(activity, "Cadastrando", "Realizando cadastro do evento aguarde...", false, false);
+        if (evento.getId() != null) {
+            progressDialog = ProgressDialog.show(activity, "Atualizando", "Realizando a atualização dos dados do evento, aguarde...", false, false);
+        } else {
+            progressDialog = ProgressDialog.show(activity, "Cadastrando", "Realizando o cadastro do evento, aguarde...", false, false);
+        }
     }
 
     @Override
-    protected Response doInBackground(Evento... eventos) {
-        Evento evento = eventos[0];
+    protected Response doInBackground(Void... voids) {
         EventoRest service = new EventoRest(activity);
 
         Response response;
@@ -45,14 +50,14 @@ public class EventoTask extends AsyncTask<Evento, Void, Response> {
             if (fileImage != null && fileImage.exists()) {
                 ResponseWithURL responseWithURL = service.postFotoBase64(fileImage);
                 if (responseWithURL != null && responseWithURL.isOk()) {
-                    // Atualiza a foto do carro
+                    // Atualiza a foto do evento
                     evento.setEnderecoImagem(responseWithURL.getUrl());
                 }
             }
             // Salva o evento
             if (evento.getId() != null) {
                 response = service.update(evento);
-            }else{
+            } else {
                 response = service.save(evento);
             }
 

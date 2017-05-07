@@ -7,7 +7,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import java.sql.SQLException;
 
@@ -27,14 +26,6 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         setUpToolbar();
         setupViewPagerTabs();
-
-        // FAB
-        findViewById(R.id.fab).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                snack(v, "Exemplo de FAB Button.");
-            }
-        });
     }
 
     @Override
@@ -107,7 +98,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (resultCode == RECRIAR_ACTIVITY){
+        if (resultCode == RECRIAR_ACTIVITY) {
             startActivity(new Intent(getContext(), MainActivity.class));
             finish();
         }

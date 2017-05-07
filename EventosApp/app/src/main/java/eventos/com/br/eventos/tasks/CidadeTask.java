@@ -27,7 +27,7 @@ public class CidadeTask extends AsyncTask<Long, Void, List<Cidade>> {
 
     @Override
     protected void onPreExecute() {
-        progressDialog = ProgressDialog.show(activity, "Buscando cidades", "Aguarde...", false, false);
+        progressDialog = ProgressDialog.show(activity, "Buscando Cidades", "Aguarde...", false, false);
     }
 
     @Override

@@ -237,6 +237,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:ems="14"
+                        android:maxLength="9"
                         android:hint="CEP"
                         android:inputType="number|text"
                         android:paddingBottom="10dp"

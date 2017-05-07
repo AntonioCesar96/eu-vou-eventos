@@ -27,7 +27,7 @@ public class FaculdadeTask extends AsyncTask<Long, Void, List<Faculdade>> {
 
     @Override
     protected void onPreExecute() {
-        progressDialog = ProgressDialog.show(activity, "Buscando faculdades", "Aguarde...", false, false);
+        progressDialog = ProgressDialog.show(activity, "Buscando Faculdades", "Aguarde...", false, false);
     }
 
     @Override
