@@ -1,22 +1,40 @@
 package eventos.com.br.eventos.fragments;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.io.File;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import eventos.com.br.eventos.R;
@@ -25,13 +43,17 @@ import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.dao.NotificacaoDAO;
 import eventos.com.br.eventos.model.Evento;
+import eventos.com.br.eventos.model.Local;
 import eventos.com.br.eventos.model.Notificacao;
 import eventos.com.br.eventos.tasks.BuscarEventoTask;
 import eventos.com.br.eventos.tasks.DownloadImagemTask;
 import eventos.com.br.eventos.util.AlarmEventoUtil;
 
+import static eventos.com.br.eventos.R.id.map;
+
 public class EventoFragment extends BaseFragment {
 
+    private GoogleMap mMap;
     private Evento evento;
     private TextView txtDesc;
     private TextView txtLocal;
@@ -111,7 +133,7 @@ public class EventoFragment extends BaseFragment {
         new DownloadImagemTask(getAppCompatActivity(), onCallbackDownloadImagem()).execute(evento.getEnderecoImagem());
     }
 
-    public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem(){
+    public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem() {
         return new DownloadImagemTask.CallbackDownloadImagem() {
             @Override
             public void onCallbackDownloadImagem(File imagem) {
@@ -159,6 +181,33 @@ public class EventoFragment extends BaseFragment {
                     txtLocalBairro.setText("Bairro: " + evento.getLocal().getBairro());
 
                     fabFavorito.setOnClickListener(clickFabFavorito());
+
+                    LatLng latLng = null;
+                    if (evento.getLocal().getLatitude() != null) {
+                        Double v1 = Double.parseDouble(evento.getLocal().getLatitude());
+                        Double v2 = Double.parseDouble(evento.getLocal().getLongitude());
+                        latLng = new LatLng(v1, v2);
+                    } else {
+                        try {
+                            Local l = evento.getLocal();
+                            String endereco = l.getRua() + " " + l.getCep() + ", " + l.getNumero() + " - "
+                                    + l.getBairro() + ", " + l.getCidade().getNome();
+
+                            Log.e("asfafasf", endereco);
+
+                            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
+                            List<Address> enderecos = geocoder.getFromLocationName(endereco, 1);
+                            if (enderecos != null && enderecos.size() > 0) {
+                                Address address = enderecos.get(0);
+                                latLng = new LatLng(address.getLatitude(), address.getLongitude());
+                            }
+
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
+
+                    mostrarMapa(latLng);
                 }
             }
         };
@@ -244,6 +293,97 @@ public class EventoFragment extends BaseFragment {
         long time = c.getTimeInMillis();
 
         return time;
+    }
+
+    private void mostrarMapa(LatLng latLng) {
+        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
+                .findFragmentById(map);
+        mapFragment.getMapAsync(onMapReadyCallback(latLng));
+    }
+
+
+    private OnMapReadyCallback onMapReadyCallback(final LatLng latLng) {
+        return new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mMap = googleMap;
+
+                if (latLng != null) {
+
+                    // Configura o tipo do mapa
+                    mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+                    final CameraPosition position = new CameraPosition.Builder()
+                            .target(latLng)    // Localização
+                            .bearing(130)        // Direção em que a cÂmera está apontando em graus
+                            .tilt(0)            // Ângulo que a cÂmera está posicionada em graus (0 a 90)
+                            .zoom(17)            // Zoom
+                            .build();
+
+                    CameraUpdate update = CameraUpdateFactory.newCameraPosition(position);
+
+                    // Centraliza o mapa com animação de 10 segundos
+                    mMap.animateCamera(update);
+
+                    // Adiciona os marcadores
+                    adicionarMarcador(mMap, latLng);
+                }
+            }
+        };
+    }
+
+    // Adiciona um marcador
+    private void adicionarMarcador(GoogleMap map, LatLng latLng) {
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng).title("Meu Marcador").snippet("Livro Android");
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher));
+
+        Marker marker = map.addMarker(markerOptions);
+
+        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                LatLng lartLng = marker.getPosition();
+                Toast.makeText(getContext(), "Clicou no: " + marker.getTitle() + " > " + lartLng, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Customiza a janela ao clicar em um marcador
+        map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
+            @Override
+            public View getInfoWindow(Marker marker) {
+                LinearLayout linear = (LinearLayout) this.getInfoContents(marker);
+                // Borda imagem 9-patch
+                linear.setBackgroundResource(R.drawable.janela_marker);
+                return linear;
+            }
+
+            @Override
+            public View getInfoContents(Marker marker) {
+                // View com o conteúdo
+                LinearLayout linear = new LinearLayout(getContext());
+                linear.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+                linear.setOrientation(LinearLayout.VERTICAL);
+
+                TextView t = new TextView(getContext());
+                t.setText("*** View customizada *** ");
+                t.setTextColor(Color.BLACK);
+                t.setGravity(Gravity.CENTER);
+                linear.addView(t);
+
+                TextView tTitle = new TextView(getContext());
+                tTitle.setText(marker.getTitle());
+                tTitle.setTextColor(Color.RED);
+                linear.addView(tTitle);
+
+                TextView tSnippet = new TextView(getContext());
+                tSnippet.setText(marker.getSnippet());
+                tSnippet.setTextColor(Color.BLUE);
+                linear.addView(tSnippet);
+
+                return linear;
+            }
+        });
     }
 }
 
