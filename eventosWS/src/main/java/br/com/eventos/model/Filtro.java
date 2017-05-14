@@ -60,4 +60,8 @@ public class Filtro implements Serializable {
 	public void setIdEstado(Long idEstado) {
 		this.idEstado = idEstado;
 	}
+	
+	public static void main(String[] args) {
+		System.out.println(Long.MAX_VALUE);
+	}
 }

@@ -41,12 +41,18 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
         this.compartilharOnClickListener = compartilharOnClickListener;
     }
 
+    public void updateList(List<Evento> eventos) {
+        this.eventos.addAll(eventos);
+        notifyDataSetChanged();
+    }
+
     @Override
     public EventoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.adapter_eventos, parent, false);
         EventoViewHolder viewHolder = new EventoViewHolder(view);
         return viewHolder;
     }
+
 
     @Override
     public void onBindViewHolder(final EventoViewHolder holder, final int position) {

@@ -45,6 +45,20 @@ public class EventosDAO {
 		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
 	}
 
+	public List<Evento> getProximosEventos(int page, int max) {
+		TypedQuery<Evento> query = manager.createQuery(
+				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+						+ "from Evento e order by e.dataHora",
+				Evento.class);
+		// query.setHint("org.hibernate.cacheable", "true");
+		setPage(query, page, max);
+
+		List<Evento> list = query.getResultList();
+
+		Calendar dataAtual = Calendar.getInstance();
+		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
+	}
+
 	public List<Evento> getEventosPorUsuario(Long idUsuario) {
 
 		TypedQuery<Evento> query = manager.createQuery(
@@ -91,45 +105,57 @@ public class EventosDAO {
 		manager.merge(e);
 	}
 
-	public List<Evento> getEventosPorFaculdade(Long idFaculdade) {
-		TypedQuery<Evento> query = manager.createQuery(
-				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
-						+ "from Evento e where e.faculdade.id = :idFaculdade order by e.dataHora",
-				Evento.class);
+	public List<Evento> getEventosPorFaculdade(Long idFaculdade, int page, int max) {
+		TypedQuery<Evento> query = manager
+				.createQuery(
+						"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+								+ "from Evento e where e.faculdade.id = :idFaculdade order by e.dataHora",
+						Evento.class);
 
 		query.setParameter("idFaculdade", idFaculdade);
-
+		setPage(query, page, max);
 		List<Evento> list = query.getResultList();
 
 		Calendar dataAtual = Calendar.getInstance();
 		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
 	}
 
-	public List<Evento> getEventosPorCidade(Long idCidade) {
+	public List<Evento> getEventosPorCidade(Long idCidade, int page, int max) {
 		TypedQuery<Evento> query = manager.createQuery(
 				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
 						+ "from Evento e inner join e.local l on (l.cidade.id = :idCidade) order by e.dataHora",
 				Evento.class);
 
 		query.setParameter("idCidade", idCidade);
-
+		setPage(query, page, max);
 		List<Evento> list = query.getResultList();
 
 		Calendar dataAtual = Calendar.getInstance();
 		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
 	}
 
-	public List<Evento> getEventosPorEstado(Long idEstado) {
+	public List<Evento> getEventosPorEstado(Long idEstado, int page, int max) {
 		TypedQuery<Evento> query = manager.createQuery(
 				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) from Evento e "
 						+ "inner join e.local l inner join l.cidade c inner join c.estado et on (et.id = :idEstado) order by e.dataHora",
 				Evento.class);
 
 		query.setParameter("idEstado", idEstado);
-
+		setPage(query, page, max);
 		List<Evento> list = query.getResultList();
 
 		Calendar dataAtual = Calendar.getInstance();
 		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
+	}
+
+	protected void setPage(Query q, int page, int max) {
+		// Paginação
+		page = page - 1;
+		int firstResult = 0;
+		if (page != 0) {
+			firstResult = page * max;
+		}
+		q.setFirstResult(firstResult);
+		q.setMaxResults(max);
 	}
 }

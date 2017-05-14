@@ -25,6 +25,7 @@ public class EventosService {
 	public List<EventosFeedDTO> getProximosEventos(Filtro filtro) {
 		List<Evento> eventos = new ArrayList<>();
 
+		/*
 		if (filtro.getIdFaculdade() != Long.MAX_VALUE) {
 			eventos = db.getEventosPorFaculdade(filtro.getIdFaculdade());
 			eventos = filtrarPorData(eventos, filtro);
@@ -42,8 +43,34 @@ public class EventosService {
 			eventos = filtrarPorData(eventos, filtro);
 			return EventosFeedDTO.createListEventoFeedDTO(eventos);
 		}
-
+*/
 		eventos = db.getProximosEventos();
+		eventos = filtrarPorData(eventos, filtro);
+		return EventosFeedDTO.createListEventoFeedDTO(eventos);
+	}
+
+	public List<EventosFeedDTO> getProximosEventos(Filtro filtro, int page, int max) {
+		List<Evento> eventos = new ArrayList<>();
+
+		if (filtro.getIdFaculdade() != Long.MAX_VALUE) {
+			eventos = db.getEventosPorFaculdade(filtro.getIdFaculdade(), page, max);
+			eventos = filtrarPorData(eventos, filtro);
+			return EventosFeedDTO.createListEventoFeedDTO(eventos);
+		}
+
+		if (filtro.getIdCidade() != Long.MAX_VALUE) {
+			eventos = db.getEventosPorCidade(filtro.getIdCidade(), page, max);
+			eventos = filtrarPorData(eventos, filtro);
+			return EventosFeedDTO.createListEventoFeedDTO(eventos);
+		}
+
+		if (filtro.getIdEstado() != Long.MAX_VALUE) {
+			eventos = db.getEventosPorEstado(filtro.getIdEstado(), page, max);
+			eventos = filtrarPorData(eventos, filtro);
+			return EventosFeedDTO.createListEventoFeedDTO(eventos);
+		}
+
+		eventos = db.getProximosEventos(page, max);
 		eventos = filtrarPorData(eventos, filtro);
 		return EventosFeedDTO.createListEventoFeedDTO(eventos);
 	}

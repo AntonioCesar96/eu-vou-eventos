@@ -2,7 +2,6 @@ package eventos.com.br.eventos.rest;
 
 import android.content.Context;
 import android.util.Base64;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -55,8 +54,7 @@ public class EventoRest {
             return getEventosPorUsuario();
         }
 
-        return getEventosProximos();
-        //return getEventosFromRaw();
+        return new ArrayList<>();
     }
 
     private List<Evento> getEventosFavoritos() throws SQLException {
@@ -66,9 +64,9 @@ public class EventoRest {
         return eventoDAO.all();
     }
 
-    private List<Evento> getEventosProximos() throws IOException {
+    public List<Evento> getEventosProximos(int pagina, int max) throws IOException {
         Filtro filtro = FiltroUtil.getFiltro();
-        String urlProximos = url + "/proximos";
+        String urlProximos = url + "/proximos/" + pagina + "/" + max;
 
         Gson gson = createGsonObject();
         String jsonFiltro = gson.toJson(filtro);
@@ -79,7 +77,8 @@ public class EventoRest {
 
         Type listType = new TypeToken<ArrayList<Evento>>() {
         }.getType();
-        return gson.fromJson(json, listType);
+        List<Evento> list = gson.fromJson(json, listType);
+        return list;
     }
 
     private List<Evento> getEventosPorUsuario() throws IOException {
