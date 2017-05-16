@@ -10,7 +10,7 @@ import java.net.URLEncoder;
 import java.util.Map;
 
 public class HttpHelper {
-    public int TIMEOUT_MILLIS = 30000;
+    public int TIMEOUT_MILLIS = 60000;
     private String contentType;
     private String charsetToEncode;
 

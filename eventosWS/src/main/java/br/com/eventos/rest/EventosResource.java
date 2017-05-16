@@ -36,23 +36,10 @@ public class EventosResource {
 	private UploadService uploadService;
 
 	@POST
-	@Path("/proximos")
-	public List<EventosFeedDTO> getProximosEventos(Filtro filtro) {
-		return service.getProximosEventos(filtro);
-	}
-
-	@POST
 	@Path("/proximos/{page}/{max}")
 	public List<EventosFeedDTO> getProximosEventosPaginado(Filtro filtro, @PathParam("page") int page,
 			@PathParam("max") int max) {
 		return service.getProximosEventos(filtro, page, max);
-	}
-
-	@GET
-	@Path("/todos")
-	public List<Evento> getTodosEventos() {
-		List<Evento> eventos = service.getTodosEventos();
-		return eventos;
 	}
 
 	@GET

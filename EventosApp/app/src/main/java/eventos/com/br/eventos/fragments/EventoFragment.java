@@ -2,12 +2,9 @@ package eventos.com.br.eventos.fragments;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.location.Address;
-import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,7 +31,6 @@ import java.io.File;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.List;
 import java.util.Locale;
 
 import eventos.com.br.eventos.R;
@@ -43,10 +39,10 @@ import eventos.com.br.eventos.dao.DataBaseHelper;
 import eventos.com.br.eventos.dao.EventoDAO;
 import eventos.com.br.eventos.dao.NotificacaoDAO;
 import eventos.com.br.eventos.model.Evento;
-import eventos.com.br.eventos.model.Local;
 import eventos.com.br.eventos.model.Notificacao;
 import eventos.com.br.eventos.tasks.BuscarEventoTask;
 import eventos.com.br.eventos.tasks.DownloadImagemTask;
+import eventos.com.br.eventos.tasks.MapaTask;
 import eventos.com.br.eventos.util.AlarmEventoUtil;
 
 import static eventos.com.br.eventos.R.id.map;
@@ -182,36 +178,36 @@ public class EventoFragment extends BaseFragment {
 
                     fabFavorito.setOnClickListener(clickFabFavorito());
 
-                    LatLng latLng = null;
-                    if (evento.getLocal().getLatitude() != null) {
-                        Double v1 = Double.parseDouble(evento.getLocal().getLatitude());
-                        Double v2 = Double.parseDouble(evento.getLocal().getLongitude());
-                        latLng = new LatLng(v1, v2);
-                    } else {
-                        try {
-                            Local l = evento.getLocal();
-                            String endereco = l.getRua() + " " + l.getCep() + ", " + l.getNumero() + " - "
-                                    + l.getBairro() + ", " + l.getCidade().getNome();
-
-                            Log.e("asfafasf", endereco);
-
-                            Geocoder geocoder = new Geocoder(getActivity(), Locale.getDefault());
-                            List<Address> enderecos = geocoder.getFromLocationName(endereco, 1);
-                            if (enderecos != null && enderecos.size() > 0) {
-                                Address address = enderecos.get(0);
-                                latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                            }
-
-                        } catch (Exception ex) {
-                            ex.printStackTrace();
-                        }
-                    }
-
-                    mostrarMapa(latLng);
+                    inicializarMapa(evento);
                 }
             }
         };
     }
+
+    private void inicializarMapa(Evento evento) {
+
+        /*
+        if (evento.getLocal().getLatitude() != null) {
+            Double v1 = Double.parseDouble(evento.getLocal().getLatitude());
+            Double v2 = Double.parseDouble(evento.getLocal().getLongitude());
+            LatLng latLng = new LatLng(v1, v2);
+
+            mostrarMapa(latLng);
+        } else {
+        */
+
+        new MapaTask(getAppCompatActivity(), onMapCallback()).execute(evento);
+    }
+
+    private MapaTask.CallbackMap onMapCallback() {
+        return new MapaTask.CallbackMap() {
+            @Override
+            public void onCallbackMap(LatLng latLng) {
+                mostrarMapa(latLng);
+            }
+        };
+    }
+
 
     private View.OnClickListener clickFabFavorito() {
         return new View.OnClickListener() {
@@ -327,7 +323,9 @@ public class EventoFragment extends BaseFragment {
 
                     // Adiciona os marcadores
                     adicionarMarcador(mMap, latLng);
+                    return;
                 }
+                Toast.makeText(getContext(), " Não foi possível localizar o local onde o evento acontecerá", Toast.LENGTH_SHORT).show();
             }
         };
     }

@@ -2,11 +2,11 @@ package br.com.eventos.dao;
 
 import java.util.Calendar;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
 
 import org.springframework.stereotype.Repository;
@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import br.com.eventos.model.Cidade;
 import br.com.eventos.model.Evento;
 import br.com.eventos.model.Faculdade;
+import br.com.eventos.model.Filtro;
 import br.com.eventos.model.Usuario;
 
 @Repository
@@ -23,40 +24,38 @@ public class EventosDAO {
 	@PersistenceContext
 	private EntityManager manager;
 
-	public List<Evento> getTodosEventos() {
-		TypedQuery<Evento> query = manager.createQuery(
-				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
-						+ "from Evento e order by e.dataHora",
-				Evento.class);
-		// query.setHint("org.hibernate.cacheable", "true");
-		return query.getResultList();
-	}
+	public List<Evento> getProximosEventos(int page, int max, Filtro filtro) {
+		Calendar dataInicial = Calendar.getInstance();
+		Calendar dataFinal = filtro.getDataFinal();
 
-	public List<Evento> getProximosEventos() {
-		TypedQuery<Evento> query = manager.createQuery(
-				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
-						+ "from Evento e order by e.dataHora",
-				Evento.class);
-		// query.setHint("org.hibernate.cacheable", "true");
+		String sql = "";
+		if (dataFinal == null) {
+			sql = "SELECT NEW br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+					+ "FROM Evento e WHERE e.dataHora >= :dataInicial ORDER BY e.dataHora";
 
-		List<Evento> list = query.getResultList();
+			if (filtro.getDataInicial() != null) {
+				dataInicial = filtro.getDataInicial();
+			}
+		} else {
+			sql = "SELECT NEW br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+					+ "FROM Evento e WHERE e.dataHora BETWEEN :dataInicial AND :dataFinal ORDER BY e.dataHora";
 
-		Calendar dataAtual = Calendar.getInstance();
-		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
-	}
+			if (filtro.getDataInicial() != null) {
+				dataInicial = filtro.getDataInicial();
+			}
+		}
 
-	public List<Evento> getProximosEventos(int page, int max) {
-		TypedQuery<Evento> query = manager.createQuery(
-				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
-						+ "from Evento e order by e.dataHora",
-				Evento.class);
-		// query.setHint("org.hibernate.cacheable", "true");
+		TypedQuery<Evento> query = manager.createQuery(sql, Evento.class);
+
+		query.setParameter("dataInicial", dataInicial, TemporalType.TIMESTAMP);
+
+		if (dataFinal != null) {
+			query.setParameter("dataFinal", dataFinal, TemporalType.TIMESTAMP);
+		}
+
 		setPage(query, page, max);
 
-		List<Evento> list = query.getResultList();
-
-		Calendar dataAtual = Calendar.getInstance();
-		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
+		return query.getResultList();
 	}
 
 	public List<Evento> getEventosPorUsuario(Long idUsuario) {
@@ -70,7 +69,7 @@ public class EventosDAO {
 		return query.getResultList();
 	}
 
-	public Evento getEventosPorId(Long idEvento) {
+	public Evento getEventoPorId(Long idEvento) {
 		TypedQuery<Evento> query = manager
 				.createQuery("from Evento e join fetch e.usuario join fetch e.faculdade join fetch e.local "
 						+ "join fetch e.local where e.id = :idEvento", Evento.class);
@@ -105,47 +104,116 @@ public class EventosDAO {
 		manager.merge(e);
 	}
 
-	public List<Evento> getEventosPorFaculdade(Long idFaculdade, int page, int max) {
-		TypedQuery<Evento> query = manager
-				.createQuery(
-						"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
-								+ "from Evento e where e.faculdade.id = :idFaculdade order by e.dataHora",
-						Evento.class);
+	public List<Evento> getEventosPorFaculdade(Long idFaculdade, int page, int max, Filtro filtro) {
+
+		Calendar dataInicial = Calendar.getInstance();
+		Calendar dataFinal = filtro.getDataFinal();
+
+		String sql = "";
+		if (dataFinal == null) {
+			sql = "SELECT NEW br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+					+ "FROM Evento e WHERE e.faculdade.id = :idFaculdade AND e.dataHora >= :dataInicial ORDER BY e.dataHora";
+
+			if (filtro.getDataInicial() != null) {
+				dataInicial = filtro.getDataInicial();
+			}
+		} else {
+			sql = "SELECT NEW br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+					+ "FROM Evento e WHERE e.faculdade.id = :idFaculdade AND e.dataHora BETWEEN :dataInicial AND :dataFinal ORDER BY e.dataHora";
+
+			if (filtro.getDataInicial() != null) {
+				dataInicial = filtro.getDataInicial();
+			}
+		}
+
+		TypedQuery<Evento> query = manager.createQuery(sql, Evento.class);
 
 		query.setParameter("idFaculdade", idFaculdade);
-		setPage(query, page, max);
-		List<Evento> list = query.getResultList();
+		query.setParameter("dataInicial", dataInicial, TemporalType.TIMESTAMP);
 
-		Calendar dataAtual = Calendar.getInstance();
-		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
+		if (dataFinal != null) {
+			query.setParameter("dataFinal", dataFinal, TemporalType.TIMESTAMP);
+		}
+
+		setPage(query, page, max);
+
+		return query.getResultList();
 	}
 
-	public List<Evento> getEventosPorCidade(Long idCidade, int page, int max) {
-		TypedQuery<Evento> query = manager.createQuery(
-				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
-						+ "from Evento e inner join e.local l on (l.cidade.id = :idCidade) order by e.dataHora",
-				Evento.class);
+	public List<Evento> getEventosPorCidade(Long idCidade, int page, int max, Filtro filtro) {
+
+		Calendar dataInicial = Calendar.getInstance();
+		Calendar dataFinal = filtro.getDataFinal();
+
+		String sql = "";
+		if (dataFinal == null) {
+			sql = "SELECT NEW br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+					+ "FROM Evento e INNER JOIN e.local l ON (l.cidade.id = :idCidade) "
+					+ "WHERE e.dataHora >= :dataInicial ORDER BY e.dataHora";
+
+			if (filtro.getDataInicial() != null) {
+				dataInicial = filtro.getDataInicial();
+			}
+		} else {
+			sql = "SELECT NEW br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+					+ "FROM Evento e INNER JOIN e.local l ON (l.cidade.id = :idCidade) "
+					+ "WHERE e.dataHora BETWEEN :dataInicial AND :dataFinal ORDER BY e.dataHora";
+
+			if (filtro.getDataInicial() != null) {
+				dataInicial = filtro.getDataInicial();
+			}
+		}
+
+		TypedQuery<Evento> query = manager.createQuery(sql, Evento.class);
 
 		query.setParameter("idCidade", idCidade);
-		setPage(query, page, max);
-		List<Evento> list = query.getResultList();
+		query.setParameter("dataInicial", dataInicial, TemporalType.TIMESTAMP);
 
-		Calendar dataAtual = Calendar.getInstance();
-		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
+		if (dataFinal != null) {
+			query.setParameter("dataFinal", dataFinal, TemporalType.TIMESTAMP);
+		}
+
+		setPage(query, page, max);
+
+		return query.getResultList();
 	}
 
-	public List<Evento> getEventosPorEstado(Long idEstado, int page, int max) {
-		TypedQuery<Evento> query = manager.createQuery(
-				"select new br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) from Evento e "
-						+ "inner join e.local l inner join l.cidade c inner join c.estado et on (et.id = :idEstado) order by e.dataHora",
-				Evento.class);
+	public List<Evento> getEventosPorEstado(Long idEstado, int page, int max, Filtro filtro) {
+
+		Calendar dataInicial = Calendar.getInstance();
+		Calendar dataFinal = filtro.getDataFinal();
+
+		String sql = "";
+		if (dataFinal == null) {
+			sql = "SELECT NEW br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+					+ "FROM Evento e INNER JOIN e.local l INNER JOIN l.cidade c INNER JOIN c.estado et ON (et.id = :idEstado) "
+					+ "WHERE e.dataHora >= :dataInicial ORDER BY e.dataHora";
+
+			if (filtro.getDataInicial() != null) {
+				dataInicial = filtro.getDataInicial();
+			}
+		} else {
+			sql = "SELECT NEW br.com.eventos.model.Evento(e.id, e.nome, e.enderecoImagem, e.dataHora, e.local.nome) "
+					+ "FROM Evento e INNER JOIN e.local l INNER JOIN l.cidade c INNER JOIN c.estado et ON (et.id = :idEstado) "
+					+ "WHERE e.dataHora BETWEEN :dataInicial AND :dataFinal ORDER BY e.dataHora";
+
+			if (filtro.getDataInicial() != null) {
+				dataInicial = filtro.getDataInicial();
+			}
+		}
+
+		TypedQuery<Evento> query = manager.createQuery(sql, Evento.class);
 
 		query.setParameter("idEstado", idEstado);
-		setPage(query, page, max);
-		List<Evento> list = query.getResultList();
+		query.setParameter("dataInicial", dataInicial, TemporalType.TIMESTAMP);
 
-		Calendar dataAtual = Calendar.getInstance();
-		return list.stream().filter(e -> e.getDataHora().after(dataAtual)).collect(Collectors.toList());
+		if (dataFinal != null) {
+			query.setParameter("dataFinal", dataFinal, TemporalType.TIMESTAMP);
+		}
+
+		setPage(query, page, max);
+
+		return query.getResultList();
 	}
 
 	protected void setPage(Query q, int page, int max) {
