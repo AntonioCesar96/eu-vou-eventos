@@ -3,7 +3,6 @@ package eventos.com.br.eventos.activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -43,8 +42,6 @@ public class LoginActivity extends BaseActivity {
         txtEmail = (EditText) findViewById(R.id.txtEmail);
         txtSenha = (EditText) findViewById(R.id.txtSenha);
         txtCadastrar = (TextView) findViewById(R.id.txtCadastrar);
-
-        focusEditText();
 
         btnEntrar.setOnClickListener(clickBtnEntrar());
         txtCadastrar.setOnClickListener(clickTxtEntrar());
@@ -92,33 +89,6 @@ public class LoginActivity extends BaseActivity {
         return validaOk;
     }
 
-    public void focusEditText() {
-
-        final View viewTxtEmail = findViewById(R.id.viewTxtEmail);
-        final View viewTxtSenha = findViewById(R.id.viewTxtSenha);
-
-        txtEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    viewTxtEmail.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.primary));
-                } else {
-                    viewTxtEmail.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cinzaBBB));
-                }
-            }
-        });
-
-        txtSenha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    viewTxtSenha.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.primary));
-                } else {
-                    viewTxtSenha.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cinzaBBB));
-                }
-            }
-        });
-    }
 
     private class UsuarioTask extends AsyncTask<String, Void, Usuario> {
 

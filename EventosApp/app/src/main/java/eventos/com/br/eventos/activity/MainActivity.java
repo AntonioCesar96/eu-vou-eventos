@@ -79,12 +79,6 @@ public class MainActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         int id = item.getItemId();
-        if (id == R.id.editar_config_ws) {
-            Intent intent = new Intent(getApplicationContext(), ConfiguracaoActivity.class);
-            startActivity(intent);
-
-            return true;
-        }
 
         if (id == R.id.filter_eventos) {
             //openDialogFilter();

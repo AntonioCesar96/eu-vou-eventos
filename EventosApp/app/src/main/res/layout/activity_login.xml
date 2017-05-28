@@ -1,32 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/loginActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="#333"
     android:orientation="vertical"
     tools:context="eventos.com.br.eventos.activity.LoginActivity">
 
-    <android.support.v7.widget.CardView
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/img_fundo_login2" />
+    <!---->
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/color_black_transparente_127" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="4dp">
+        android:background="@color/color_transparente"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:navigationIcon="@drawable/ic_sair_white" />
 
-        <include layout="@layout/include_toolbar" />
-    </android.support.v7.widget.CardView>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/toolbar">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:paddingTop="@dimen/nav_header_vertical_spacing"
+                android:scaleType="centerInside"
+                app:srcCompat="@drawable/logo_white2" />
 
 
             <FrameLayout
@@ -40,15 +63,6 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                    <!-- Logo -->
-                    <ImageView
-                        android:id="@+id/imageView2"
-                        android:layout_width="180dp"
-                        android:layout_height="180dp"
-                        android:layout_gravity="center"
-                        android:layout_marginBottom="20dp"
-                        android:src="@drawable/placeholder" />
-
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -59,27 +73,21 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            app:backgroundTint="@color/white"
-                            android:background="@color/white"
                             android:hint="E-mail"
                             android:inputType="textEmailAddress"
-                            android:padding="5dp"
-                            android:textColorHint="@color/cinzaBBB"
-                            android:textSize="18sp" />
+                            android:textColor="@color/color_white"
+                            android:textColorHint="@color/color_white"
+                            android:textSize="18sp"
+                            app:backgroundTint="@color/white" />
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <View
-                        android:id="@+id/viewTxtEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/cinzaBBB" />
 
                     <android.support.design.widget.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColorHint="@color/cinzaBBB"
-                        android:layout_marginTop="10dp">
+                        android:layout_marginTop="10dp"
+                        android:textColorHint="@color/cinzaBBB">
 
                         <EditText
                             android:id="@+id/txtSenha"
@@ -87,21 +95,15 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="10dp"
-                            app:backgroundTint="@color/white"
-                            android:background="@color/white"
                             android:hint="Senha"
                             android:inputType="textPassword"
-                            android:padding="5dp"
-                            android:textColorHint="@color/cinzaBBB"
-                            android:textSize="18sp" />
+                            android:textColor="@color/color_white"
+                            android:textColorHint="@color/color_white"
+                            android:textSize="18sp"
+                            app:backgroundTint="@color/white" />
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <View
-                        android:id="@+id/viewTxtSenha"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/cinzaBBB" />
 
                     <Button
                         android:id="@+id/btnEntrar"
@@ -110,24 +112,51 @@
                         android:layout_gravity="center"
                         android:layout_marginBottom="15dp"
                         android:layout_marginTop="30dp"
-                        android:background="@color/primary"
+                        android:background="@color/color_red"
                         android:text="Entrar"
                         android:textColor="@color/white" />
 
-                    <TextView
-                        android:id="@+id/txtCadastrar"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="5dp"
-                        android:text="Não possui login? cadastre-se"
-                        android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="@color/primary"
-                        android:textSize="15dp" />
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:text="Não possui login?"
+                            android:textAlignment="textEnd"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="@color/color_white"
+                            android:textSize="15dp" />
+
+                        <TextView
+                            android:id="@+id/txtCadastrar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1"
+                            android:padding="5dp"
+                            android:paddingLeft="5dp"
+                            android:text="cadastre-se"
+                            android:textAlignment="textStart"
+                            android:textAllCaps="true"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="@color/color_yellow"
+                            android:textSize="15dp" />
+
+                    </LinearLayout>
+
+
                 </LinearLayout>
 
                 <include layout="@layout/include_progress" />
             </FrameLayout>
         </LinearLayout>
     </ScrollView>
-</LinearLayout>
+</RelativeLayout>

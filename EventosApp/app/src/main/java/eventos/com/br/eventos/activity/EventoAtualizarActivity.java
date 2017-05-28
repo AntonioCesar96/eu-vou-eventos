@@ -5,10 +5,11 @@ import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.URLUtil;
 import android.widget.AdapterView;
@@ -65,10 +66,10 @@ import eventos.com.br.eventos.util.ValidationUtil;
 public class EventoAtualizarActivity extends BaseActivity {
     private final int PLACE_PICKER_REQUEST = 3;
 
-    private EditText txtNome, txtDesc, txtDataInicio, txtHoraInicio, txtLocalNome, txtLocalCep, txtLocalRua, txtLocalBairro, txtLocalNumero, txtNomeAtletica;
+    private EditText txtNome, txtDesc, txtLocalNome, txtLocalCep, txtLocalRua, txtLocalBairro, txtLocalNumero, txtNomeAtletica;
     private ImageView imgView;
     private Evento evento;
-    private Button btnSalvar;
+    private Button txtDataInicio, txtHoraInicio;
     private Spinner spFaculdades, spEstados, spCidades;
     private Faculdade faculdadeSelecionada;
     private Estado estadoSelecionado;
@@ -81,7 +82,7 @@ public class EventoAtualizarActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_evento_cadastro);
+        setContentView(R.layout.activity_evento_atualizar);
         setUpToolbar();
         setUpNavigation();
 
@@ -89,9 +90,6 @@ public class EventoAtualizarActivity extends BaseActivity {
         evento = new Evento();
 
         initFields();
-
-        // Botão salvar
-        btnSalvar.setOnClickListener(onClickSalvar());
 
         // Botão abrir a galeria
         ImageButton btAbrirGaleria = (ImageButton) findViewById(R.id.btnGaleria);
@@ -103,8 +101,6 @@ public class EventoAtualizarActivity extends BaseActivity {
         });
 
         buscar();
-
-        focusEditText();
 
         Intent intent = getIntent();
         if (intent != null) {
@@ -162,26 +158,11 @@ public class EventoAtualizarActivity extends BaseActivity {
         };
     }
 
-    public void focusEditText() {
-        final View viewNome = findViewById(R.id.viewNome);
-
-        txtNome.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    viewNome.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.primary));
-                } else {
-                    viewNome.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cinzaBBB));
-                }
-            }
-        });
-    }
-
     private void initFields() {
         txtNome = (EditText) findViewById(R.id.tNome);
         txtDesc = (EditText) findViewById(R.id.tDesc);
-        txtDataInicio = (EditText) findViewById(R.id.tDataInicio);
-        txtHoraInicio = (EditText) findViewById(R.id.tHoraInicio);
+        txtDataInicio = (Button) findViewById(R.id.tDataInicio);
+        txtHoraInicio = (Button) findViewById(R.id.tHoraInicio);
         txtLocalNome = (EditText) findViewById(R.id.localNome);
         txtLocalCep = (EditText) findViewById(R.id.localCep);
         txtLocalRua = (EditText) findViewById(R.id.localRua);
@@ -192,7 +173,6 @@ public class EventoAtualizarActivity extends BaseActivity {
         spFaculdades = (Spinner) findViewById(R.id.spFaculdades);
         spEstados = (Spinner) findViewById(R.id.spLocalEstado);
         spCidades = (Spinner) findViewById(R.id.spLocalCidade);
-        btnSalvar = (Button) findViewById(R.id.btSalvar);
 
         txtLocalCep.addTextChangedListener(LocalCepTextChangedListener());
     }
@@ -276,48 +256,43 @@ public class EventoAtualizarActivity extends BaseActivity {
         }
     }
 
-    private View.OnClickListener onClickSalvar() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    private void onClickSalvar() {
 
-                boolean validaOk = validaCampos();
+        boolean validaOk = validaCampos();
 
-                Usuario usuario = EventosApplication.getInstance().getUsuario();
-                if (usuario == null) {
-                    validaOk = false;
-                }
+        Usuario usuario = EventosApplication.getInstance().getUsuario();
+        if (usuario == null) {
+            validaOk = false;
+        }
 
-                if (validaOk) {
-                    // Validação de campos preenchidos
-                    Local local = evento.getLocal();
-                    local.setNome(txtLocalNome.getText().toString());
-                    local.setCep(txtLocalCep.getText().toString());
-                    local.setCidade(cidadeSelecionada);
-                    local.setRua(txtLocalRua.getText().toString());
-                    local.setBairro(txtLocalBairro.getText().toString());
-                    local.setNumero(txtLocalNumero.getText().toString());
+        if (validaOk) {
+            // Validação de campos preenchidos
+            Local local = evento.getLocal();
+            local.setNome(txtLocalNome.getText().toString());
+            local.setCep(txtLocalCep.getText().toString());
+            local.setCidade(cidadeSelecionada);
+            local.setRua(txtLocalRua.getText().toString());
+            local.setBairro(txtLocalBairro.getText().toString());
+            local.setNumero(txtLocalNumero.getText().toString());
 
-                    if (latLng != null) {
-                        local.setLatitude("" + latLng.latitude);
-                        local.setLongitude("" + latLng.longitude);
-                    }
-
-                    evento.setNome(txtNome.getText().toString());
-                    evento.setDescricao(txtDesc.getText().toString());
-                    evento.setNomeAtletica(txtNomeAtletica.getText().toString());
-                    evento.setLocal(local);
-                    evento.setFaculdade(faculdadeSelecionada);
-                    evento.setUsuario(usuario);
-
-                    salvarTask(evento);
-                }
+            if (latLng != null) {
+                local.setLatitude("" + latLng.latitude);
+                local.setLongitude("" + latLng.longitude);
             }
-        };
+
+            evento.setNome(txtNome.getText().toString());
+            evento.setDescricao(txtDesc.getText().toString());
+            evento.setNomeAtletica(txtNomeAtletica.getText().toString());
+            evento.setLocal(local);
+            evento.setFaculdade(faculdadeSelecionada);
+            evento.setUsuario(usuario);
+
+            salvarTask(evento);
+        }
     }
 
     private boolean validaCampos() {
-        List<EditText> editTexts = Arrays.asList(txtNome, txtDataInicio, txtHoraInicio, txtLocalNome, txtLocalCep,
+        List<EditText> editTexts = Arrays.asList(txtNome, txtLocalNome, txtLocalCep,
                 txtLocalRua, txtLocalBairro, txtLocalNumero, txtNomeAtletica, txtDesc);
         boolean validaOk = ValidationUtil.validateNotNull(editTexts);
         if (validaOk) {
@@ -629,5 +604,23 @@ public class EventoAtualizarActivity extends BaseActivity {
             txtLocalCep.setText(cep);
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_novo_evento, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_salvar) {
+            onClickSalvar();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

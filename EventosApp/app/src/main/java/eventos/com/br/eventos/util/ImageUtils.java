@@ -48,7 +48,8 @@ public class ImageUtils {
                 }
             });
         } else {
-            Picasso.with(context).load(R.drawable.sem_imagem).resize(largura, altura).centerCrop().into(img, null);
+            //Picasso.with(context).load(R.drawable.sem_imagem).resize(largura, altura).centerCrop().into(img, null);
+            imgEventoWrapper.setVisibility(View.GONE);
         }
     }
 

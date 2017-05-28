@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -51,7 +52,7 @@ public class EventoFragment extends BaseFragment {
 
     private GoogleMap mMap;
     private Evento evento;
-    private TextView txtDesc;
+    private TextView txtDesc, txtCep, txtCidade;
     private TextView txtLocal;
     private TextView txtRuaMostra;
     private TextView txtNumeroMostra;
@@ -97,6 +98,8 @@ public class EventoFragment extends BaseFragment {
         txtRuaMostra = (TextView) view.findViewById(R.id.txtRuaMostra);
         txtNumeroMostra = (TextView) view.findViewById(R.id.txtNumeroMostra);
         txtLocalBairro = (TextView) view.findViewById(R.id.txtLocalBairro);
+        txtCep = (TextView) view.findViewById(R.id.txtCep);
+        txtCidade = (TextView) view.findViewById(R.id.txtCidade);
     }
 
     @Override
@@ -174,7 +177,12 @@ public class EventoFragment extends BaseFragment {
                     txtLocal.setText(evento.getLocal().getNome());
                     txtRuaMostra.setText(evento.getLocal().getRua());
                     txtNumeroMostra.setText(evento.getLocal().getNumero());
-                    txtLocalBairro.setText("Bairro: " + evento.getLocal().getBairro());
+                    txtLocalBairro.setText(evento.getLocal().getBairro());
+                    txtCep.setText(evento.getLocal().getCep());
+
+                    if (evento.getLocal().getCidade() != null) {
+                        txtCidade.setText(evento.getLocal().getCidade().getNome());
+                    }
 
                     fabFavorito.setOnClickListener(clickFabFavorito());
 
@@ -283,12 +291,16 @@ public class EventoFragment extends BaseFragment {
     }
 
     private long pegarMilisegundosDiaDaNotificacao(Calendar data) {
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(System.currentTimeMillis());
-        c.add(Calendar.SECOND, 10);
-        long time = c.getTimeInMillis();
 
-        return time;
+        if (data != null) {
+            data.add(Calendar.DAY_OF_MONTH, -1);
+
+            Log.e("DATA", new SimpleDateFormat("dd/MM/yyyy HH:mm").format(data.getTime()));
+
+            return data.getTimeInMillis();
+        }
+
+        return 0;
     }
 
     private void mostrarMapa(LatLng latLng) {
@@ -325,26 +337,21 @@ public class EventoFragment extends BaseFragment {
                     adicionarMarcador(mMap, latLng);
                     return;
                 }
-                Toast.makeText(getContext(), " Não foi possível localizar o local onde o evento acontecerá", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Não foi possível localizar o local onde o evento acontecerá", Toast.LENGTH_SHORT).show();
             }
         };
     }
 
     // Adiciona um marcador
     private void adicionarMarcador(GoogleMap map, LatLng latLng) {
+        SimpleDateFormat formatData = new SimpleDateFormat("EEE',' dd 'de' MMMM 'às' HH:mm", Locale.getDefault());
+        String data = formatData.format(evento.getDataHora().getTime()).toUpperCase();
+
         MarkerOptions markerOptions = new MarkerOptions();
-        markerOptions.position(latLng).title("Meu Marcador").snippet("Livro Android");
+        markerOptions.position(latLng).title(data);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.mipmap.ic_launcher));
 
         Marker marker = map.addMarker(markerOptions);
-
-        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                LatLng lartLng = marker.getPosition();
-                Toast.makeText(getContext(), "Clicou no: " + marker.getTitle() + " > " + lartLng, Toast.LENGTH_SHORT).show();
-            }
-        });
 
         // Customiza a janela ao clicar em um marcador
         map.setInfoWindowAdapter(new GoogleMap.InfoWindowAdapter() {
@@ -364,20 +371,15 @@ public class EventoFragment extends BaseFragment {
                 linear.setOrientation(LinearLayout.VERTICAL);
 
                 TextView t = new TextView(getContext());
-                t.setText("*** View customizada *** ");
+                t.setText(evento.getNome());
                 t.setTextColor(Color.BLACK);
                 t.setGravity(Gravity.CENTER);
                 linear.addView(t);
 
                 TextView tTitle = new TextView(getContext());
                 tTitle.setText(marker.getTitle());
-                tTitle.setTextColor(Color.RED);
+                tTitle.setTextColor(Color.BLACK);
                 linear.addView(tTitle);
-
-                TextView tSnippet = new TextView(getContext());
-                tSnippet.setText(marker.getSnippet());
-                tSnippet.setTextColor(Color.BLUE);
-                linear.addView(tSnippet);
 
                 return linear;
             }

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape
+    xmlns:xmls="http://schemas.android.com/apk/res/android"
+    xmls:shape="oval">
+    <solid xmls:color="@color/accent"></solid>
+
+</shape>

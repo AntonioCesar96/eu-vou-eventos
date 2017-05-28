@@ -4,7 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -54,7 +53,7 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_alterar_dados_usuario);
+        setContentView(R.layout.activity_alterar_dados_usuario2);
         setUpToolbar();
         setUpNavigation();
 
@@ -73,8 +72,19 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
         buscarFaculdades();
 
         updateFields();
+    }
 
-        focusEditText();
+    private View.OnClickListener clickImg() {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (usuario.getFotoPerfil() != null) {
+                    Intent intent = new Intent(getContext(), PhotoViewActivity.class);
+                    intent.putExtra("url", usuario.getFotoPerfil());
+                    startActivity(intent);
+                }
+            }
+        };
     }
 
     private void updateFields() {
@@ -111,46 +121,8 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
         });
 
         btnCadastrar.setOnClickListener(onClickCadastrar());
-    }
 
-    public void focusEditText() {
-
-        final View viewTxtNome = findViewById(R.id.viewTxtNome);
-        final View viewTxtEmail = findViewById(R.id.viewTxtEmail);
-        final View viewTxtSenha = findViewById(R.id.viewTxtSenha);
-
-        txtEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    viewTxtEmail.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.primary));
-                } else {
-                    viewTxtEmail.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cinzaBBB));
-                }
-            }
-        });
-
-        txtSenha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    viewTxtSenha.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.primary));
-                } else {
-                    viewTxtSenha.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cinzaBBB));
-                }
-            }
-        });
-
-        txtNome.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    viewTxtNome.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.primary));
-                } else {
-                    viewTxtNome.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cinzaBBB));
-                }
-            }
-        });
+        imgView.setOnClickListener(clickImg());
     }
 
     private View.OnClickListener onClickCadastrar() {
@@ -302,13 +274,6 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
         f.setNome("Selecione uma faculdade");
         f.setId(Long.MAX_VALUE);
         faculdades.add(0, f);
-
-        for (int i = 0; i < 20; i++) {
-            Faculdade f1 = new Faculdade();
-            f1.setNome("Faculdade " + i);
-            f1.setId((long) i);
-            faculdades.add(f1);
-        }
 
         BaseAdapter adapter = new FaculdadesAdapter(getContext(), faculdades);
         AlterarDadosUsuarioActivity.this.spFaculdades.setAdapter(adapter);

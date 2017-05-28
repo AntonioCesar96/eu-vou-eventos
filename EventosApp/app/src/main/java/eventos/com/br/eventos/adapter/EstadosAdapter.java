@@ -56,7 +56,7 @@ public class EstadosAdapter extends BaseAdapter {
         text.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
 
         if (i == 0) {
-            text.setTextColor(ContextCompat.getColor(context, R.color.cinzaBBB));
+            text.setTextColor(ContextCompat.getColor(context, R.color.color_black_transparente_96));
         }
 
         return inflate;

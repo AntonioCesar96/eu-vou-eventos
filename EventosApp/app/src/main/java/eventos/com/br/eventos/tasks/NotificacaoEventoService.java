@@ -88,7 +88,8 @@ public class NotificacaoEventoService extends Service {
         private long agendarAlarmParaAmanha(Long data) {
             Calendar c = Calendar.getInstance();
             c.setTimeInMillis(data);
-            c.add(Calendar.SECOND, 10);
+            c.add(Calendar.DAY_OF_MONTH, 1);
+            c.add(Calendar.HOUR, 4);
             long time = c.getTimeInMillis();
 
             return time;

@@ -10,9 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -21,7 +18,6 @@ import java.util.Locale;
 
 import eventos.com.br.eventos.R;
 import eventos.com.br.eventos.model.Evento;
-import eventos.com.br.eventos.util.ImageUtils;
 
 /**
  * Adapter para recycler view
@@ -52,10 +48,13 @@ public class MeusEventoAdapter extends RecyclerView.Adapter<MeusEventoAdapter.Ev
     public void onBindViewHolder(final EventoViewHolder holder, final int position) {
         Evento evento = this.eventos.get(position);
 
-        SimpleDateFormat formatData = new SimpleDateFormat("EEE',' dd 'de' MMMM 'às' HH:mm", Locale.getDefault());
+        SimpleDateFormat formatData = new SimpleDateFormat("EEE',' dd 'de' MMMM", Locale.getDefault());
+        SimpleDateFormat formatHoras = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String data = formatData.format(evento.getDataHora().getTime()).toUpperCase();
+        String horas = formatHoras.format(evento.getDataHora().getTime()).toUpperCase();
 
         holder.txtData.setText(data);
+        holder.txthora.setText(horas);
         holder.txtNome.setText(evento.getNome());
         holder.txtLocal.setText("Local: " + evento.getLocal().getNome());
 
@@ -93,20 +92,19 @@ public class MeusEventoAdapter extends RecyclerView.Adapter<MeusEventoAdapter.Ev
 
     // ViewHolder com as views
     public static class EventoViewHolder extends RecyclerView.ViewHolder {
-        TextView txtData;
+        TextView txtData, txthora;
         TextView txtNome;
         TextView txtLocal;
         ImageButton icEdit;
-        LinearLayout popupMenuWrapper;
 
         EventoViewHolder(View view) {
             super(view);
             // Cria as views para salvar no ViewHolder
             txtNome = (TextView) view.findViewById(R.id.txtNome);
             txtData = (TextView) view.findViewById(R.id.txtData);
+            txthora = (TextView) view.findViewById(R.id.txthora);
             txtLocal = (TextView) view.findViewById(R.id.txtLocal);
             icEdit = (ImageButton) view.findViewById(R.id.icEdit);
-            popupMenuWrapper = (LinearLayout) view.findViewById(R.id.popupMenuWrapper);
         }
     }
 }

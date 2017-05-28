@@ -58,10 +58,13 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
     public void onBindViewHolder(final EventoViewHolder holder, final int position) {
         Evento evento = this.eventos.get(position);
 
-        SimpleDateFormat formatData = new SimpleDateFormat("EEE',' dd 'de' MMMM 'às' HH:mm", Locale.getDefault());
+        SimpleDateFormat formatData = new SimpleDateFormat("EEE',' dd 'de' MMMM", Locale.getDefault());
+        SimpleDateFormat formatHoras = new SimpleDateFormat("HH:mm", Locale.getDefault());
         String data = formatData.format(evento.getDataHora().getTime()).toUpperCase();
+        String horas = formatHoras.format(evento.getDataHora().getTime()).toUpperCase();
 
         holder.txtData.setText(data);
+        holder.txthora.setText(horas);
         holder.txtNome.setText(evento.getNome());
         holder.txtLocal.setText("Local: " + evento.getLocal().getNome());
 
@@ -91,6 +94,11 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
         return this.eventos != null ? this.eventos.size() : 0;
     }
 
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
     public interface EventoOnClickListener {
         void onClickEvento(EventoViewHolder holder, int idx);
     }
@@ -105,7 +113,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
 
     // ViewHolder com as views
     public static class EventoViewHolder extends RecyclerView.ViewHolder {
-        TextView txtData;
+        TextView txtData, txthora;
         TextView txtNome;
         TextView txtLocal;
         ImageButton icCompartilhar;
@@ -118,6 +126,7 @@ public class EventoAdapter extends RecyclerView.Adapter<EventoAdapter.EventoView
             // Cria as views para salvar no ViewHolder
             txtNome = (TextView) view.findViewById(R.id.txtNome);
             txtData = (TextView) view.findViewById(R.id.txtData);
+            txthora = (TextView) view.findViewById(R.id.txthora);
             txtLocal = (TextView) view.findViewById(R.id.txtLocal);
             icCompartilhar = (ImageButton) view.findViewById(R.id.icCompartilhar);
             imgEvento = (ImageView) view.findViewById(R.id.imgEvento);

@@ -8,8 +8,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -42,7 +42,7 @@ public class FiltroActivity extends BaseActivity {
     private Cidade cidadeSelecionada;
     private ProgressBar progress;
     private Filtro filtro;
-    private EditText tDataInicio, tDataFinal;
+    private Button tDataInicio, tDataFinal;
     private boolean updateCampos;
 
     @Override
@@ -59,8 +59,8 @@ public class FiltroActivity extends BaseActivity {
         spEstados = (Spinner) findViewById(R.id.spEstados);
         spCidades = (Spinner) findViewById(R.id.spCidades);
         progress = (ProgressBar) findViewById(R.id.progress);
-        tDataInicio = (EditText) findViewById(R.id.tDataInicio);
-        tDataFinal = (EditText) findViewById(R.id.tDataFinal);
+        tDataInicio = (Button) findViewById(R.id.tDataInicio);
+        tDataFinal = (Button) findViewById(R.id.tDataFinal);
 
         try {
             FiltroDAO dao = new FiltroDAO();
@@ -86,8 +86,8 @@ public class FiltroActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
 
-                tDataInicio.setText("");
-                tDataFinal.setText("");
+                tDataInicio.setText("Data de Início");
+                tDataFinal.setText("Data de Fim");
                 spFaculdades.setSelection(0);
                 spEstados.setSelection(0);
                 spCidades.setSelection(0);
@@ -120,36 +120,6 @@ public class FiltroActivity extends BaseActivity {
             public void onClick(View view) {
 
                 onFilter(filtro);
-
-                /*
-                if (ValidationUtil.validaSpinnerEstadoFiltro(spEstados)) {
-                    filtro.setFiltroTipo(FiltroTipo.TODOS);
-                    onFilter(filtro);
-                    createToast("Buscando todos os eventos");
-                    return;
-                }
-
-                if (ValidationUtil.validaSpinnerEstado(spEstados) && !ValidationUtil.validaSpinnerCidade(spCidades)) {
-                    createToast("Selecione uma cidade");
-                    return;
-                }
-
-                if (ValidationUtil.validaSpinnerFaculdadeFiltro(spFaculdades)) {
-                    filtro.setFiltroTipo(FiltroTipo.FACULDADE);
-                    onFilter(filtro);
-                    createToast("Buscando todos os eventos da faculdade " + faculdadeSelecionada.getNome());
-                    return;
-                }
-
-                if (ValidationUtil.validaSpinnerEstado(spEstados) && ValidationUtil.validaSpinnerCidade(spCidades)) {
-                    filtro.setFiltroTipo(FiltroTipo.CIDADE);
-                    onFilter(filtro);
-                    createToast("Buscando todos os eventos da cidade " + cidadeSelecionada.getNome());
-                    return;
-                }
-
-                createToast("Selecione algum critério de filtro");
-                */
             }
         };
     }

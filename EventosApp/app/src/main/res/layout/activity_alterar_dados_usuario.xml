@@ -1,237 +1,189 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/loginActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:orientation="vertical"
-    tools:context="eventos.com.br.eventos.activity.LoginActivity">
+    android:fitsSystemWindows="true">
 
-    <android.support.v7.widget.CardView
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/primary"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="4dp">
+        android:layout_height="350dp"
+        android:fitsSystemWindows="true"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:expanded="true">
 
-        <include layout="@layout/include_toolbar" />
-    </android.support.v7.widget.CardView>
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/toolbar_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="?attr/colorAccent"
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
             <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent">
 
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_eu"
+                    app:layout_collapseMode="parallax" />
+
+                <ProgressBar
+                    android:id="@+id/progressImg"
+                    style="@android:style/Widget.ProgressBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center|center_vertical"
+                    android:gravity="center|center_vertical"
+                    android:visibility="invisible" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/btnImagem"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/color_black_transparente_96">
+                <!-- Botoes de foto e galeria-->
                 <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom|right"
+                    android:orientation="vertical">
+
+                    <ImageButton
+                        android:id="@+id/btnCamera"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:background="@drawable/round_button"
+                        android:focusable="true"
+                        android:src="@drawable/ic_camera" />
+
+                    <ImageButton
+                        android:id="@+id/btnGaleria"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="2dp"
+                        android:background="@drawable/round_button"
+                        android:focusable="true"
+                        android:src="@drawable/ic_galeria" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/AppTheme.PopupOverlay"
+                app:title="Perfil" />
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/color_white_fundo"
+        android:padding="10dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="vertical">
+
+                <Spinner
+                    android:id="@+id/spFaculdades"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_marginRight="3dp"
+                    android:background="@color/color_black_transparente_127" />
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="15dp">
+
+                    <EditText
+                        android:id="@+id/txtNome"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Nome completo"
+                        android:inputType="text"
+                        android:textAllCaps="false" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/txtEmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="E-mail"
+                        android:inputType="text"
+                        android:textAllCaps="false" />
+
+                </android.support.design.widget.TextInputLayout>
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <EditText
+                        android:id="@+id/txtSenha"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="Senha"
+                        android:inputType="text"
+                        android:textAllCaps="false" />
+
+                </android.support.design.widget.TextInputLayout>
+
+                <CheckBox
+                    android:id="@+id/cbOrganizador"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    android:orientation="vertical"
-                    android:padding="16dp">
+                    android:layout_marginTop="10dp"
+                    android:checked="false"
+                    android:padding="10dp"
+                    android:text="Organizador de eventos de atlética." />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginBottom="10dp">
+                <Button
+                    android:id="@+id/btnCadastrar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:backgroundTint="@color/color_red"
+                    android:text="Atualizar"
+                    android:textColor="#fff" />
 
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <FrameLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <ImageView
-                                        android:id="@+id/img"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="220dp" />
-
-                                    <ProgressBar
-                                        android:id="@+id/progressImg"
-                                        style="@android:style/Widget.ProgressBar.Small"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_gravity="center|center_vertical"
-                                        android:gravity="center|center_vertical"
-                                        android:visibility="invisible" />
-                                </FrameLayout>
-                            </LinearLayout>
-
-                            <!-- Botoes de foto e galeria-->
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="bottom|right"
-                                android:orientation="vertical">
-
-                                <ImageButton
-                                    android:id="@+id/btnCamera"
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
-                                    android:background="@drawable/round_button"
-                                    android:focusable="true"
-                                    android:src="@drawable/ic_camera" />
-
-                                <ImageButton
-                                    android:id="@+id/btnGaleria"
-                                    android:layout_width="50dp"
-                                    android:layout_height="50dp"
-                                    android:layout_marginTop="2dp"
-                                    android:background="@drawable/round_button"
-                                    android:focusable="true"
-                                    android:src="@drawable/ic_galeria" />
-                            </LinearLayout>
-
-                        </FrameLayout>
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/cinzaBBB" />
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textColorHint="@color/cinzaBBB">
-
-                        <EditText
-                            android:id="@+id/txtNome"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            app:backgroundTint="#fff"
-                            android:background="@color/white"
-                            android:ems="14"
-                            android:hint="Nome"
-                            android:inputType="textPersonName"
-                            android:paddingBottom="10dp"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:paddingTop="5dp"
-                            android:textColorHint="#ccc" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                    <View
-                        android:id="@+id/viewTxtNome"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/cinzaBBB" />
-
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textColorHint="@color/cinzaBBB">
-
-                        <EditText
-                            android:id="@+id/txtEmail"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            app:backgroundTint="@color/white"
-                            android:background="@color/white"
-                            android:hint="E-mail"
-                            android:inputType="textEmailAddress"
-                            android:paddingBottom="10dp"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:paddingTop="5dp"
-                            android:textColorHint="@color/cinzaBBB"
-                            android:textSize="18sp" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                    <View
-                        android:id="@+id/viewTxtEmail"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/cinzaBBB" />
-
-                    <Spinner
-                        android:id="@+id/spFaculdades"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"></Spinner>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/cinzaBBB" />
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:textColorHint="@color/cinzaBBB">
-
-                        <EditText
-                            android:id="@+id/txtSenha"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginTop="10dp"
-                            app:backgroundTint="@color/white"
-                            android:background="@color/white"
-                            android:hint="Senha"
-                            android:inputType="textPassword"
-                            android:paddingBottom="10dp"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:paddingTop="5dp"
-                            android:textColorHint="@color/cinzaBBB"
-                            android:textSize="18sp" />
-
-                    </android.support.design.widget.TextInputLayout>
-
-                    <View
-                        android:id="@+id/viewTxtSenha"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/cinzaBBB" />
-
-                    <CheckBox
-                        android:id="@+id/cbOrganizador"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:checked="false"
-                        android:padding="10dp"
-                        android:text="Organizador de eventos de atlética." />
-
-                    <Button
-                        android:id="@+id/btnCadastrar"
-                        android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
-                        android:background="@color/primary"
-                        android:text="Atualizar"
-                        android:textColor="#fff" />
-                </LinearLayout>
-
-                <include layout="@layout/include_progress" />
-            </FrameLayout>
-        </LinearLayout>
-    </ScrollView>
-</LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+    </android.support.v4.widget.NestedScrollView>
+</android.support.design.widget.CoordinatorLayout>

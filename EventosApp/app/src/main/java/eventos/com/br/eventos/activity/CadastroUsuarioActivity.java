@@ -3,12 +3,11 @@ package eventos.com.br.eventos.activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -32,7 +31,7 @@ import eventos.com.br.eventos.util.ValidationUtil;
 
 public class CadastroUsuarioActivity extends BaseActivity {
 
-    private Button btnCadastrar;
+    private FloatingActionButton btnCadastrar;
     private EditText txtNome, txtEmail, txtSenha;
     private CheckBox cbOrganizador;
     private Spinner spFaculdades;
@@ -46,7 +45,7 @@ public class CadastroUsuarioActivity extends BaseActivity {
         setUpToolbar();
         setUpNavigation();
 
-        btnCadastrar = (Button) findViewById(R.id.btnCadastrar);
+        btnCadastrar = (FloatingActionButton) findViewById(R.id.btnCadastrar);
         txtNome = (EditText) findViewById(R.id.txtNome);
         txtEmail = (EditText) findViewById(R.id.txtEmail);
         txtSenha = (EditText) findViewById(R.id.txtSenha);
@@ -54,8 +53,6 @@ public class CadastroUsuarioActivity extends BaseActivity {
         cbOrganizador = (CheckBox) findViewById(R.id.cbOrganizador);
 
         btnCadastrar.setOnClickListener(clickBtnCadastrar());
-
-        focusEditText();
 
         buscarFaculdades();
     }
@@ -101,46 +98,6 @@ public class CadastroUsuarioActivity extends BaseActivity {
             validaOk = ValidationUtil.validateSenha(txtSenha);
         }
         return validaOk;
-    }
-
-    public void focusEditText() {
-
-        final View viewTxtNome = findViewById(R.id.viewTxtNome);
-        final View viewTxtEmail = findViewById(R.id.viewTxtEmail);
-        final View viewTxtSenha = findViewById(R.id.viewTxtSenha);
-
-        txtEmail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    viewTxtEmail.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.primary));
-                } else {
-                    viewTxtEmail.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cinzaBBB));
-                }
-            }
-        });
-
-        txtSenha.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    viewTxtSenha.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.primary));
-                } else {
-                    viewTxtSenha.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cinzaBBB));
-                }
-            }
-        });
-
-        txtNome.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean hasFocus) {
-                if (hasFocus) {
-                    viewTxtNome.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.primary));
-                } else {
-                    viewTxtNome.setBackgroundColor(ContextCompat.getColor(getContext(), R.color.cinzaBBB));
-                }
-            }
-        });
     }
 
     private void buscarFaculdades() {

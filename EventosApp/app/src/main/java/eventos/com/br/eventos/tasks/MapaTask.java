@@ -5,7 +5,6 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
@@ -40,18 +39,38 @@ public class MapaTask extends AsyncTask<Evento, Void, LatLng> {
 
         LatLng latLng = null;
         try {
+            // Tenta com nome do local
             Local l = evento.getLocal();
             String endereco = l.getNome() + " " + l.getRua() + " " + l.getCep() + ", " + l.getNumero() + " - "
                     + l.getBairro() + ", " + l.getCidade().getNome();
 
-            Log.e("AAAAA", endereco);
-
             Geocoder geocoder = new Geocoder(activity, Locale.getDefault());
             List<Address> enderecos = geocoder.getFromLocationName(endereco, 1);
 
+            // tenta sem o nome
             if (enderecos != null && enderecos.size() == 0) {
                 endereco = l.getRua() + " " + l.getCep() + ", " + l.getNumero() + " - "
                         + l.getBairro() + ", " + l.getCidade().getNome();
+                enderecos = geocoder.getFromLocationName(endereco, 1);
+            }
+
+            // tenta sem o cep
+            if (enderecos != null && enderecos.size() == 0) {
+                endereco = l.getRua() + ", " + l.getNumero() + " - "
+                        + l.getBairro() + ", " + l.getCidade().getNome();
+                enderecos = geocoder.getFromLocationName(endereco, 1);
+            }
+
+            // tenta sem o bairro
+            if (enderecos != null && enderecos.size() == 0) {
+                endereco = l.getRua() + ", " + l.getNumero() + ", " + l.getCidade().getNome();
+                enderecos = geocoder.getFromLocationName(endereco, 1);
+            }
+
+            // tenta sem a cidade
+            if (enderecos != null && enderecos.size() == 0) {
+                endereco = l.getRua() + ", " + l.getNumero() + " - "
+                        + l.getBairro();
                 enderecos = geocoder.getFromLocationName(endereco, 1);
             }
 

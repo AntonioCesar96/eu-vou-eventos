@@ -2,7 +2,7 @@
     <!-- Cores do Tema Material -->
     <color name="primary">#2196F3</color>
     <color name="primary_dark">#1976D2</color>
-    <color name="accent">#ddd</color>
+    <color name="accent">#be1e2e</color>
     <color name="control_highlight">#ddd</color>
 
     <!-- Outras cores -->
@@ -24,4 +24,27 @@
     <color name="refresh_progress_3">#CC0000</color>
     <!-- vermelho -->
 
+ <!--Novas cores-->
+    <color name="color_transparente">#00ffffff</color>
+    <color name="color_white">#ffffff</color>
+    <color name="color_white_fundo">#f5f5f5</color>
+    <color name="color_white_transparente_191">#bfffffff</color>
+    <color name="color_white_transparente_127">#7fffffff</color>
+    <color name="color_white_transparente_61">#3dffffff</color>
+    <color name="color_white_transparente_96">#60ffffff</color>
+    <color name="color_black">#000000</color>
+    <color name="color_black_transparente_30">#1e000000</color>
+    <color name="color_black_transparente_61">#3d000000</color>
+    <color name="color_black_transparente_96">#60000000</color>
+    <color name="color_black_transparente_127">#7f000000</color>
+    <color name="color_fundo_splash">#cccccc</color>
+    <color name="color_red">#be1e2e</color>
+    <color name="color_red_dark">#8f1824</color>
+    <color name="color_red_transparente_61">#3dbe1e2e</color>
+    <color name="color_red_transparente_127">#7fbe1e2e</color>
+    <color name="color_red_transparente_191">#bfbe1e2e</color>
+    <color name="color_blue_dark">#1a344f</color>
+    <color name="color_gray">#848484</color>
+    <color name="color_yellow">#febb01</color>
+    <color name="colorLinhaEspaço">#c9c9c9</color>
 </resources>
