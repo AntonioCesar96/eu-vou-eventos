@@ -3,11 +3,11 @@ package eventos.com.br.eventos.activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -31,7 +31,7 @@ import eventos.com.br.eventos.util.ValidationUtil;
 
 public class CadastroUsuarioActivity extends BaseActivity {
 
-    private FloatingActionButton btnCadastrar;
+    private Button btnCadastrar;
     private EditText txtNome, txtEmail, txtSenha;
     private CheckBox cbOrganizador;
     private Spinner spFaculdades;
@@ -45,7 +45,7 @@ public class CadastroUsuarioActivity extends BaseActivity {
         setUpToolbar();
         setUpNavigation();
 
-        btnCadastrar = (FloatingActionButton) findViewById(R.id.btnCadastrar);
+        btnCadastrar = (Button) findViewById(R.id.btnCadastrar);
         txtNome = (EditText) findViewById(R.id.txtNome);
         txtEmail = (EditText) findViewById(R.id.txtEmail);
         txtSenha = (EditText) findViewById(R.id.txtSenha);
@@ -194,13 +194,6 @@ public class CadastroUsuarioActivity extends BaseActivity {
         f.setNome("Selecione uma faculdade");
         f.setId(Long.MAX_VALUE);
         faculdades.add(0, f);
-
-        for (int i = 0; i < 20; i++) {
-            Faculdade f1 = new Faculdade();
-            f1.setNome("Faculdade " + i);
-            f1.setId((long) i);
-            faculdades.add(f1);
-        }
 
         BaseAdapter adapter = new FaculdadesAdapter(getContext(), faculdades);
         CadastroUsuarioActivity.this.spFaculdades.setAdapter(adapter);

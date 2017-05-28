@@ -21,8 +21,7 @@
             android:layout_height="100dp"
             android:paddingTop="@dimen/nav_header_vertical_spacing"
             android:layout_gravity="center"
-            android:src="@android:drawable/sym_def_app_icon" />
-        <!-- app:srcCompat="@drawable/img_login" -->
+            android:src="@drawable/img_login" />
 
         <TextView
             android:layout_width="match_parent"

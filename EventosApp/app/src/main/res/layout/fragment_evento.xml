@@ -67,11 +67,12 @@
                     android:orientation="vertical">
 
                     <Button
+                        style="?android:attr/borderlessButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
                         android:background="@color/color_white_fundo"
-                        android:drawableLeft="@drawable/ic_ir_gray"
+                        android:drawableLeft="@drawable/ic_subject"
                         android:drawablePadding="20dp"
                         android:paddingLeft="20dp"
                         android:text="Descrição"
@@ -116,6 +117,7 @@
                     android:orientation="vertical">
 
                     <Button
+                        style="?android:attr/borderlessButtonStyle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
@@ -126,6 +128,11 @@
                         android:text="Endereço"
                         android:textAlignment="textStart"
                         android:textColor="@color/color_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_black_transparente_30" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -287,6 +294,11 @@
                         android:text="Como chegar?"
                         android:textAlignment="textStart"
                         android:textColor="@color/color_gray" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/color_black_transparente_30" />
 
                     <fragment
                         android:id="@+id/map"
