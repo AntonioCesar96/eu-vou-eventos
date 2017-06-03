@@ -47,7 +47,7 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
     private ProgressDialog progressDialog;
     private Faculdade faculdadeSelecionada;
     private CameraUtil cameraUtil;
-    private File fileImage;
+    private File fileImage = null;
     private Usuario usuario;
 
     @Override
@@ -307,5 +307,14 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
                 return;
             }
         }
+    }
+
+    @Override
+    public void finish() {
+        if (fileImage != null && fileImage.exists()) {
+            fileImage.delete();
+        }
+
+        super.finish();
     }
 }

@@ -61,6 +61,7 @@ public class EventoFragment extends BaseFragment {
     private FloatingActionButton fabFavorito;
     public boolean flagClickFab;
     private DataBaseHelper dataBaseHelper;
+    private File imagemShare;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,8 +135,10 @@ public class EventoFragment extends BaseFragment {
 
     public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem() {
         return new DownloadImagemTask.CallbackDownloadImagem() {
+
             @Override
             public void onCallbackDownloadImagem(File imagem) {
+                imagemShare = imagem;
 
                 Uri uri = Uri.fromFile(imagem);
                 Intent shareIntent = new Intent();
@@ -145,6 +148,14 @@ public class EventoFragment extends BaseFragment {
                 getAppCompatActivity().startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
             }
         };
+    }
+
+    @Override
+    public void onDestroy() {
+        if (imagemShare != null && imagemShare.exists()) {
+            imagemShare.delete();
+        }
+        super.onDestroy();
     }
 
     public void setFabButton(FloatingActionButton fabFavorito) {

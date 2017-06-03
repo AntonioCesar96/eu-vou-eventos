@@ -623,4 +623,12 @@ public class EventoAtualizarActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void finish() {
+        if (fileImage != null && fileImage.exists()) {
+            fileImage.delete();
+        }
+        super.finish();
+    }
 }

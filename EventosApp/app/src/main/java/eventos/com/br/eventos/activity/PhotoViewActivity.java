@@ -24,6 +24,7 @@ public class PhotoViewActivity extends BaseActivity {
     private ProgressBar progress;
     private PhotoViewAttacher mAttacher;
     private String url;
+    private File imagemShare;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +99,10 @@ public class PhotoViewActivity extends BaseActivity {
 
     public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem(){
         return new DownloadImagemTask.CallbackDownloadImagem() {
+
             @Override
             public void onCallbackDownloadImagem(File imagem) {
+                imagemShare = imagem;
 
                 Uri uri = Uri.fromFile(imagem);
                 Intent shareIntent = new Intent();
@@ -109,5 +112,13 @@ public class PhotoViewActivity extends BaseActivity {
                 getAppCompatActivity().startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
             }
         };
+    }
+
+    @Override
+    public void finish() {
+        if (imagemShare != null && imagemShare.exists()) {
+            imagemShare.delete();
+        }
+        super.finish();
     }
 }

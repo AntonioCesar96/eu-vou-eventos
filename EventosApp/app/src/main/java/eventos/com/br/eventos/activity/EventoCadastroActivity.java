@@ -650,6 +650,9 @@ public class EventoCadastroActivity extends BaseActivity {
     }
 
     public void finalizarActivity() {
+        if (fileImage != null && fileImage.exists()) {
+            fileImage.delete();
+        }
         super.finish();
     }
 

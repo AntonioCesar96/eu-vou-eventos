@@ -32,6 +32,7 @@ public class EventosFragment extends BaseFragment {
     private List<Evento> eventos;
     private TipoBusca tipoDeBusca;
     private ProgressBar progress;
+    private File imagemShare;
     public static final int ATUALIZAR_FAVORITOS = 9;
 
     // Método para instanciar esse fragment pelo tipo.
@@ -205,8 +206,10 @@ public class EventosFragment extends BaseFragment {
 
     public DownloadImagemTask.CallbackDownloadImagem onCallbackDownloadImagem() {
         return new DownloadImagemTask.CallbackDownloadImagem() {
+
             @Override
             public void onCallbackDownloadImagem(File imagem) {
+                imagemShare = imagem;
 
                 Uri uri = Uri.fromFile(imagem);
                 Intent shareIntent = new Intent();
@@ -216,6 +219,14 @@ public class EventosFragment extends BaseFragment {
                 getAppCompatActivity().startActivity(Intent.createChooser(shareIntent, "Compartilhar Evento"));
             }
         };
+    }
+
+    @Override
+    public void onDetach() {
+        if (imagemShare != null && imagemShare.exists()) {
+            imagemShare.delete();
+        }
+        super.onDetach();
     }
 
     private EventoAdapter.EventoOnClickListener onClickEvento() {
