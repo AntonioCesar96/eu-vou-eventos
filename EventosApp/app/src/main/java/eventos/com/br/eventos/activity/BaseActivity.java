@@ -30,6 +30,8 @@ import eventos.com.br.eventos.model.Usuario;
 import eventos.com.br.eventos.util.AlertUtils;
 import eventos.com.br.eventos.util.ImageUtils;
 
+import static eventos.com.br.eventos.activity.MainActivity.RECRIAR_ACTIVITY;
+
 public class BaseActivity extends AppCompatActivity {
     protected DrawerLayout drawerLayout;
     protected NavigationView navigationView;
@@ -95,8 +97,7 @@ public class BaseActivity extends AppCompatActivity {
         headerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
+                startActivityForResult(new Intent(getContext(), LoginActivity.class), MainActivity.RECRIAR_ACTIVITY);
             }
         });
     }
@@ -156,7 +157,7 @@ public class BaseActivity extends AppCompatActivity {
                         switch (menuItem.getItemId()) {
                             case R.id.c_evento:
                                 startActivityForResult(new Intent(getAppCompatActivity(), EventoCadastroActivity.class),
-                                        MainActivity.RECRIAR_ACTIVITY);
+                                        RECRIAR_ACTIVITY);
                                 break;
                             case R.id.l_eventos:
                                 startActivity(new Intent(getAppCompatActivity(), MeusEventosActivity.class));

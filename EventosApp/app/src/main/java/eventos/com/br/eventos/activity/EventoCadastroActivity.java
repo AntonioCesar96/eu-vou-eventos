@@ -78,6 +78,7 @@ public class EventoCadastroActivity extends BaseActivity {
     private CameraUtil cameraUtil;
     private EventoRascunho eventoRascunho;
     private LatLng latLng;
+    private boolean abrirBuscaLocal = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,8 +160,21 @@ public class EventoCadastroActivity extends BaseActivity {
         spFaculdades = (Spinner) findViewById(R.id.spFaculdades);
         spEstados = (Spinner) findViewById(R.id.spLocalEstado);
         spCidades = (Spinner) findViewById(R.id.spLocalCidade);
-
         txtLocalCep.addTextChangedListener(LocalCepTextChangedListener());
+
+        txtLocalNome.setOnFocusChangeListener(onClickLocalNome());
+    }
+
+    private View.OnFocusChangeListener onClickLocalNome() {
+        return new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (abrirBuscaLocal) {
+                    buscarLocal(null);
+                    abrirBuscaLocal = false;
+                }
+            }
+        };
     }
 
     @Override

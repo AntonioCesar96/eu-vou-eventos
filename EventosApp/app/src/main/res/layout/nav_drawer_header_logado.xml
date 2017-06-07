@@ -29,9 +29,8 @@
 
         <ImageView
             android:id="@+id/img"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:paddingTop="@dimen/nav_header_vertical_spacing"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/icone_perfil" />
 

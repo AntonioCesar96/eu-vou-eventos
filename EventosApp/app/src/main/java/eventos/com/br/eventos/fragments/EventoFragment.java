@@ -52,12 +52,7 @@ public class EventoFragment extends BaseFragment {
 
     private GoogleMap mMap;
     private Evento evento;
-    private TextView txtDesc, txtCep, txtCidade;
-    private TextView txtLocal;
-    private TextView txtRuaMostra;
-    private TextView txtNumeroMostra;
-    private TextView txtLocalBairro;
-    private TextView txtDataEvento;
+    private TextView txtDesc, txtCep, txtCidade, txtData, txtHora, txtLocalBairro, txtNumeroMostra, txtRuaMostra, txtLocal;
     private FloatingActionButton fabFavorito;
     public boolean flagClickFab;
     private DataBaseHelper dataBaseHelper;
@@ -95,7 +90,8 @@ public class EventoFragment extends BaseFragment {
     private void initFields(View view) {
         txtDesc = (TextView) view.findViewById(R.id.txtDesc);
         txtLocal = (TextView) view.findViewById(R.id.txtLocal);
-        txtDataEvento = (TextView) view.findViewById(R.id.txtDataEvento);
+        txtData = (TextView) view.findViewById(R.id.txtData);
+        txtHora = (TextView) view.findViewById(R.id.txtHora);
         txtRuaMostra = (TextView) view.findViewById(R.id.txtRuaMostra);
         txtNumeroMostra = (TextView) view.findViewById(R.id.txtNumeroMostra);
         txtLocalBairro = (TextView) view.findViewById(R.id.txtLocalBairro);
@@ -180,10 +176,13 @@ public class EventoFragment extends BaseFragment {
                 if (e != null) {
                     evento = e;
 
-                    SimpleDateFormat formatData = new SimpleDateFormat("EEE',' dd 'de' MMMM 'às' HH:mm", Locale.getDefault());
+                    SimpleDateFormat formatData = new SimpleDateFormat("EEE',' dd 'de' MMMM", Locale.getDefault());
+                    SimpleDateFormat formatHoras = new SimpleDateFormat("HH:mm", Locale.getDefault());
                     String data = formatData.format(evento.getDataHora().getTime()).toUpperCase();
+                    String hora = formatHoras.format(evento.getDataHora().getTime()).toUpperCase();
 
-                    txtDataEvento.setText(data);
+                    txtData.setText(data);
+                    txtHora.setText(hora);
                     txtDesc.setText(evento.getDescricao());
                     txtLocal.setText(evento.getLocal().getNome());
                     txtRuaMostra.setText(evento.getLocal().getRua());
@@ -317,7 +316,9 @@ public class EventoFragment extends BaseFragment {
     private void mostrarMapa(LatLng latLng) {
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(map);
-        mapFragment.getMapAsync(onMapReadyCallback(latLng));
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(onMapReadyCallback(latLng));
+        }
     }
 
 

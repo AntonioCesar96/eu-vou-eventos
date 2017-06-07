@@ -125,6 +125,7 @@ public class LoginActivity extends BaseActivity {
                     // Salva usuário na memória enquanto o aplicativo estiver aberto
                     EventosApplication.getInstance().setUsuario(usuario);
 
+                    setResult(MainActivity.RECRIAR_ACTIVITY);
                     finish();
                 } catch (SQLException e) {
                     Log.i("Error", e.getMessage());

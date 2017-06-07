@@ -217,15 +217,15 @@ public class AlterarDadosUsuarioActivity extends BaseActivity {
         @Override
         protected void onPostExecute(Usuario usuario) {
             progressDialog.dismiss();
-
+            
             if (usuario != null && usuario.getId() != null) {
-
-                // Salva o usuário
                 try {
+                    // Salva o usuário
                     DataBaseHelper dataBaseHelper = EventosApplication.getInstance().getDataBaseHelper();
                     UsuarioDAO dao = new UsuarioDAO(dataBaseHelper.getConnectionSource());
                     dao.deletarUsuarioDonoDoCelular();
                     dao.saveUsuarioDonoDoCelular(usuario);
+                    EventosApplication.getInstance().setUsuario(usuario);
                     finish();
                 } catch (SQLException e) {
                     Log.i("", e.getMessage());

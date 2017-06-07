@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@color/color_fundo_splash"
+    android:background="@color/color_white"
     tools:context="eventos.com.br.eventos.activity.SplashScreenActivity">
 
     <ImageView

@@ -58,11 +58,11 @@
                             android:id="@+id/btnGaleria"
                             android:layout_width="match_parent"
                             android:layout_height="0dp"
-                            android:paddingTop="56dp"
                             android:layout_weight="1"
                             android:background="@color/transparent"
                             android:focusable="true"
                             android:focusableInTouchMode="true"
+                            android:paddingTop="56dp"
                             android:src="@drawable/ic_camera_big">
 
                             <requestFocus />
@@ -233,7 +233,8 @@
                             android:background="@android:color/transparent"
                             android:foreground="?attr/selectableItemBackground"
                             android:onClick="buscarLocal"
-                            android:src="@drawable/ic_search" />
+                            android:src="@drawable/ic_search"
+                            android:tint="@color/color_black_transparente_127" />
                     </LinearLayout>
 
                     <android.support.design.widget.TextInputLayout
@@ -253,27 +254,28 @@
 
                     </android.support.design.widget.TextInputLayout>
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp">
-
-                        <EditText
-                            android:id="@+id/localBairro"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ems="10"
-                            android:hint="Bairro"
-                            android:inputType="text"
-                            android:textColor="@color/color_black" />
-
-                    </android.support.design.widget.TextInputLayout>
-
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
+
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="1">
+
+
+                            <EditText
+                                android:id="@+id/localCep"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="CEP"
+                                android:inputType="number"
+                                android:textColor="@color/color_black" />
+                        </android.support.design.widget.TextInputLayout>
 
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
@@ -292,25 +294,25 @@
                                 android:textColor="@color/color_black" />
 
                         </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp"
-                            android:layout_marginRight="10dp"
-                            android:layout_weight="1">
-
-                            <EditText
-                                android:id="@+id/localCep"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:ems="10"
-                                android:hint="CEP"
-                                android:inputType="number"
-                                android:textColor="@color/color_black" />
-
-                        </android.support.design.widget.TextInputLayout>
                     </LinearLayout>
+
+                    <android.support.design.widget.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp">
+
+                        <EditText
+                            android:id="@+id/localBairro"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Bairro"
+                            android:inputType="text"
+                            android:textColor="@color/color_black" />
+
+                    </android.support.design.widget.TextInputLayout>
+
 
                     <Spinner
                         android:id="@+id/spLocalEstado"

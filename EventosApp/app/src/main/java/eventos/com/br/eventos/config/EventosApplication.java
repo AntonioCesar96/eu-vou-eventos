@@ -30,7 +30,6 @@ public class EventosApplication extends Application {
         super.onCreate();
         // Salva a instância para termos acesso como Singleton
         instance = this;
-
         // register to be informed of activities starting up
         registerActivityLifecycleCallbacks(getCallback());
     }

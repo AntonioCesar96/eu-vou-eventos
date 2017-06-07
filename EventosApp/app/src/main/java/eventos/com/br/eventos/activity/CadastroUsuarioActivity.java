@@ -144,8 +144,8 @@ public class CadastroUsuarioActivity extends BaseActivity {
                     // Salva usuário na memória enquanto o aplicativo estiver aberto
                     EventosApplication.getInstance().setUsuario(usuario);
 
+                    setResult(MainActivity.RECRIAR_ACTIVITY);
                     finish();
-                    //startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 } catch (SQLException e) {
                     Log.i("Error", e.getMessage());
                 }
