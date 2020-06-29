@@ -1,4 +1,4 @@
-# Livros Lembrete
+# Eu Vou - Eventos
 
 ![Preview-Screens](https://github.com/AntonioCesar96/eu-vou-eventos/blob/master/eventos.gif)
 
